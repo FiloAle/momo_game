@@ -59,7 +59,7 @@ export default class Physics_v5 extends Phaser.Scene {
         // Creiamo un fungo enorme che sia così grande da essere non saltabile
         this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");
         this.big_mushroom.setOrigin(0, 1);
-        this.big_mushroom.setScale(6,6);
+        this.big_mushroom.setScale(3,3);
 
         // Imposto il fungo come immovable e senza gravità, perchè voglio che
         // l'oggetto non sia spostabile dal giocatore
