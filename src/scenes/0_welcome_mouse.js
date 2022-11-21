@@ -49,7 +49,7 @@ export default class SceneWelcomeMenu extends Phaser.Scene {
         this.playbutton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
 
         this.playbutton.on("pointerdown", ()=>{ //quando viene clickato il bottone succedono cose
-            this.scene.start("physics_v5");
+            this.scene.start("physics_v4");
         });
     }
 
