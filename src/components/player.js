@@ -114,26 +114,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight) {
             if (!this.isJumping) {
                 this.isJumping = true;
-                this.body.setVelocityY(-300);  // Salto (caso con l'introduzione della fisica)
+                this.body.setVelocityY(-400);  // Salto (caso con l'introduzione della fisica)
             }
         }
 
         // Se il giocatore non sta premendo la barra spaziatrice e il personaggio è con
         // i piedi per terra, non c'è salto oppure è stato già gestito...
-        if (this.keySpace.isUp && this.y >= this.floorHeight) {
+        if (this.y >= this.floorHeight) {
             this.isJumping = false;
         }
 
         // Gestiamo le animazioni separatamente
         this.manageAnimations();
-
-        /*
-        *** Con l'introduzione della fisica, questo codice può essere rimosso ***
-        // Effetto gravità: se il personaggio sta fluttuando, riportiamolo a terra frame dopo frame
-        if (!this.keySpace.isDown && this.y < this.floorHeight) {
-            this.y += this.gravityPull;
-        }
-        */
     }
 
     die() {

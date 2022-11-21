@@ -30,6 +30,7 @@ export default class Physics_v5 extends Phaser.Scene {
         console.log("physics_v5 - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
+        this.load.image("platform", "assets/images/environment_elements/platform.png");
     }
 
     create() {
@@ -83,6 +84,8 @@ export default class Physics_v5 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
+        this.createStaticPlatforms();
+
     }
 
     update() {
@@ -90,6 +93,22 @@ export default class Physics_v5 extends Phaser.Scene {
         this.player.manageMovements();
         this.animateBackground();
         this.manageShurikens();
+    }
+
+    createStaticPlatforms() {
+        // Aggiungi le piattaforme come un gruppo di oggetti statici
+        this.platforms = this.physics.add.staticGroup({
+            key: 'platform',
+            repeat: 3,
+            setXY: { x: 1280, y: this.game.config.height - 300, stepX: 1000, stepY: 50}
+        });
+
+        // Rendi le piattaforme "solide". Se il giocatore è su una piattaforma
+        // allora il suo stato è "non sta saltando" (questo per riprodurre l'animazione
+        // del giocatore fermo).
+        this.physics.add.collider(this.platforms, this.player, ()=> {
+            this.player.isJumping = false;
+        });
     }
 
     manageShurikens() {
