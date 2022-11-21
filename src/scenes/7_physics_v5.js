@@ -67,7 +67,7 @@ export default class Physics_v5 extends Phaser.Scene {
         // Creiamo un fungo enorme che sia così grande da essere non saltabile
         this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");
         this.big_mushroom.setOrigin(0, 1);
-        this.big_mushroom.setScale(3,3);
+        this.big_mushroom.setScale(1, 1);
 
         // Imposto il fungo come immovable e senza gravità, perchè voglio che
         // l'oggetto non sia spostabile dal giocatore
@@ -100,13 +100,11 @@ export default class Physics_v5 extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup({
             key: 'platform',
             repeat: 3,
-            setXY: { x: 1280, y: this.game.config.height - 300, stepX: 1000, stepY: 50}
+            setXY: { x: 1024, y: this.game.config.height - 150, stepX: 512, stepY: 50}
         });
 
-        // Rendi le piattaforme "solide". Se il giocatore è su una piattaforma
-        // allora il suo stato è "non sta saltando" (questo per riprodurre l'animazione
-        // del giocatore fermo).
-        this.physics.add.collider(this.platforms, this.player, ()=> {
+        // Rende le piattaforme "solide"
+        this.physics.add.collider(this.platforms, this.player, () => {
             this.player.isJumping = false;
         });
     }

@@ -77,7 +77,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
         const curr_anim = this.anims.currentAnim.key;   // Otteniamo il nome dell'animazione corrente
 
-        if (this.body.velocity.y != 0) {
+        if (this.body.velocity.y != 0) {    // < 0 se voglio l'animazione solo in salita
             // Se mi sto muovendo verticalmente, l'animazione
             // è sempre playerJump
             if (curr_anim != "playerJump") {
@@ -111,17 +111,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(0); 
         }
 
-        if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight) {
-            if (!this.isJumping) {
-                this.isJumping = true;
-                this.body.setVelocityY(-400);  // Salto (caso con l'introduzione della fisica)
-            }
+        if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight && !this.isJumping && this.body.touching.down) {
+            console.log(this.y + "   " + this.displayHeight + "   " + this.floorHeight);
+            this.isJumping = true;
+            this.body.setVelocityY(-600);  // Salto (caso con l'introduzione della fisica)
         }
 
         // Se il giocatore non sta premendo la barra spaziatrice e il personaggio è con
         // i piedi per terra, non c'è salto oppure è stato già gestito...
         if (this.y >= this.floorHeight) {
             this.isJumping = false;
+        }
+        if (this.body.touching.up) {
+            this.isJumping = false;
+            this.body.setVelocityY(0);
+            console.log("TOCCO");
         }
 
         // Gestiamo le animazioni separatamente
