@@ -24,7 +24,7 @@ export default class Physics_v5 extends Phaser.Scene {
     }
 
     preload() {
-        console.log("physics_v5- Executing preload()");
+        console.log("physics_v5 - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
     }
@@ -33,7 +33,7 @@ export default class Physics_v5 extends Phaser.Scene {
         // Qui le istruzioni su cosa creare e dove nel mondo di gioco
         console.log("physics_v5 - Executing create()");
         // Sfondo
-        this.background = this.add.tileSprite(0, 0, 1280, 720, "background_base");
+        this.background = this.add.tileSprite(0, 0, 6000, 720, "background_base");
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
@@ -47,14 +47,14 @@ export default class Physics_v5 extends Phaser.Scene {
         this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
 
         // Player
-        const thePlayer = new Player(this, 200, this.floorHeight, this.worldWidth)
+        const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth)
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(thePlayer);
         this.physics.add.collider(this.player, this.floor);
 
         // Imposta la camera per seguire i movimenti del giocatore lungo l'asse x
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setFollowOffset(0, this.game.config.height / 2); // Abbassiamo la telecamera
+        this.cameras.main.setFollowOffset(-this.game.config.width / 2, this.game.config.height / 2); // Abbassiamo la telecamera
 
         // Creiamo un fungo enorme che sia così grande da essere non saltabile
         this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");

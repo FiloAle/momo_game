@@ -14,7 +14,7 @@ export default class SceneWelcomeMenu extends Phaser.Scene {
     preload() {
         console.log("scene_welcome - Executing preload()");
         // Carichiamo gli asset grafici
-        this.load.image("background_base", "assets/images/background/background.png"); // carica l'immagine di sfondo
+        this.load.image("background_base", "assets/images/background/background.jpg"); // carica l'immagine di sfondo
 
         // Carichiamo l'immagine del giocatore in formato spritesheet (ci servirà nelle prossime scene)
         const player_spritesheet_config = {
