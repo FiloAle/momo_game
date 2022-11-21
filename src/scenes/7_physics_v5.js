@@ -7,6 +7,9 @@ export default class Physics_v5 extends Phaser.Scene {
     player;           // oggetto relativo all'elemento "giocatore"
     floorHeight;      // Altezza del terreno (asse y) rispetto al riquadro di gioco
     lastShuriken;     // Tempo dell'ultimo Shuriken lanciato
+    isCameraFollowingPlayer;
+    
+
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -37,6 +40,8 @@ export default class Physics_v5 extends Phaser.Scene {
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
+        this.isCameraFollowingPlayer = false;
+
         // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
         this.floor = this.add.rectangle(0, this.game.config.height,
             this.worldWidth, this.game.config.height - this.floorHeight,
@@ -52,9 +57,11 @@ export default class Physics_v5 extends Phaser.Scene {
         this.player = this.physics.add.existing(thePlayer);
         this.physics.add.collider(this.player, this.floor);
 
-        // Imposta la camera per seguire i movimenti del giocatore lungo l'asse x
+        // Posizione camera centrata su player quando arriva a metà schermata
+        this.cameras.main.setBounds(0, 0, 10000, 720);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setFollowOffset(-this.game.config.width / 2, this.game.config.height / 2); // Abbassiamo la telecamera
+        this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
+        
 
         // Creiamo un fungo enorme che sia così grande da essere non saltabile
         this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");
@@ -108,7 +115,7 @@ export default class Physics_v5 extends Phaser.Scene {
     }
 
     animateBackground() {
-        this.background.tilePositionX = this.cameras.main.scrollX * 0.5;
+        this.background.x = -this.cameras.main.scrollX * 0.5;
         this.cameras.main.followOffset.y = this.player.body.y + this.player.height/2 - this.game.config.height / 2;
     }
 

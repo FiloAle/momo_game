@@ -27,6 +27,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
         // Recuperiamo il riferimento al tasto SPAZIO
         this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
         this.initAnimations();
     }
@@ -96,10 +100,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     manageMovements() {
         // E' stato premuto il tasto freccia sinistra e il giocatore è a destra del limite sinistro del quadro?
-        if (this.cursorKeys.left.isDown && this.x >= 0) {
+        if ((this.cursorKeys.left.isDown || this.keyA.isDown) && this.x >= 0) {
             this.body.setVelocityX(-200);// Velocità per spostamento verso sinistra
         // E' stato premuto il tasto freccia destra e il giocatore è a sinistra del limite sinistro del quadro?
-        } else if (this.cursorKeys.right.isDown && this.x <= this.maxWidth - this.displayWidth){
+        } else if ((this.cursorKeys.right.isDown || this.keyD.isDown) && this.x <= this.maxWidth - this.displayWidth){
             this.body.setVelocityX(200); // Velocità per spostamento verso destra
         } else {
             // In questa condizione non è stato premuto alcun tasto e possiamo fermare il giocatore
@@ -107,7 +111,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(0); 
         }
 
-        if (this.keySpace.isDown && this.y >= this.displayHeight) {
+        if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight) {
             if (!this.isJumping) {
                 this.isJumping = true;
                 this.body.setVelocityY(-300);  // Salto (caso con l'introduzione della fisica)
