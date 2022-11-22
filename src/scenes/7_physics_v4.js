@@ -23,13 +23,14 @@ export default class Physics_v4 extends Phaser.Scene {
         console.log("physics_v4 - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("platform", "assets/images/environment_elements/platform.png");
+        this.load.image("mushroom", "assets/images/environment_elements/mushroom_1.png");
     }
 
     create() {
         // Qui le istruzioni su cosa creare e dove nel mondo di gioco
         console.log("physics_v4 - Executing create()");
         // Sfondo
-        this.background = this.add.tileSprite(0, 0, 1280, 720, "background_base");
+        this.background = this.add.tileSprite(0, -280, 6000, 1000, "background_base");
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
@@ -48,12 +49,46 @@ export default class Physics_v4 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.floor);
 
         // Imposta la camera per seguire i movimenti del giocatore lungo l'asse x
+        this.cameras.main.setBounds(0, 0, 10000, 720);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setFollowOffset(0, this.game.config.height / 2); // Abbassiamo la telecamera
+        this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
 
         // Inserisci delle piattaforme
         this.createStaticPlatforms();
         this.createMovingPlatforms();
+
+        // Inserisci gli elementi dell'interfaccia utente
+        this.createUI();
+
+        // Inserisci i funghetti nella scena
+        this.mushrooms = [];
+        for (let i = 0; i < 10; i++) {
+            const mushroom = this.add.image(400 + 400 * i, this.floorHeight, "mushroom");
+            mushroom.setOrigin(0, 1);
+            this.mushrooms.push(mushroom);
+        }
+        // Aggiungi i funghetti alla fisica
+        this.mushroomsGroup = this.physics.add.group(this.mushrooms);
+        this.physics.add.collider(this.mushroomsGroup, this.floor);
+        // Gestisci la raccolta dei funghi attraverso la fisica
+        this.physics.add.overlap(this.player, this.mushroomsGroup, this.updateScore, null, this);
+    }
+
+    createUI() {
+        const styleConfig = { color: '#FFFFFF', fontSize: 36 };
+
+        // Inserisci il testo con il punteggio corrente
+        const scoreMessage = "Score: " + this.game.gameState.score;
+        this.scoreBox = this.add.text(700, 0, scoreMessage, styleConfig);
+        this.scoreBox.setOrigin(0, 0);
+        this.scoreBox.setScrollFactor(0, 0);
+
+        // Inserisci il testo con il punteggio corrente
+        const lifeMessage = "Lives: " + this.game.gameState.lives;
+        this.lifeBox = this.add.text(400, 0, lifeMessage, styleConfig);
+        this.lifeBox.setOrigin(0, 0);
+        this.lifeBox.setScrollFactor(0, 0);
+
     }
 
     createStaticPlatforms() {
@@ -61,7 +96,7 @@ export default class Physics_v4 extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup({
             key: 'platform',
             repeat: 3,
-            setXY: { x: 50, y: this.game.config.height - 300, stepX: 1000, stepY: 50}
+            setXY: { x: 768, y: this.game.config.height - 300, stepX: 1000, stepY: 50}
         });
 
         // Rendi le piattaforme "solide". Se il giocatore è su una piattaforma
@@ -117,6 +152,14 @@ export default class Physics_v4 extends Phaser.Scene {
                 platform.body.setVelocityX(updatedSpeed);
             }
         });
+    }
+
+    updateScore(player, mushroom) {
+        // Rimuove il funghetto dalla scena
+        mushroom.destroy();
+        // Aggiorna il punteggio
+        this.game.gameState.score += 10;
+        this.scoreBox.setText("Score: " + this.game.gameState.score);
     }
 
 }
