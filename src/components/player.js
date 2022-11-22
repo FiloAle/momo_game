@@ -41,9 +41,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
             key: "playerMove",
             frames: this.anims.generateFrameNumbers("playerrun", {
                 start: 0, //iniziamo dal primo frame
-                end: 9, //e i primi 10 frame (fino alla fine della corsa)
+                end: 3, //e i primi 10 frame (fino alla fine della corsa)
             }),
-            frameRate: 15, //aggiornimao l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
+            frameRate: 10, //aggiorniamo l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
             repeat: -1 //ripetiamo all'infinito la stessa animazione
         });
 
@@ -51,8 +51,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.anims.create({
             key: "playerStop",
             frames: this.anims.generateFrameNumbers("playerrun", {
-                start: 4, //prendiamo un frame in cui il personaggio è fermo in una posizione ragionevole
-                end: 4, //e riusiamo lo stesso frame, questo vuol dire che non verrà cambiata l'immagine
+                start: 0, //prendiamo un frame in cui il personaggio è fermo in una posizione ragionevole
+                end: 0, //e riusiamo lo stesso frame, questo vuol dire che non verrà cambiata l'immagine
             }),
             frameRate: 15, //aggiornimao l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
             repeat: -1 //ripetiamo all'infinito la stessa animazione
@@ -62,8 +62,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.anims.create({
             key: "playerJump",
             frames: this.anims.generateFrameNumbers("playerrun", {
-                start: 10, //iniziamo dal primo frame
-                end: 17, //e i primi 10 frame (fino alla fine della corsa)
+                start: 4, //iniziamo dal primo frame
+                end: 11, //e i primi 10 frame (fino alla fine della corsa)
             }),
             frameRate: 15, //aggiornimao l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
             repeat: -1

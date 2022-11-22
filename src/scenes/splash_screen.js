@@ -34,6 +34,8 @@ export default class SplashScreen extends Phaser.Scene {
         this.load.image("pauseButton", "assets/UI/pause_button.png"); //caricamento bottone menu di pausa
         this.load.image("menuBkg", "assets/UI/menu_block.png"); //caricamento pannello del menu di pausa
         this.load.image("playButton", "assets/UI/play_button.png");
+        this.load.image("storyButton", "assets/UI/story_button.png");
+        this.load.image("creditsButton", "assets/UI/credits_button.png");
         this.load.image("flower", "assets/images/weapons/flower.png");
     }
 
@@ -45,11 +47,19 @@ export default class SplashScreen extends Phaser.Scene {
         this.background.setOrigin(0,0);
 
         //creo una immagine per il bottone
-        this.playbutton = this.add.image(this.game.config.width - 440, this.game.config.height / 2 + 128, "playButton");
-        this.playbutton.setOrigin(0, 0);
-        this.playbutton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
+        this.playButton = this.add.image(128, this.game.config.height / 2 + 256, "playButton");
+        this.playButton.setOrigin(0.5, 0.5);
+        this.playButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
 
-        this.playbutton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
+        this.storyButton = this.add.image(320, this.game.config.height / 2 + 256, "storyButton");
+        this.storyButton.setOrigin(0.5, 0.5);
+        this.storyButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
+
+        this.creditsButton = this.add.image(512, this.game.config.height / 2 + 256, "creditsButton");
+        this.creditsButton.setOrigin(0.5, 0.5);
+        this.creditsButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
+
+        this.playButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
             this.scene.start("test_scene_2");
         });
     }
