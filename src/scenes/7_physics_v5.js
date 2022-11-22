@@ -133,8 +133,6 @@ export default class Physics_v5 extends Phaser.Scene {
 
     animateBackground() {
         this.background.x = -this.cameras.main.scrollX * 0.5;
-        //this.cameras.main.y = - (this.player.body.y + this.player.height / 2 - this.game.config.height);
-        //this.background.y = - this.cameras.main.scrollY * 0.5;
     }
 
     destroyMushroom(mushroom, s) {
