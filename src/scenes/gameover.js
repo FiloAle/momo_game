@@ -1,4 +1,4 @@
-export default class SceneGameOver extends Phaser.Scene {
+export default class GameOver extends Phaser.Scene {
 
     background;        // oggetto relativo all'elemento "sfondo"
 

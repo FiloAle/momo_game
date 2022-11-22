@@ -1,33 +1,33 @@
 import Player from "../components/player.js"
-import Shuriken from "../components/shuriken.js"
+import Flower from "../components/flower.js"
 
-export default class Physics_v5 extends Phaser.Scene {
+export default class TestScene2 extends Phaser.Scene {
 
     background;       // oggetto relativo all'elemento "sfondo"
     player;           // oggetto relativo all'elemento "giocatore"
     floorHeight;      // Altezza del terreno (asse y) rispetto al riquadro di gioco
-    lastShuriken;     // Tempo dell'ultimo Shuriken lanciato
+    lastFlower;     // Tempo dell'ultimo fiore lanciato
     isCameraFollowingPlayer;
     
 
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
-        super("physics_v5");
+        super("test_scene_2");
     }
 
     init() {
-        console.log("physics_v5 - Executing init()");
+        console.log("test_scene_2 - Executing init()");
         // Definiamo l'altezza del terreno pari all'altezza del riquadro
         // di gioco, per posizionare il giocatore sul fondo della schermata.
         this.floorHeight = this.game.config.height - 30;
         this.worldWidth = 10000;
-        this.lastShuriken = 0;
+        this.lastFlower = 0;
 
     }
 
     preload() {
-        console.log("physics_v5 - Executing preload()");
+        console.log("test_scene_2 - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
         this.load.image("platform", "assets/images/environment_elements/platform.png");
@@ -35,7 +35,7 @@ export default class Physics_v5 extends Phaser.Scene {
 
     create() {
         // Qui le istruzioni su cosa creare e dove nel mondo di gioco
-        console.log("physics_v5 - Executing create()");
+        console.log("test_scene_2 - Executing create()");
         // Sfondo
         this.background = this.add.tileSprite(0, -280, 6000, 1000, "background_base");
         this.background.setOrigin(0, 0);
@@ -92,7 +92,7 @@ export default class Physics_v5 extends Phaser.Scene {
         // Azioni che vengono eseguite a ogni frame del gioco
         this.player.manageMovements();
         this.animateBackground();
-        this.manageShurikens();
+        this.manageFlowers();
     }
 
     createStaticPlatforms() {
@@ -109,21 +109,21 @@ export default class Physics_v5 extends Phaser.Scene {
         });
     }
 
-    manageShurikens() {
-        const minTimeBetweenShurikens = 500;    // Tempo minimo (in ms) tra uno shuriken e l'altro
+    manageFlowers() {
+        const minTimeBetweenFlowers = 500;    // Tempo minimo (in ms) tra un fiore e l'altro
 
-        const timeFromPreviousShuriken = this.time.now-this.lastShuriken;
+        const timeFromPreviousFlower = this.time.now-this.lastFlower;
 
-        // Se F e' premuto ed e' passato abbastanza tempo tra lo shuriken precedente
+        // Se F e' premuto ed e' passato abbastanza tempo tra il fiore precedente
         // e adesso...
-        if(this.keyF.isDown && timeFromPreviousShuriken > minTimeBetweenShurikens) {
-            // Se sono qui devo creare e lanciare uno shuriken
-            this.lastShuriken = this.time.now;      // Setto il tempo per il prossimo giro
+        if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
+            // Se sono qui devo creare e lanciare un fiore
+            this.lastFlower = this.time.now;      // Setto il tempo per il prossimo giro
             const player_dir = this.player.flipX;   // Prendo la direzione del player
-                                                    // (che sara' la direzione dello Shuriken)
+                                                    // (che sara' la direzione del fiore)
 
-            // Creo uno shuriken
-            const s = new Shuriken(this, this.player.x+20, this.player.y-60, 10, player_dir);
+            // Creo un fiore
+            const s = new Flower(this, this.player.x + this.player.body.width / 2, this.player.y-60, 10, player_dir);
             // Aggiungo la colisione
             this.physics.add.collider(this.big_mushroom, s, this.destroyMushroom, null, this);
             // Lo lancio

@@ -1,8 +1,8 @@
 // Importiamo le scene (ne usiamo una diversa per ogni esempio)
-import SceneWelcomeMenu from "./scenes/0_welcome_mouse.js"
-import Physics_v4 from "./scenes/7_physics_v4.js";
-import Physics_v5 from "./scenes/7_physics_v5.js";
-import SceneGameOver from "./scenes/G_gameover.js";
+import SplashScreen from "./scenes/splash_screen.js"
+import TestScene1 from "./scenes/test_scene_1.js";
+import TestScene2 from "./scenes/test_scene_2.js";
+import GameOver from "./scenes/gameover.js";
 
 // Definiamo la configurazione di lancio del gioco
 const config = {
@@ -10,7 +10,7 @@ const config = {
     width: 1280,
     height: 720,
     backgroundColor: 0x000000, // sfondo nero
-    scene: [ SceneWelcomeMenu, Physics_v4, Physics_v5, SceneGameOver ],
+    scene: [ SplashScreen, TestScene1, TestScene2, GameOver ],
     pixelArt: true,
     parent: "game_area", // Specifica il div contenitore
     physics: {

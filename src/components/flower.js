@@ -1,4 +1,4 @@
-export default class Shuriken extends Phaser.GameObjects.Sprite {
+export default class Flower extends Phaser.GameObjects.Sprite {
 
     floorHeight;
     goingRight;
@@ -8,7 +8,7 @@ export default class Shuriken extends Phaser.GameObjects.Sprite {
 
     constructor(scene, x, y, stepLength, goingRight) {
         // Il costruttore della classe base Phaser.Scene prende come argomento la scena
-		super(scene, x, y, "shuriken");
+		super(scene, x, y, "flower");
         scene.add.existing(this);
         this.initialX = x;
         this.goingRight = goingRight;

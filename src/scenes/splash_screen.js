@@ -1,18 +1,18 @@
-export default class SceneWelcomeMenu extends Phaser.Scene {
+export default class SplashScreen extends Phaser.Scene {
 
     background;        // oggetto relativo all'elemento "sfondo"
 
     constructor(){
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
-		super("scene_welcome_menu");
+		super("splash_screen");
     }
 
     init(){
-        console.log("scene_welcome - Executing init()");
+        console.log("splash_screen - Executing init()");
     }
 
     preload() {
-        console.log("scene_welcome - Executing preload()");
+        console.log("splash_screen - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("background_base", "assets/images/background/background.jpg"); // carica l'immagine di sfondo
 
@@ -33,11 +33,11 @@ export default class SceneWelcomeMenu extends Phaser.Scene {
         this.load.image("pauseButton", "assets/UI/pause_button.png"); //caricamento bottone menu di pausa
         this.load.image("menuBkg", "assets/UI/menu_block.png"); //caricamento pannello del menu di pausa
         this.load.image("playButton", "assets/UI/play_button.png");
-        this.load.image("shuriken", "assets/images/weapons/shuriken.png");
+        this.load.image("flower", "assets/images/weapons/flower.png");
     }
 
     create() {
-        console.log("scene_welcome - Executing create()");
+        console.log("splash_screen - Executing create()");
 
         // Posizioniamo gli elementi nella scena
         this.background = this.add.image(0, -280, "background_base");
@@ -49,7 +49,7 @@ export default class SceneWelcomeMenu extends Phaser.Scene {
         this.playbutton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
 
         this.playbutton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
-            this.scene.start("physics_v4");
+            this.scene.start("test_scene_2");
         });
     }
 
