@@ -40,7 +40,7 @@ export default class SceneWelcomeMenu extends Phaser.Scene {
         console.log("scene_welcome - Executing create()");
 
         // Posizioniamo gli elementi nella scena
-        this.background = this.add.image(0, 0, "background_base");
+        this.background = this.add.image(0, -280, "background_base");
         this.background.setOrigin(0,0);
 
         //creo una immagine per il bottone. NB NON SEGUITE I TUTORIAL PER PHASER2, è stata completamente cambiata e non funzionano più

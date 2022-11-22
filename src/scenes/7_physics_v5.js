@@ -37,7 +37,7 @@ export default class Physics_v5 extends Phaser.Scene {
         // Qui le istruzioni su cosa creare e dove nel mondo di gioco
         console.log("physics_v5 - Executing create()");
         // Sfondo
-        this.background = this.add.tileSprite(0, 0, 6000, 720, "background_base");
+        this.background = this.add.tileSprite(0, -280, 6000, 1000, "background_base");
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
@@ -100,7 +100,7 @@ export default class Physics_v5 extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup({
             key: 'platform',
             repeat: 3,
-            setXY: { x: 1024, y: this.game.config.height - 150, stepX: 512, stepY: 50}
+            setXY: { x: 1024, y: this.game.config.height - 150, stepX: 512, stepY: -50}
         });
 
         // Rende le piattaforme "solide"
@@ -133,7 +133,8 @@ export default class Physics_v5 extends Phaser.Scene {
 
     animateBackground() {
         this.background.x = -this.cameras.main.scrollX * 0.5;
-        this.cameras.main.followOffset.y = this.player.body.y + this.player.height/2 - this.game.config.height / 2;
+        //this.cameras.main.y = - (this.player.body.y + this.player.height / 2 - this.game.config.height);
+        //this.background.y = - this.cameras.main.scrollY * 0.5;
     }
 
     destroyMushroom(mushroom, s) {

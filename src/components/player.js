@@ -125,7 +125,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if (this.body.touching.up) {
             this.isJumping = false;
             this.body.setVelocityY(0);
-            console.log("TOCCO");
         }
 
         // Gestiamo le animazioni separatamente
