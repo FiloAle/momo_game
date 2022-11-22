@@ -114,7 +114,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight && !this.isJumping && this.body.touching.down) {
             console.log(this.y + "   " + this.displayHeight + "   " + this.floorHeight);
             this.isJumping = true;
-            this.body.setVelocityY(-800);  // Salto (caso con l'introduzione della fisica)
+            this.body.setVelocityY(-550);  // Salto (caso con l'introduzione della fisica)
         }
 
         // Se il giocatore non sta premendo la barra spaziatrice e il personaggio è con

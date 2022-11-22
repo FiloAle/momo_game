@@ -15,6 +15,7 @@ export default class SplashScreen extends Phaser.Scene {
         console.log("splash_screen - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("background_base", "assets/images/background/background.jpg"); // carica l'immagine di sfondo
+        this.load.image("background_splash_screen", "assets/images/background/splash_screen.jpg"); // carica l'immagine di sfondo
 
         // Carichiamo l'immagine del giocatore in formato spritesheet (ci servirà nelle prossime scene)
         const player_spritesheet_config = {
@@ -40,12 +41,12 @@ export default class SplashScreen extends Phaser.Scene {
         console.log("splash_screen - Executing create()");
 
         // Posizioniamo gli elementi nella scena
-        this.background = this.add.image(0, -280, "background_base");
+        this.background = this.add.image(0, 0, "background_splash_screen");
         this.background.setOrigin(0,0);
 
-        //creo una immagine per il bottone. NB NON SEGUITE I TUTORIAL PER PHASER2, è stata completamente cambiata e non funzionano più
-        this.playbutton = this.add.image(this.game.config.width/2, this.game.config.height/2, "playButton");
-        this.playbutton.setOrigin(0.5, 0.5);
+        //creo una immagine per il bottone
+        this.playbutton = this.add.image(this.game.config.width - 440, this.game.config.height / 2 + 128, "playButton");
+        this.playbutton.setOrigin(0, 0);
         this.playbutton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
 
         this.playbutton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
