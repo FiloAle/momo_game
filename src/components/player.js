@@ -7,6 +7,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     stepLength;       // lunghezza del passo
     isJumping;        // verifichiamo se l'animazione del giocatore è già in salto o no
     maxWidth;
+    isKeyUpPressed;
 
     constructor(scene, x, y, maxWidth) {
         // Il costruttore della classe base Phaser.Scene prende come argomento la scena
@@ -111,10 +112,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(0); 
         }
 
-        if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight && !this.isJumping && this.body.touching.down) {
-            console.log(this.y + "   " + this.displayHeight + "   " + this.floorHeight);
+        if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight && !this.isJumping && this.body.touching.down && !this.isKeyUpPressed) {
+            this.isKeyUpPressed = true;
             this.isJumping = true;
             this.body.setVelocityY(-550);  // Salto (caso con l'introduzione della fisica)
+        }
+        if(this.keySpace.isUp && this.keyW.isUp && this.cursorKeys.up.isUp)
+        {
+            this.isKeyUpPressed = false;
         }
 
         // Se il giocatore non sta premendo la barra spaziatrice e il personaggio è con
