@@ -3,10 +3,10 @@ import Flower from "../components/flower.js"
 
 export default class TestScene2 extends Phaser.Scene {
 
-    background;       // oggetto relativo all'elemento "sfondo"
-    player;           // oggetto relativo all'elemento "giocatore"
-    floorHeight;      // Altezza del terreno (asse y) rispetto al riquadro di gioco
-    lastFlower;     // Tempo dell'ultimo fiore lanciato
+    background;         // oggetto relativo all'elemento "sfondo"
+    player;             // oggetto relativo all'elemento "giocatore"
+    floorHeight;        // Altezza del terreno (asse y) rispetto al riquadro di gioco
+    lastFlower;         // Tempo dell'ultimo fiore lanciato
     isCameraFollowingPlayer;
     
 
@@ -58,7 +58,7 @@ export default class TestScene2 extends Phaser.Scene {
         this.player = this.physics.add.existing(thePlayer);
         this.physics.add.collider(this.player, this.floor);
 
-        // Posizione camera centrata su player quando arriva a metà schermata
+        // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
         this.cameras.main.setBounds(0, 0, 10000, 720);
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
@@ -112,7 +112,7 @@ export default class TestScene2 extends Phaser.Scene {
     manageFlowers() {
         const minTimeBetweenFlowers = 500;    // Tempo minimo (in ms) tra un fiore e l'altro
 
-        const timeFromPreviousFlower = this.time.now-this.lastFlower;
+        const timeFromPreviousFlower = this.time.now - this.lastFlower;
 
         // Se F e' premuto ed e' passato abbastanza tempo tra il fiore precedente
         // e adesso...
