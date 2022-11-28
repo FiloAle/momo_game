@@ -1,5 +1,6 @@
 import Player from "../components/player.js"
 import Flower from "../components/flower.js"
+import Obstacles from "../components/obstacles.js";
 
 export default class TestScene2 extends Phaser.Scene {
 
@@ -84,7 +85,8 @@ export default class TestScene2 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        this.createStaticPlatforms();
+        const ob = new Obstacles(this);
+        ob.createStaticPlatforms(850, this.game.config.height - 150, 500, -50, 'platform', 5);
 
     }
 
@@ -93,20 +95,6 @@ export default class TestScene2 extends Phaser.Scene {
         this.player.manageMovements();
         this.animateBackground();
         this.manageFlowers();
-    }
-
-    createStaticPlatforms() {
-        // Aggiungi le piattaforme come un gruppo di oggetti statici
-        this.platforms = this.physics.add.staticGroup({
-            key: 'platform',
-            repeat: 3,
-            setXY: { x: 1024, y: this.game.config.height - 150, stepX: 512, stepY: -50}
-        });
-
-        // Rende le piattaforme "solide"
-        this.physics.add.collider(this.platforms, this.player, () => {
-            this.player.isJumping = false;
-        });
     }
 
     manageFlowers() {
