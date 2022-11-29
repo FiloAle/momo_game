@@ -123,7 +123,7 @@ export default class TestScene1 extends Phaser.Scene {
         // Rendi le piattaforme "solide". Se il giocatore è su una piattaforma
         // allora il suo stato è "non sta saltando" (questo per riprodurre l'animazione
         // del giocatore fermo).
-        this.physics.add.collider(this.movingPlatforms, this.player, ()=> {
+        this.physics.add.collider(this.movingPlatforms, this.player, () => {
             this.player.isJumping = false;
         });
     }

@@ -1,6 +1,7 @@
 import Player from "../components/player.js"
 import Flower from "../components/flower.js"
-import Obstacles from "../components/obstacles.js";
+import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
+import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 
 export default class TestScene2 extends Phaser.Scene {
 
@@ -9,7 +10,8 @@ export default class TestScene2 extends Phaser.Scene {
     floorHeight;        // Altezza del terreno (asse y) rispetto al riquadro di gioco
     lastFlower;         // Tempo dell'ultimo fiore lanciato
     isCameraFollowingPlayer;
-    
+    mP1;
+    updates = 0;
 
 
     constructor() {
@@ -85,9 +87,11 @@ export default class TestScene2 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        const ob = new Obstacles(this);
-        ob.createStaticPlatforms(850, this.game.config.height - 150, 500, -50, 'platform', 5);
+        const sP1 = new StaticPlatformsGroup(this);
+        sP1.createStaticPlatforms(5, 850, this.game.config.height - 150, 500, -50, 'platform');
 
+        this.mP1 = new MovingPlatformsGroup(this);
+        this.mP1.createMovingPlatforms(3, 200, 100, 250, -50, 'platform', 1, 200, 100);
     }
 
     update() {
@@ -95,6 +99,13 @@ export default class TestScene2 extends Phaser.Scene {
         this.player.manageMovements();
         this.animateBackground();
         this.manageFlowers();
+        
+        this.updates++;
+        if(this.updates % 60 == 0)
+        {
+            console.log(this.time.now);
+            this.mP1.updateMovingPlatforms();
+        }
     }
 
     manageFlowers() {

@@ -1,11 +1,11 @@
-export default class Obstacles {
+export default class StaticPlatformsGroup {
     _scene;
 
     constructor(scene) {
         this._scene = scene;
     }
     
-    createStaticPlatforms(coordX, coordY, distX, distY, img, n) {
+    createStaticPlatforms(n, coordX, coordY, distX, distY, img) {
         // Aggiungi le piattaforme come un gruppo di oggetti statici
         this._scene.platforms = this._scene.physics.add.staticGroup({
             key: img,
