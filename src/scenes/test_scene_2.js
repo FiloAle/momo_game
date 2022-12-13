@@ -2,6 +2,7 @@ import Player from "../components/player.js"
 import Flower from "../components/flower.js"
 import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
 import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
+import Enemy from "../components/enemy.js";
 
 export default class TestScene2 extends Phaser.Scene {
 
@@ -12,6 +13,8 @@ export default class TestScene2 extends Phaser.Scene {
     isCameraFollowingPlayer;
     mP1;
     updates = 0;
+    playerStartedMoving;
+    lastLivesDecrement;
 
 
     constructor() {
@@ -26,7 +29,9 @@ export default class TestScene2 extends Phaser.Scene {
         this.floorHeight = this.game.config.height - 30;
         this.worldWidth = 10000;
         this.lastFlower = 0;
-
+        this.lastLivesDecrement = 0;
+        this.playerStartedMoving = false;
+        this.isFlowerActive = false;
     }
 
     preload() {
@@ -47,8 +52,8 @@ export default class TestScene2 extends Phaser.Scene {
         this.isCameraFollowingPlayer = false;
 
         // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
-        this.floor = this.add.rectangle(0, this.game.config.height,
-            this.worldWidth, this.game.config.height - this.floorHeight,
+        this.floor = this.add.rectangle(-250, this.game.config.height,
+            this.worldWidth + 250, this.game.config.height - this.floorHeight,
             0xFFFFFF, 0);
         this.floor.setScrollFactor(0, 0);
         this.floor.setOrigin(0, 1);
@@ -92,6 +97,23 @@ export default class TestScene2 extends Phaser.Scene {
 
         this.mP1 = new MovingPlatformsGroup(this);
         this.mP1.createMovingPlatforms(3, 200, 100, 250, -50, 'platform', 1, 200, 100);
+
+        this.uomogrigio = new Enemy(this, -250, this.floorHeight);
+        this.physics.add.existing(this.uomogrigio);
+        this.physics.add.collider(this.uomogrigio, this.floor);
+
+
+        this.player.resize();
+        this.uomogrigio.resize();
+
+        this.game.gameState.lives = 3;
+        const styleConfig = { color: '#FFFFFF', fontSize: 36 };
+
+        // Inserisci il testo con il punteggio corrente
+        const lifeMessage = "Lives: " + this.game.gameState.lives;
+        this.lifeBox = this.add.text(100, 0, lifeMessage, styleConfig);
+        this.lifeBox.setOrigin(0, 0);
+        this.lifeBox.setScrollFactor(0, 0);
     }
 
     update() {
@@ -99,10 +121,23 @@ export default class TestScene2 extends Phaser.Scene {
         this.player.manageMovements();
         this.animateBackground();
         this.manageFlowers();
+
+        // Rimosso overlap a favore di un controllo di sovrapposizione "manuale" che risolve indirettamente problema di istruzione bloccante
+        if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.uomogrigio.getBounds()) && this.uomogrigio.isEvil) {
+            this.updateLives();
+        }
+
+        if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
+            this.playerStartedMoving = true;
+            this.uomogrigio.start();
+        }
+
+        if(this.playerStartedMoving) {
+            this.uomogrigio.manageMovements();
+        }
         
         this.updates++;
-        if(this.updates % 60 == 0)
-        {
+        if(this.updates % 60 == 0) {
             console.log(this.time.now);
             this.mP1.updateMovingPlatforms();
         }
@@ -115,19 +150,25 @@ export default class TestScene2 extends Phaser.Scene {
 
         // Se F e' premuto ed e' passato abbastanza tempo tra il fiore precedente
         // e adesso...
+
+        this.flower;
         if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
             // Se sono qui devo creare e lanciare un fiore
             this.lastFlower = this.time.now;      // Setto il tempo per il prossimo giro
-            const player_dir = this.player.flipX;   // Prendo la direzione del player
-                                                    // (che sara' la direzione del fiore)
 
             // Creo un fiore
-            const s = new Flower(this, this.player.x + this.player.body.width / 2, this.player.y-60, 10, player_dir);
-            // Aggiungo la colisione
-            this.physics.add.collider(this.big_mushroom, s, this.destroyMushroom, null, this);
+            this.flower = new Flower(this, this.player.x + this.player.body.width / 2, this.player.y - 50, 10, this.player.flipX);
+            // Aggiungo la collisione
+            this.isFlowerActive = true;
+            
             // Lo lancio
-            s.fire();
-        } 
+            this.flower.fire();
+        }
+
+        if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.getBounds(), this.uomogrigio.getBounds()) && this.uomogrigio.isEvil) {
+            this.cureEnemy(this.uomogrigio, this.flower);
+            this.isFlowerActive = false;
+        }
     }
 
     animateBackground() {
@@ -136,9 +177,24 @@ export default class TestScene2 extends Phaser.Scene {
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
     }
 
-    destroyMushroom(mushroom, s) {
-        mushroom.destroy();
-        s.destroy();
+    cureEnemy(enemy, f) {
+        enemy.isEvil = false;
+        f.destroy();
+    }
+
+    updateLives() {
+        // Aggiorna il punteggio
+        const minTimeLivesDecrement = 2000;    // Tempo minimo (in ms) tra una perdita di vita e l'altra
+
+        const timeFromLastLivesDecrement = this.time.now - this.lastLivesDecrement;
+
+        if(timeFromLastLivesDecrement > minTimeLivesDecrement) {
+            // Se sono qui devo togliere una vita
+            this.lastLivesDecrement = this.time.now;
+
+            this.game.gameState.lives--;
+            this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+        }
     }
  
 }

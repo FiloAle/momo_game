@@ -2,7 +2,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     cursorKeys;
     keySpace;
-    initialPosition;
+    initialX;
     floorHeight;
     stepLength;       // lunghezza del passo
     isJumping;        // verifichiamo se l'animazione del giocatore è già in salto o no
@@ -13,7 +13,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         // Il costruttore della classe base Phaser.Scene prende come argomento la scena
 		super(scene, x, y, "playerrun");
         scene.add.existing(this);
-        this.initialPosition = x;
+        this.initialX = x;
         this.floorHeight = y;
         this.setOrigin(0, 1); // Punto pivot in basso a sinistra
         this.setScale(0.5);   // Scala le dimensioni del giocatore
@@ -71,6 +71,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
         });
 
         this.anims.play("playerStop"); //facciamo partire l'animazione del personaggio, questa volta fermo
+    }
+
+    resize() {
+        this.body.setSize(100, 335);
     }
 
     manageAnimations() {
@@ -139,7 +143,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     die() {
         // Nel nostro caso la morte del giocatore consiste nel reset alla posizione iniziale
         // del livello
-        this.x = this.initialPosition;
+        this.x = this.initialX;
     }
 
 }

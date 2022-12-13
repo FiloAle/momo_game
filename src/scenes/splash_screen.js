@@ -24,11 +24,11 @@ export default class SplashScreen extends Phaser.Scene {
         };
         this.load.spritesheet("playerrun", "assets/images/characters/playerrunandjump.png", player_spritesheet_config);
 
-        const monster_spritesheet_config = {
-            frameWidth:  72,
-            frameHeight: 72,
+        const enemy_spritesheet_config = {
+            frameWidth:  280,
+            frameHeight: 335,
         };
-        this.load.spritesheet("monster", "assets/images/characters/enemy.png", monster_spritesheet_config);
+        this.load.spritesheet("enemy", "assets/images/characters/enemy.png", enemy_spritesheet_config);
 
         // Carichiamo gli asset grafici
         this.load.image("pauseButton", "assets/UI/pause_button.png"); //caricamento bottone menu di pausa
