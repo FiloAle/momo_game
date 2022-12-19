@@ -5,7 +5,7 @@ export default class StaticPlatformsGroup {
         this._scene = scene;
     }
     
-    createStaticPlatforms(n, coordX, coordY, distX, distY, img) {
+    createStaticPlatforms(n, coordX, coordY, distX, distY, solid, img) {
         // Aggiungi le piattaforme come un gruppo di oggetti statici
         this._scene.platforms = this._scene.physics.add.staticGroup({
             key: img,
@@ -16,8 +16,10 @@ export default class StaticPlatformsGroup {
         // Rendi le piattaforme "solide". Se il giocatore è su una piattaforma
         // allora il suo stato è "non sta saltando" (questo per riprodurre l'animazione
         // del giocatore fermo).
-        this._scene.physics.add.collider(this._scene.platforms, this._scene.player, () => {
-            this._scene.player.isJumping = false;
-        });
+        if(solid) {
+            this._scene.physics.add.collider(this._scene.platforms, this._scene.player, () => {
+                this._scene.player.isJumping = false;
+            });
+        }
     }
 }

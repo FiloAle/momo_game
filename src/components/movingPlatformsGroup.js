@@ -51,8 +51,7 @@ export default class MovingPlatformsGroup {
     }
     
     updateMovingPlatforms() {
-        this._velocity = -this._velocity;
-        console.log(this._velocity);
+        this._velocity = - this._velocity;
 
         this._scene.movingPlatforms.children.iterate((platform) => {
             if(this._direction == 0)

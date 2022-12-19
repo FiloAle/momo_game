@@ -64,8 +64,6 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     manageAnimations() {
-        console.log(this.body.velocity.x);
-
         const curr_anim = this.anims.currentAnim.key;   // Otteniamo il nome dell'animazione corrente
 
         if (this.body.velocity.x == 0) {
@@ -77,5 +75,10 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
 
             this.flipX = this.body.velocity.x < 0;
         }
+    }
+
+    cure(f) {
+        this.isEvil = false;
+        f.destroy();
     }
 }

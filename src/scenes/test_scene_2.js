@@ -9,7 +9,7 @@ export default class TestScene2 extends Phaser.Scene {
     background;         // oggetto relativo all'elemento "sfondo"
     player;             // oggetto relativo all'elemento "giocatore"
     floorHeight;        // Altezza del terreno (asse y) rispetto al riquadro di gioco
-    lastFlower;         // Tempo dell'ultimo fiore lanciato
+    lastFlower;         // Tempo dall'ultimo fiore lanciato
     isCameraFollowingPlayer;
     mP1;
     updates = 0;
@@ -39,39 +39,52 @@ export default class TestScene2 extends Phaser.Scene {
         // Carichiamo gli asset grafici
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
         this.load.image("platform", "assets/images/environment_elements/platform.png");
+        this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
+        this.load.image("column", "assets/images/environment_elements/column.png");
     }
 
     create() {
         // Qui le istruzioni su cosa creare e dove nel mondo di gioco
         console.log("test_scene_2 - Executing create()");
-        // Sfondo
-        this.background = this.add.tileSprite(0, -280, 6000, 1000, "background_base");
+
+        //#region Impostazione sfondo scena
+        this.background = this.add.tileSprite(0, this.game.config.height - this.textures.get('b1').getSourceImage().height, this.game.width, this.textures.get('b1').getSourceImage().height, "b1");
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
+        //#endregion
 
         this.isCameraFollowingPlayer = false;
 
-        // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
-        this.floor = this.add.rectangle(-250, this.game.config.height,
-            this.worldWidth + 250, this.game.config.height - this.floorHeight,
-            0xFFFFFF, 0);
+        //#region Pavimento
+        this.floor = this.add.rectangle(-1000, this.game.config.height,
+            this.worldWidth + 1000, this.game.config.height - this.floorHeight,
+            0xFFFFFF, 0); // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
         this.floor.setScrollFactor(0, 0);
         this.floor.setOrigin(0, 1);
         // Aggiungi il piano alla fisica
         this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
+        //#endregion
 
-        // Player
+        const stP = new StaticPlatformsGroup(this);
+        stP.createStaticPlatforms(2, 50, 552, 100, 0, false, 'column');
+
+        //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth)
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(thePlayer);
         this.physics.add.collider(this.player, this.floor);
-
-        // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
-        this.cameras.main.setBounds(0, 0, 10000, 720);
-        this.cameras.main.startFollow(this.player);
-        this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
+        //#endregion
         
+        stP.createStaticPlatforms(1, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
+        stP.createStaticPlatforms(0, 2948, 600, 0, 0, true, 'platform_1');
+        stP.createStaticPlatforms(5, 850, this.game.config.height - 150, 500, -50, true, 'platform');
 
+        //#region Posizionamento camera
+        this.cameras.main.setBounds(0, 0, 10000, 720);
+        this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
+        this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
+        //#endregion
+        
         // Creiamo un fungo enorme che sia così grande da essere non saltabile
         this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");
         this.big_mushroom.setOrigin(0, 1);
@@ -92,28 +105,36 @@ export default class TestScene2 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        const sP1 = new StaticPlatformsGroup(this);
-        sP1.createStaticPlatforms(5, 850, this.game.config.height - 150, 500, -50, 'platform');
-
         this.mP1 = new MovingPlatformsGroup(this);
         this.mP1.createMovingPlatforms(3, 200, 100, 250, -50, 'platform', 1, 200, 100);
 
-        this.uomogrigio = new Enemy(this, -250, this.floorHeight);
-        this.physics.add.existing(this.uomogrigio);
-        this.physics.add.collider(this.uomogrigio, this.floor);
+        //#region Creazione nemici
+        this.uominiGrigi = [];
+        for(let i = 0; i < 5; i++) {
+            this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
+            this.physics.add.existing(this.uominiGrigi[i]);
+            this.physics.add.collider(this.uominiGrigi[i], this.floor);
+            this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
+        }
 
+        for(let k = 0; k < this.uominiGrigi.length; k++) {
+            this.uominiGrigi.forEach(enemy => {
+                this.physics.add.collider(this.uominiGrigi[k], enemy);
+            });
+        }
+        //#endregion
 
-        this.player.resize();
-        this.uomogrigio.resize();
+        this.player.resize(); // Ridimensionamento hitbox
 
         this.game.gameState.lives = 3;
         const styleConfig = { color: '#FFFFFF', fontSize: 36 };
 
-        // Inserisci il testo con il punteggio corrente
+        //#region Inserimento informazione vita
         const lifeMessage = "Lives: " + this.game.gameState.lives;
         this.lifeBox = this.add.text(100, 0, lifeMessage, styleConfig);
         this.lifeBox.setOrigin(0, 0);
         this.lifeBox.setScrollFactor(0, 0);
+        //#endregion
     }
 
     update() {
@@ -122,25 +143,31 @@ export default class TestScene2 extends Phaser.Scene {
         this.animateBackground();
         this.manageFlowers();
 
-        // Rimosso overlap a favore di un controllo di sovrapposizione "manuale" che risolve indirettamente problema di istruzione bloccante
-        if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.uomogrigio.getBounds()) && this.uomogrigio.isEvil) {
-            this.updateLives();
+        for(let i = 0; i < 5; i++) {
+            if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
+                this.updateLives();
+            }
         }
 
         if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
             this.playerStartedMoving = true;
-            this.uomogrigio.start();
+            for(let i = 0; i < 5; i++) {
+                this.uominiGrigi[i].start();
+            }
         }
 
         if(this.playerStartedMoving) {
-            this.uomogrigio.manageMovements();
+            for(let i = 0; i < 5; i++) {
+                this.uominiGrigi[i].manageMovements();
+            }
         }
         
+        //#region Aggiornamento movimento platforms mobili
         this.updates++;
         if(this.updates % 60 == 0) {
-            console.log(this.time.now);
             this.mP1.updateMovingPlatforms();
         }
+        //#endregion
     }
 
     manageFlowers() {
@@ -165,9 +192,12 @@ export default class TestScene2 extends Phaser.Scene {
             this.flower.fire();
         }
 
-        if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.getBounds(), this.uomogrigio.getBounds()) && this.uomogrigio.isEvil) {
-            this.cureEnemy(this.uomogrigio, this.flower);
-            this.isFlowerActive = false;
+
+        for(let i = 0; i < 5; i++) {
+            if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
+                this.uominiGrigi[i].cure(this.flower);
+                this.isFlowerActive = false;
+            }
         }
     }
 
@@ -175,11 +205,6 @@ export default class TestScene2 extends Phaser.Scene {
         this.background.x = - this.cameras.main.scrollX * 0.5;
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
-    }
-
-    cureEnemy(enemy, f) {
-        enemy.isEvil = false;
-        f.destroy();
     }
 
     updateLives() {

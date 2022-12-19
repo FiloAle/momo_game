@@ -15,6 +15,7 @@ export default class SplashScreen extends Phaser.Scene {
         console.log("splash_screen - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("background_base", "assets/images/background/background.jpg"); // carica l'immagine di sfondo
+        this.load.image("b1", "assets/images/background/b1.jpg"); // carica l'immagine di sfondo
         this.load.image("background_splash_screen", "assets/images/background/splash_screen.jpg"); // carica l'immagine di sfondo
 
         // Carichiamo l'immagine del giocatore in formato spritesheet (ci servirà nelle prossime scene)
