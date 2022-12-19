@@ -66,7 +66,7 @@ export default class TestScene2 extends Phaser.Scene {
         //#endregion
 
         const stP = new StaticPlatformsGroup(this);
-        stP.createStaticPlatforms(2, 50, 552, 100, 0, false, 'column');
+        stP.createStaticPlatforms(3, 50, 552, 100, 0, false, "column");
 
         //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth)
@@ -75,9 +75,9 @@ export default class TestScene2 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.floor);
         //#endregion
         
-        stP.createStaticPlatforms(1, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        stP.createStaticPlatforms(0, 2948, 600, 0, 0, true, 'platform_1');
-        stP.createStaticPlatforms(5, 850, this.game.config.height - 150, 500, -50, true, 'platform');
+        stP.createStaticPlatforms(2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
+        stP.createStaticPlatforms(1, 2948, 600, 0, 0, true, 'platform_1');
+        stP.createStaticPlatforms(6, 850, this.game.config.height - 150, 500, -50, true, 'platform');
 
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 10000, 720);
@@ -85,7 +85,7 @@ export default class TestScene2 extends Phaser.Scene {
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
         //#endregion
         
-        // Creiamo un fungo enorme che sia così grande da essere non saltabile
+        // Creiamo un fungo
         this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");
         this.big_mushroom.setOrigin(0, 1);
         this.big_mushroom.setScale(1, 1);
@@ -94,9 +94,6 @@ export default class TestScene2 extends Phaser.Scene {
         // l'oggetto non sia spostabile dal giocatore
         this.big_mushroom.setImmovable(true);
         this.big_mushroom.body.allowGravity = false;
-
-        // Aggiungi il fungo alla fisica
-        this.physics.add.existing(this.big_mushroom);
 
         // Aggiungo i collider necessari
         this.physics.add.collider(this.big_mushroom, this.floor);
