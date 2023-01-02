@@ -2,10 +2,11 @@ import Platform from "./platform.js";
 
 export default class StaticPlatformsGroup {
     scene;
-    list = [];
+    list;
 
     constructor(scene) {
         this.scene = scene;
+        this.list = [];
     }
     
     createStaticPlatforms(n, coordX, coordY, distX, distY, solid, img) {
