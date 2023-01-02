@@ -12,7 +12,7 @@ export default class TestScene2 extends Phaser.Scene {
     lastFlower;         // Tempo dall'ultimo fiore lanciato
     isCameraFollowingPlayer;
     mP1;
-    updates = 0;
+    updates;
     playerStartedMoving;
     lastLivesDecrement;
 
@@ -29,6 +29,7 @@ export default class TestScene2 extends Phaser.Scene {
         this.floorHeight = this.game.config.height - 30;
         this.worldWidth = 10000;
         this.lastFlower = 0;
+        this.updates = 0;
         this.lastLivesDecrement = 0;
         this.playerStartedMoving = false;
         this.isFlowerActive = false;
@@ -69,7 +70,7 @@ export default class TestScene2 extends Phaser.Scene {
         stP.createStaticPlatforms(3, 50, 552, 100, 0, false, "column");
 
         //#region Creazione player
-        const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth)
+        const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(thePlayer);
         this.physics.add.collider(this.player, this.floor);
@@ -140,7 +141,7 @@ export default class TestScene2 extends Phaser.Scene {
         this.animateBackground();
         this.manageFlowers();
 
-        for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
             if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
                 this.updateLives();
             }
@@ -148,13 +149,13 @@ export default class TestScene2 extends Phaser.Scene {
 
         if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
             this.playerStartedMoving = true;
-            for(let i = 0; i < 5; i++) {
+            for(let i = 0; i < this.uominiGrigi.length; i++) {
                 this.uominiGrigi[i].start();
             }
         }
 
         if(this.playerStartedMoving) {
-            for(let i = 0; i < 5; i++) {
+            for(let i = 0; i < this.uominiGrigi.length; i++) {
                 this.uominiGrigi[i].manageMovements();
             }
         }
@@ -182,15 +183,14 @@ export default class TestScene2 extends Phaser.Scene {
 
             // Creo un fiore
             this.flower = new Flower(this, this.player.x + this.player.body.width / 2, this.player.y - 50, 10, this.player.flipX);
-            // Aggiungo la collisione
+            
             this.isFlowerActive = true;
             
             // Lo lancio
             this.flower.fire();
         }
 
-
-        for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
             if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
                 this.uominiGrigi[i].cure(this.flower);
                 this.isFlowerActive = false;
