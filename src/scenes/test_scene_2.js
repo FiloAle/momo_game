@@ -16,7 +16,6 @@ export default class TestScene2 extends Phaser.Scene {
     playerStartedMoving;
     lastLivesDecrement;
 
-
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
         super("test_scene_2");
@@ -115,6 +114,14 @@ export default class TestScene2 extends Phaser.Scene {
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
         }
 
+        /* for(let i = 0; i < 5; i++) {
+            this.uominiGrigi.push(new Enemy(this, this.movingPlatformsList[0].list[i].x, this.movingPlatformsList[0].list[i].y));
+            this.physics.add.existing(this.uominiGrigi[this.uominiGrigi.length - 1]);
+            this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.floor);
+            this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.movingPlatformsList[0].list[i]);
+            this.uominiGrigi[this.uominiGrigi.length - 1].resize(); // Ridimensionamento hitbox
+        } */
+
         for(let k = 0; k < this.uominiGrigi.length; k++) {
             this.uominiGrigi.forEach(enemy => {
                 this.physics.add.collider(this.uominiGrigi[k], enemy);
@@ -162,7 +169,7 @@ export default class TestScene2 extends Phaser.Scene {
         
         //#region Aggiornamento movimento platforms mobili
         this.updates++;
-        if(this.updates % 60 == 0) {
+        if(this.updates % this.mP1.duration == 0) {
             this.mP1.updateMovingPlatforms();
         }
         //#endregion
@@ -210,13 +217,17 @@ export default class TestScene2 extends Phaser.Scene {
 
         const timeFromLastLivesDecrement = this.time.now - this.lastLivesDecrement;
 
-        if(timeFromLastLivesDecrement > minTimeLivesDecrement) {
+        if(timeFromLastLivesDecrement > minTimeLivesDecrement && this.game.gameState.lives > 0) {
             // Se sono qui devo togliere una vita
             this.lastLivesDecrement = this.time.now;
 
             this.game.gameState.lives--;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
         }
+
+        if(this.game.gameState.lives == 0) {
+            this.player.die();
+            //schermata game over
+        }
     }
- 
 }

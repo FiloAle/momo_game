@@ -24,8 +24,6 @@ const config = {
     }
 };
 
-
-
 //creiamo il gioco a partire dalla configurazione iniziale
 let game = new Phaser.Game(config);
 
