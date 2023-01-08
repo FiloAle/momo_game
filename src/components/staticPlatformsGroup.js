@@ -4,7 +4,7 @@ export default class StaticPlatformsGroup {
     scene;
     list;
 
-    constructor(n, coordX, coordY, distX, distY, solid, img, scene) {
+    constructor(scene, n, coordX, coordY, distX, distY, solid, img) {
         this.scene = scene;
         this.list = [];
         this.#createStaticPlatforms(n, coordX, coordY, distX, distY, solid, img);

@@ -8,7 +8,7 @@ export default class MovingPlatformsGroup {
     lastDirectionChange;
     list;
 
-    constructor(n, coordX, coordY, distX, distY, img, direction, velocity, duration, scene) {
+    constructor(scene, n, coordX, coordY, distX, distY, img, direction, velocity, duration) {
         this.scene = scene;
         this.velocity = 0;
         this.direction = 0;
