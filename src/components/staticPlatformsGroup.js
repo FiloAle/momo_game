@@ -4,12 +4,13 @@ export default class StaticPlatformsGroup {
     scene;
     list;
 
-    constructor(scene) {
+    constructor(n, coordX, coordY, distX, distY, solid, img, scene) {
         this.scene = scene;
         this.list = [];
+        this.#createStaticPlatforms(n, coordX, coordY, distX, distY, solid, img);
     }
     
-    createStaticPlatforms(n, coordX, coordY, distX, distY, solid, img) {
+    #createStaticPlatforms(n, coordX, coordY, distX, distY, solid, img) {
         // Aggiungi le piattaforme come un gruppo di oggetti statici
         let x = coordX;
         let y = coordY;

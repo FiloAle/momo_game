@@ -65,8 +65,7 @@ export default class TestScene2 extends Phaser.Scene {
         this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
         //#endregion
 
-        const stP = new StaticPlatformsGroup(this);
-        stP.createStaticPlatforms(3, 50, 552, 100, 0, false, "column");
+        const columns = new StaticPlatformsGroup(3, 50, 552, 100, 0, false, "column", this);
 
         //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
@@ -75,9 +74,9 @@ export default class TestScene2 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.floor);
         //#endregion
         
-        stP.createStaticPlatforms(2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        stP.createStaticPlatforms(1, 2948, 600, 0, 0, true, 'platform_1');
-        stP.createStaticPlatforms(6, 850, this.game.config.height - 150, 500, -50, true, 'platform');
+        const pavement = new StaticPlatformsGroup(2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1', this);
+        const pavement_1 = new StaticPlatformsGroup(1, 2948, 600, 0, 0, true, 'platform_1', this);
+        const platforms_1 = new StaticPlatformsGroup(6, 850, this.game.config.height - 150, 500, -50, true, 'platform', this);
 
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 10000, 720);
@@ -102,8 +101,7 @@ export default class TestScene2 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        this.mP1 = new MovingPlatformsGroup(this);
-        this.mP1.createMovingPlatforms(3, 200, 100, 250, -50, 'platform', 1, 200, 100);
+        this.mP1 = new MovingPlatformsGroup(3, 200, 100, 250, -50, 'platform', 1, 200, 100, this);
 
         //#region Creazione nemici
         this.uominiGrigi = [];

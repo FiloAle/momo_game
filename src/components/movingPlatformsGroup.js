@@ -8,16 +8,17 @@ export default class MovingPlatformsGroup {
     lastDirectionChange;
     list;
 
-    constructor(scene) {
+    constructor(n, coordX, coordY, distX, distY, img, direction, velocity, duration, scene) {
         this.scene = scene;
         this.velocity = 0;
         this.direction = 0;
         this.duration = 0;
         this.lastDirectionChange = 0;
         this.list = [];
+        this.#createMovingPlatforms(n, coordX, coordY, distX, distY, img, direction, velocity, duration);
     }
     
-    createMovingPlatforms(n, coordX, coordY, distX, distY, img, direction, velocity, duration) {
+    #createMovingPlatforms(n, coordX, coordY, distX, distY, img, direction, velocity, duration) {
         // Aggiungi le piattaforme come un gruppo di oggetti dinamici
         this.x = coordX;
         this.y = coordY;
