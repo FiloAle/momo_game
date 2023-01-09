@@ -5,6 +5,7 @@ export default class Platform extends Phaser.GameObjects.Sprite {
     velocity;
     direction;
     width;
+    platform;
 
     constructor(scene, x, y, solid, img, direction, velocity) {
         super(scene, x, y, img);

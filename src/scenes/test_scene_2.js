@@ -64,9 +64,8 @@ export default class TestScene2 extends Phaser.Scene {
         //#endregion
 
         //#region Creazione player
-        const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(thePlayer);
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
 
@@ -74,6 +73,10 @@ export default class TestScene2 extends Phaser.Scene {
         const pavement_1 = new StaticPlatformsGroup(this, 1, pavement.list[pavement.list.length - 1].x + pavement.list[pavement.list.length - 1].width, 600, 0, 0, true, 'platform_1');
         const columns = new StaticPlatformsGroup(this, 3, 20, pavement.list[0].y - this.textures.get('column').getSourceImage().height, 100, 0, false, "column");
         const platforms_1 = new StaticPlatformsGroup(this, 6, 660, this.game.config.height - 150, 480, -50, true, 'platform');
+
+        this.pavements = [];
+        this.pavements.push(pavement);
+        this.pavements.push(pavement_1);
 
         this.player.setDepth(1);
         
@@ -107,10 +110,8 @@ export default class TestScene2 extends Phaser.Scene {
         //#region Creazione nemici
         this.uominiGrigi = [];
         for(let i = 0; i < 5; i++) {
-            this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
-            this.physics.add.existing(this.uominiGrigi[i]);
-            //this.physics.add.collider(this.uominiGrigi[i], this.floor);
-            this.uominiGrigi[i].body.allowGravity = false;
+            this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, Math.floor(Math.random() * (pavement.list[1].x + pavement.list[1].width)), this.floorHeight)));
+            this.uominiGrigi[i].body.allowGravity = true;
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
         }
 
@@ -121,6 +122,14 @@ export default class TestScene2 extends Phaser.Scene {
             this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.movingPlatformsList[0].list[i]);
             this.uominiGrigi[this.uominiGrigi.length - 1].resize(); // Ridimensionamento hitbox
         } */
+
+        this.pavements.forEach(pavement => {
+            this.uominiGrigi.forEach(enemy => {
+                pavement.list.forEach(platform => {
+                    this.physics.add.collider(enemy, platform.platform);
+                });
+            });
+        });
 
         for(let k = 0; k < this.uominiGrigi.length; k++) {
             this.uominiGrigi.forEach(enemy => {
@@ -150,8 +159,12 @@ export default class TestScene2 extends Phaser.Scene {
 
         for(let i = 0; i < this.uominiGrigi.length; i++) {
             if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
-                this.updateLives();
+                //this.updateLives();
             }
+        }
+
+        if(this.player.body.y > this.game.config.height) {
+            this.player.die();
         }
 
         if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
