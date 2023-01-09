@@ -56,28 +56,27 @@ export default class TestScene2 extends Phaser.Scene {
         this.isCameraFollowingPlayer = false;
 
         //#region Pavimento
-        this.floor = this.add.rectangle(-1000, this.game.config.height,
-            this.worldWidth + 1000, this.game.config.height - this.floorHeight,
-            0xFFFFFF, 0); // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
-        this.floor.setScrollFactor(0, 0);
-        this.floor.setOrigin(0, 1);
+        //this.floor = this.add.rectangle(-1000, this.game.config.height, this.worldWidth + 1000, this.game.config.height - this.floorHeight, 0xFFFFFF, 0); // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
+        //this.floor.setScrollFactor(0, 0);
+        //this.floor.setOrigin(0, 1);
         // Aggiungi il piano alla fisica
-        this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
+        //this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
         //#endregion
-
-        const columns = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
 
         //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(thePlayer);
-        this.physics.add.collider(this.player, this.floor);
+        //this.physics.add.collider(this.player, this.floor);
         //#endregion
-        
-        const pavement = new StaticPlatformsGroup(this, 2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        const pavement_1 = new StaticPlatformsGroup(this, 1, 2948, 600, 0, 0, true, 'platform_1');
-        const platforms_1 = new StaticPlatformsGroup(this, 6, 850, this.game.config.height - 150, 500, -50, true, 'platform');
 
+        const pavement = new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
+        const pavement_1 = new StaticPlatformsGroup(this, 1, pavement.list[pavement.list.length - 1].x + pavement.list[pavement.list.length - 1].width, 600, 0, 0, true, 'platform_1');
+        const columns = new StaticPlatformsGroup(this, 3, 20, pavement.list[0].y - this.textures.get('column').getSourceImage().height, 100, 0, false, "column");
+        const platforms_1 = new StaticPlatformsGroup(this, 6, 660, this.game.config.height - 150, 480, -50, true, 'platform');
+
+        this.player.setDepth(1);
+        
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 10000, 720);
         this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
@@ -94,6 +93,8 @@ export default class TestScene2 extends Phaser.Scene {
         this.big_mushroom.setImmovable(true);
         this.big_mushroom.body.allowGravity = false;
 
+        //TODO: Sostituire TUTTI i this.floor !!!
+
         // Aggiungo i collider necessari
         this.physics.add.collider(this.big_mushroom, this.floor);
         this.physics.add.collider(this.big_mushroom, this.player);
@@ -101,14 +102,15 @@ export default class TestScene2 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        this.mP1 = new MovingPlatformsGroup(this, 3, 200, 100, 250, -50, 'platform', 1, 200, 100);
+        this.mP1 = new MovingPlatformsGroup(this, 3, 50, 120, 240, -60, 'platform', 1, 200, 60);
 
         //#region Creazione nemici
         this.uominiGrigi = [];
         for(let i = 0; i < 5; i++) {
             this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
             this.physics.add.existing(this.uominiGrigi[i]);
-            this.physics.add.collider(this.uominiGrigi[i], this.floor);
+            //this.physics.add.collider(this.uominiGrigi[i], this.floor);
+            this.uominiGrigi[i].body.allowGravity = false;
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
         }
 
