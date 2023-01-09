@@ -16,7 +16,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.initialX = x;
         this.floorHeight = y;
         this.setOrigin(0, 1); // Punto pivot in basso a sinistra
-        this.setScale(0.5);   // Scala le dimensioni del giocatore
+        this.setScale(0.35);   // Scala le dimensioni del giocatore
 
         // Inizializziamo i valori di alcune proprietà
         this.isJumping = false; //di default il giocatore non sta saltando
@@ -119,7 +119,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight && !this.isJumping && this.body.touching.down && !this.isKeyUpPressed) {
             this.isKeyUpPressed = true;
             this.isJumping = true;
-            this.body.setVelocityY(-550);  // Salto (caso con l'introduzione della fisica)
+            this.body.setVelocityY(-600);  // Salto (caso con l'introduzione della fisica)
         }
         if(this.keySpace.isUp && this.keyW.isUp && this.cursorKeys.up.isUp)
         {

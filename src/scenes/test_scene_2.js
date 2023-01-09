@@ -38,8 +38,10 @@ export default class TestScene2 extends Phaser.Scene {
         console.log("test_scene_2 - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
-        this.load.image("platform", "assets/images/environment_elements/platform.png");
+        this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
         this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
+        this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
+        this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
     }
 
@@ -75,42 +77,38 @@ export default class TestScene2 extends Phaser.Scene {
         //#endregion
         
         const pavement = new StaticPlatformsGroup(this, 2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        const pavement_1 = new StaticPlatformsGroup(this, 1, 2948, 600, 0, 0, true, 'platform_1');
-        const platforms_1 = new StaticPlatformsGroup(this, 6, 850, this.game.config.height - 150, 500, -50, true, 'platform');
+        //const pavement_1 = new StaticPlatformsGroup(this, 1, 2948, 600, 0, 0, true, 'platform_1');
+        
+        //platform casine
+        const platforms_casa_1 = new StaticPlatformsGroup(this, 3, 850, this.game.config.height - 100, 2000, 30, true, 'platform_casa_1');
+        const platform_casa_2 = new StaticPlatformsGroup(this, 2, 1250, this.game.config.height - 127, 2000, 30, true, 'platform_casa_2');
+        
+        //platform verdi
+        const platforms_verde_alti = new StaticPlatformsGroup(this, 2, 1570, this.game.config.height - 360, 500, -0, true, 'platform_verde_1');
+        const platforms_verde_bassi = new StaticPlatformsGroup(this, 2, 1800, this.game.config.height - 150, 500, -0, true, 'platform_verde_1');
+
+        //platform verdi piccoli
+        //const platforms_3 = new StaticPlatformsGroup(this, 2, 1500, this.game.config.height - 300, 330, -0, true, 'platform');
 
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 10000, 720);
         this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
         //#endregion
-        
-        // Creiamo un fungo
-        this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");
-        this.big_mushroom.setOrigin(0, 1);
-        this.big_mushroom.setScale(1, 1);
-
-        // Imposto il fungo come immovable e senza gravità, perchè voglio che
-        // l'oggetto non sia spostabile dal giocatore
-        this.big_mushroom.setImmovable(true);
-        this.big_mushroom.body.allowGravity = false;
-
-        // Aggiungo i collider necessari
-        this.physics.add.collider(this.big_mushroom, this.floor);
-        this.physics.add.collider(this.big_mushroom, this.player);
 
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        this.mP1 = new MovingPlatformsGroup(this, 3, 200, 100, 250, -50, 'platform', 1, 200, 100);
+        //this.mP1 = new MovingPlatformsGroup(this, 3, 200, 100, 250, -50, 'platform', 1, 200, 100);
 
         //#region Creazione nemici
         this.uominiGrigi = [];
-        for(let i = 0; i < 5; i++) {
-            this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
-            this.physics.add.existing(this.uominiGrigi[i]);
-            this.physics.add.collider(this.uominiGrigi[i], this.floor);
-            this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
-        }
+        //for(let i = 0; i < 5; i++) {
+        //    this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
+        //    this.physics.add.existing(this.uominiGrigi[i]);
+        //    this.physics.add.collider(this.uominiGrigi[i], this.floor);
+        //    this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
+        //}
 
         /* for(let i = 0; i < 5; i++) {
             this.uominiGrigi.push(new Enemy(this, this.movingPlatformsList[0].list[i].x, this.movingPlatformsList[0].list[i].y));
@@ -167,9 +165,9 @@ export default class TestScene2 extends Phaser.Scene {
         
         //#region Aggiornamento movimento platforms mobili
         this.updates++;
-        if(this.updates % this.mP1.duration == 0) {
-            this.mP1.updateMovingPlatforms();
-        }
+        //if(this.updates % this.mP1.duration == 0) {
+            //this.mP1.updateMovingPlatforms();
+        //}
         //#endregion
     }
 
