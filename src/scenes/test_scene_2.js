@@ -39,10 +39,15 @@ export default class TestScene2 extends Phaser.Scene {
         // Carichiamo gli asset grafici
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
         this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
+        this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
+        this.load.image("platform_verde_lungo", "assets/images/environment_elements/platform_verde_3.png");
         this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
         this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
         this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
+        this.load.image("platform_grigia_1", "assets/images/environment_elements/platform_grigia_1.png");
+        this.load.image("platform_grigia_2", "assets/images/environment_elements/platform_grigia_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
+        this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
     }
 
     create() {
@@ -67,25 +72,35 @@ export default class TestScene2 extends Phaser.Scene {
         this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
         //#endregion
 
-        const columns = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
+        const columns_inizio = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
+        const columns_banca = new StaticPlatformsGroup(this, 7, 5500, 350, 100, 0, false, "column");
 
         //#region Creazione player
-        const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
+        const thePlayer = new Player(this, 5000, this.floorHeight-400, this.worldWidth);
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(thePlayer);
         this.physics.add.collider(this.player, this.floor);
         //#endregion
         
+        const punzoni = new StaticPlatformsGroup(this, 10, 6250, this.game.config.height - 40, 95, -0, true, 'punzoni');   
+        const columns_platform_1 = new StaticPlatformsGroup(this, 2, 2250, this.game.config.height - 10, 480, -0, true, 'column');
+        const columns_platform_2 = new StaticPlatformsGroup(this, 2, 2505, this.game.config.height - 150, 470, -0, true, 'column');
+
         const pavement = new StaticPlatformsGroup(this, 2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        //const pavement_1 = new StaticPlatformsGroup(this, 1, 2948, 600, 0, 0, true, 'platform_1');
+        const pavement_1 = new StaticPlatformsGroup(this, 1, 5800, 700, 0, 0, true, 'platform_1');
         
         //platform casine
-        const platforms_casa_1 = new StaticPlatformsGroup(this, 3, 850, this.game.config.height - 100, 2000, 30, true, 'platform_casa_1');
-        const platform_casa_2 = new StaticPlatformsGroup(this, 2, 1250, this.game.config.height - 127, 2000, 30, true, 'platform_casa_2');
+        const platforms_casa_1 = new StaticPlatformsGroup(this, 1, 840, this.game.config.height - 100, 2710, 30, true, 'platform_casa_1');
+        const platform_casa_2 = new StaticPlatformsGroup(this, 1, 1240, this.game.config.height - 127, 2110, 30, true, 'platform_casa_2');
         
         //platform verdi
-        const platforms_verde_alti = new StaticPlatformsGroup(this, 2, 1570, this.game.config.height - 360, 500, -0, true, 'platform_verde_1');
-        const platforms_verde_bassi = new StaticPlatformsGroup(this, 2, 1800, this.game.config.height - 150, 500, -0, true, 'platform_verde_1');
+        const platforms_verde_alti_corto = new StaticPlatformsGroup(this, 2, 1570, this.game.config.height - 340, 450, -0, true, 'platform_verde_corto');
+        const platforms_verde_bassi_corto = new StaticPlatformsGroup(this, 2, 1795, this.game.config.height - 180, 0, -300, true, 'platform_verde_corto');
+        const platform_verde_lungo = new StaticPlatformsGroup(this, 1, 2530, this.game.config.height - 600, 0, -0, true, 'platform_verde_lungo');
+
+        //platform grige
+        const platforms_grigia_1 = new StaticPlatformsGroup(this, 2, 3300, this.game.config.height - 125, 790, 150, true, 'platform_grigia_1');
+        const platforms_grigia_2 = new StaticPlatformsGroup(this, 2, 3900, this.game.config.height - 60, 590, -0, true, 'platform_grigia_2');
 
         //platform verdi piccoli
         //const platforms_3 = new StaticPlatformsGroup(this, 2, 1500, this.game.config.height - 300, 330, -0, true, 'platform');
@@ -99,8 +114,13 @@ export default class TestScene2 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        //this.mP1 = new MovingPlatformsGroup(this, 3, 200, 100, 250, -50, 'platform', 1, 200, 100);
+        this.mP1 = new MovingPlatformsGroup(this, 1, 3598, 220, 0, -20, 'platform_verde_1', 1, 250, 100);
+        this.mP2 = new MovingPlatformsGroup(this, 2, 4750, 220, 300, -0, 'platform_verde_corto', 1, 250, 100);
+        this.mP3 = new MovingPlatformsGroup(this, 1, 4900, 500, 300, -20, 'platform_verde_corto', 1, -250, 100);
+        this.mP4 = new MovingPlatformsGroup(this, 1, 4900, 470, 300, -20, 'punzoni', 1, -250, 100);
+       
 
+        
         //#region Creazione nemici
         this.uominiGrigi = [];
         //for(let i = 0; i < 5; i++) {
@@ -165,9 +185,22 @@ export default class TestScene2 extends Phaser.Scene {
         
         //#region Aggiornamento movimento platforms mobili
         this.updates++;
-        //if(this.updates % this.mP1.duration == 0) {
-            //this.mP1.updateMovingPlatforms();
-        //}
+        if(this.updates % this.mP1.duration == 0) {
+            this.mP1.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP2.duration == 0) {
+            this.mP2.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP3.duration == 0) {
+            this.mP3.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP4.duration == 0) {
+            this.mP4.updateMovingPlatforms();
+        }
+
         //#endregion
     }
 
