@@ -40,7 +40,12 @@ export default class TestScene2 extends Phaser.Scene {
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
         this.load.image("platform", "assets/images/environment_elements/platform.png");
         this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
+        this.load.image("platform_2", "assets/images/environment_elements/platform_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
+        this.load.image("platform_verde_2", "assets/images/environment_elements/platform_verde_2.png");
+        this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
+        this.load.image("platform_3", "assets/images/environment_elements/platform_3.png");
+        this.load.image("platform_verde_3", "assets/images/environment_elements/platform_verde_3.png");
     }
 
     create() {
@@ -70,9 +75,26 @@ export default class TestScene2 extends Phaser.Scene {
         //#endregion
 
         const pavement = new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        const pavement_1 = new StaticPlatformsGroup(this, 1, pavement.list[pavement.list.length - 1].x + pavement.list[pavement.list.length - 1].width, 600, 0, 0, true, 'platform_1');
+        const pavement_1 = new StaticPlatformsGroup(this, 2, pavement.list[pavement.list.length - 1].x + pavement.list[pavement.list.length - 1].width, 500, 1000, 100, true, 'platform_3');
         const columns = new StaticPlatformsGroup(this, 3, 20, pavement.list[0].y - this.textures.get('column').getSourceImage().height, 100, 0, false, "column");
-        const platforms_1 = new StaticPlatformsGroup(this, 6, 660, this.game.config.height - 150, 480, -50, true, 'platform');
+        const platform_verde_2 = new StaticPlatformsGroup(this, 2, 700, pavement.list[0].y -120, 180, -70, true, "platform_verde_2");
+        const platform_2 = new StaticPlatformsGroup(this, 2, 1070, 500, 200, 0, true, "platform_2");
+        const punzoni = new StaticPlatformsGroup(this, 2, 2550, this.game.config.height-250, 90, 0, true, "punzoni");
+        const platform_verde_3 = new StaticPlatformsGroup(this, 2, 2200, pavement.list[0].y -120, 400, -160, true, "platform_verde_2");
+        const platform_verde_4 = new StaticPlatformsGroup(this, 1, 3600, pavement.list[0].y -230, 250, 0, true, "platform_verde_2");
+        const columns_2 = new StaticPlatformsGroup(this, 3, 4060, this.game.config.height-130, 220, -30, true, "column");
+        const pavement_2 = new StaticPlatformsGroup(this, 1, 5200, 600, 0, 0, true, 'platform_3');
+        const platform_3 = new StaticPlatformsGroup(this, 2, 6550, 400, 0, 100, true, "platform_2");
+        const platform_verde_5 = new StaticPlatformsGroup(this, 3, 7000, this.game.config.height-150, 200,0, true, "platform_verde_2");
+        const platform_verde_6 = new StaticPlatformsGroup(this, 2, 7600, this.game.config.height-500, 0,310, true, "platform_verde_3");
+        const punzoni_2 = new StaticPlatformsGroup(this, 3, 7640, this.game.config.height-490, 400, 0, true, "punzoni");
+        const punzoni_3 = new StaticPlatformsGroup(this, 2, 7900, this.game.config.height-215, 400, 0, true, "punzoni");
+        const platform_verde_7 = new StaticPlatformsGroup(this, 3, 8650, this.game.config.height-190, 220,-40, true, "platform_verde_2");
+        const platform_verde_8 = new StaticPlatformsGroup(this, 1, 9300, this.game.config.height-280, 0,0, true, "platform_verde_3");
+
+        for(let i = 0; i < punzoni_2.list.length; i++) {
+            punzoni_2.list[i].platform.flipY = true;
+        }
 
         this.pavements = [];
         this.pavements.push(pavement);
@@ -85,36 +107,27 @@ export default class TestScene2 extends Phaser.Scene {
         this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
         //#endregion
-        
-        // Creiamo un fungo
-        this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");
-        this.big_mushroom.setOrigin(0, 1);
-        this.big_mushroom.setScale(1, 1);
-
-        // Imposto il fungo come immovable e senza gravità, perchè voglio che
-        // l'oggetto non sia spostabile dal giocatore
-        this.big_mushroom.setImmovable(true);
-        this.big_mushroom.body.allowGravity = false;
-
-        //TODO: Sostituire TUTTI i this.floor !!!
-
-        // Aggiungo i collider necessari
-        this.physics.add.collider(this.big_mushroom, this.floor);
-        this.physics.add.collider(this.big_mushroom, this.player);
 
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        
+        //MOVING PLATFORMS
+        this.mP1 = new MovingPlatformsGroup(this, 2, 3060, 220, 95, 0, 'platform_verde_2', 1, 250, 100);
+        this.mP2 = new MovingPlatformsGroup(this, 2, 4600, 450, 95, 0, 'platform_verde_2', 0, 250, 80);
+        this.mP3 = new MovingPlatformsGroup(this, 3, 5890, 500, 230, -20, 'column', 1, 100, 100);
+        this.mP4 = new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, 'platform_verde_2', 1, 150, 50);
+        this.mP5 = new MovingPlatformsGroup(this, 2, 7100, 480, 200, 0, 'punzoni', 1, 150, 50);
+        this.mP6 = new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, 'platform_verde_2', 0, 200, 170);
 
-        this.mP1 = new MovingPlatformsGroup(this, 3, 50, 120, 240, -60, 'platform', 1, 200, 60);
 
         //#region Creazione nemici
-        this.uominiGrigi = [];
+       /*  this.uominiGrigi = [];
         for(let i = 0; i < 5; i++) {
             this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, Math.floor(Math.random() * (pavement.list[1].x + pavement.list[1].width)), this.floorHeight)));
             this.uominiGrigi[i].body.allowGravity = true;
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
-        }
-
+        } */
+ 
         /* for(let i = 0; i < 5; i++) {
             this.uominiGrigi.push(new Enemy(this, this.movingPlatformsList[0].list[i].x, this.movingPlatformsList[0].list[i].y));
             this.physics.add.existing(this.uominiGrigi[this.uominiGrigi.length - 1]);
@@ -123,7 +136,7 @@ export default class TestScene2 extends Phaser.Scene {
             this.uominiGrigi[this.uominiGrigi.length - 1].resize(); // Ridimensionamento hitbox
         } */
 
-        this.pavements.forEach(pavement => {
+        /* this.pavements.forEach(pavement => {
             this.uominiGrigi.forEach(enemy => {
                 pavement.list.forEach(platform => {
                     this.physics.add.collider(enemy, platform.platform);
@@ -135,7 +148,7 @@ export default class TestScene2 extends Phaser.Scene {
             this.uominiGrigi.forEach(enemy => {
                 this.physics.add.collider(this.uominiGrigi[k], enemy);
             });
-        }
+        }  */
         //#endregion
 
         this.player.resize(); // Ridimensionamento hitbox
@@ -157,34 +170,52 @@ export default class TestScene2 extends Phaser.Scene {
         this.animateBackground();
         this.manageFlowers();
 
-        for(let i = 0; i < this.uominiGrigi.length; i++) {
+       /*  for(let i = 0; i < this.uominiGrigi.length; i++) {
             if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
                 //this.updateLives();
             }
-        }
+        }  */
 
         if(this.player.body.y > this.game.config.height) {
             this.player.die();
         }
+        
 
-        if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
+       /* if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
             this.playerStartedMoving = true;
             for(let i = 0; i < this.uominiGrigi.length; i++) {
                 this.uominiGrigi[i].start();
             }
-        }
+        } */
 
-        if(this.playerStartedMoving) {
+        /* if(this.playerStartedMoving) {
             for(let i = 0; i < this.uominiGrigi.length; i++) {
                 this.uominiGrigi[i].manageMovements();
             }
-        }
-        
+        } 
+         */
         //#region Aggiornamento movimento platforms mobili
         this.updates++;
         if(this.updates % this.mP1.duration == 0) {
             this.mP1.updateMovingPlatforms();
         }
+
+        if(this.updates % this.mP2.duration == 0) {
+            this.mP2.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP3.duration == 0) {
+            this.mP3.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP4.duration == 0) {
+            this.mP4.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP5.duration == 0) {
+            this.mP5.updateMovingPlatforms();
+        }
+
         //#endregion
     }
 
@@ -210,12 +241,12 @@ export default class TestScene2 extends Phaser.Scene {
             this.flower.fire();
         }
 
-        for(let i = 0; i < this.uominiGrigi.length; i++) {
+        /* for(let i = 0; i < this.uominiGrigi.length; i++) {
             if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
                 this.uominiGrigi[i].cure(this.flower);
                 this.isFlowerActive = false;
             }
-        }
+        } */
     }
 
     animateBackground() {
