@@ -76,15 +76,24 @@ export default class TestScene2 extends Phaser.Scene {
         const columns_banca = new StaticPlatformsGroup(this, 7, 5500, 350, 100, 0, false, "column");
 
         //#region Creazione player
-        const thePlayer = new Player(this, 5000, this.floorHeight-400, this.worldWidth);
+        const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(thePlayer);
         this.physics.add.collider(this.player, this.floor);
         //#endregion
         
-        const punzoni = new StaticPlatformsGroup(this, 10, 6250, this.game.config.height - 40, 95, -0, true, 'punzoni');   
+        const punzoni = new StaticPlatformsGroup(this, 15, 6340, this.game.config.height - 40, 95, -0, true, 'punzoni');   
         const columns_platform_1 = new StaticPlatformsGroup(this, 2, 2250, this.game.config.height - 10, 480, -0, true, 'column');
         const columns_platform_2 = new StaticPlatformsGroup(this, 2, 2505, this.game.config.height - 150, 470, -0, true, 'column');
+
+        const punzoni_2 = new StaticPlatformsGroup(this, 2, 8300, this.game.config.height-20, 200, -0, true, 'punzoni');   
+        const columns_platform_3 = new StaticPlatformsGroup(this, 1, 8400, this.game.config.height, 0, 0, true, 'column');
+        
+        const punzoni_3 = new StaticPlatformsGroup(this, 2, 8985, this.game.config.height-120, 260, -0, true, 'punzoni'); 
+        const columns_platform_4 = new StaticPlatformsGroup(this, 2, 8900, this.game.config.height-20, 260, 0, true, 'column');
+        const columns_platform_5 = new StaticPlatformsGroup(this, 2, 8985, this.game.config.height+20, 260, 0, true, 'column');
+        const columns_platform_6 = new StaticPlatformsGroup(this, 2, 9065, this.game.config.height-10, 260, 0, true, 'column');
+          
 
         const pavement = new StaticPlatformsGroup(this, 2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
         const pavement_1 = new StaticPlatformsGroup(this, 1, 5800, 700, 0, 0, true, 'platform_1');
@@ -97,6 +106,10 @@ export default class TestScene2 extends Phaser.Scene {
         const platforms_verde_alti_corto = new StaticPlatformsGroup(this, 2, 1570, this.game.config.height - 340, 450, -0, true, 'platform_verde_corto');
         const platforms_verde_bassi_corto = new StaticPlatformsGroup(this, 2, 1795, this.game.config.height - 180, 0, -300, true, 'platform_verde_corto');
         const platform_verde_lungo = new StaticPlatformsGroup(this, 1, 2530, this.game.config.height - 600, 0, -0, true, 'platform_verde_lungo');
+        const platform_verde_2 = new StaticPlatformsGroup(this, 2, 7300, this.game.config.height - 200, 250, -0, true, 'platform_verde_corto');
+        const platform_verde_3 = new StaticPlatformsGroup(this, 4, 7800, this.game.config.height - 260, 180, -90, true, 'platform_verde_corto');
+        const platform_verde_4 = new StaticPlatformsGroup(this, 2, 8550, 150, 100, 0, true, 'platform_verde_corto');
+       
 
         //platform grige
         const platforms_grigia_1 = new StaticPlatformsGroup(this, 2, 3300, this.game.config.height - 125, 790, 150, true, 'platform_grigia_1');
@@ -118,6 +131,9 @@ export default class TestScene2 extends Phaser.Scene {
         this.mP2 = new MovingPlatformsGroup(this, 2, 4750, 220, 300, -0, 'platform_verde_corto', 1, 250, 100);
         this.mP3 = new MovingPlatformsGroup(this, 1, 4900, 500, 300, -20, 'platform_verde_corto', 1, -250, 100);
         this.mP4 = new MovingPlatformsGroup(this, 1, 4900, 470, 300, -20, 'punzoni', 1, -250, 100);
+        this.mP5 = new MovingPlatformsGroup(this, 1, 6470, 500, 0, 0, 'platform_verde_corto', 0, 100, 100);
+        this.mP6 = new MovingPlatformsGroup(this, 1, 6900, 450, 0, 0, 'platform_verde_corto', 0, -100, 100);
+        this.mP7 = new MovingPlatformsGroup(this, 1, 7100, 450, 0, 0, 'platform_verde_corto', 1, 100, 100);
        
 
         
@@ -199,6 +215,18 @@ export default class TestScene2 extends Phaser.Scene {
 
         if(this.updates % this.mP4.duration == 0) {
             this.mP4.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP5.duration == 0) {
+            this.mP5.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP6.duration == 0) {
+            this.mP6.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP7.duration == 0) {
+            this.mP7.updateMovingPlatforms();
         }
 
         //#endregion
