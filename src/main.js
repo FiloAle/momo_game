@@ -9,6 +9,7 @@ const config = {
     type: Phaser.AUTO,
     width: 1280,
     height: 720,
+    autoRound: true,
     backgroundColor: 0x000000, // sfondo nero
     scene: [ SplashScreen, TestScene1, TestScene2, GameOver ],
     pixelArt: true,
@@ -19,8 +20,11 @@ const config = {
             gravity: {
                 y: 980,
             },
-            debug: true
+            debug: false
         }
+    },
+    render: {
+        roundPixels: true,
     }
 };
 
