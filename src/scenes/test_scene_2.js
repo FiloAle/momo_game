@@ -18,7 +18,7 @@ export default class TestScene2 extends Phaser.Scene {
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
-        super("level_2");
+        super("test_scene_2");
     }
 
     init() {

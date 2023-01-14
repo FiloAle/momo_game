@@ -15,7 +15,7 @@ export default class SplashScreen extends Phaser.Scene {
         console.log("splash_screen - Executing preload()");
         // Carichiamo gli asset grafici
         this.load.image("background_base", "assets/images/background/background.jpg"); // carica l'immagine di sfondo
-        this.load.image("b1", "assets/images/background/sfondo1_colore.png"); // carica l'immagine di sfondo
+        this.load.image("b1", "assets/images/background/b1.jpg"); // carica l'immagine di sfondo
         this.load.image("nuvole", "assets/images/background/nuvole.png"); 
         this.load.image("background_splash_screen", "assets/images/background/splash_screen.jpg"); // carica l'immagine di sfondo
 
@@ -62,7 +62,7 @@ export default class SplashScreen extends Phaser.Scene {
         this.creditsButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
 
         this.playButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
-            this.scene.start("test_scene_2");
+            this.scene.start("level_3");
         });
     }
 
