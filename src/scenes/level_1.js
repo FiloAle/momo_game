@@ -4,7 +4,7 @@ import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
 import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
 
-export default class TestScene extends Phaser.Scene {
+export default class Level1 extends Phaser.Scene {
 
     background;         // oggetto relativo all'elemento "sfondo"
     player;             // oggetto relativo all'elemento "giocatore"
