@@ -20,7 +20,7 @@ export default class TestScene extends Phaser.Scene {
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
-        super("test_scene");
+        super("level_1");
     }
 
     init() {
@@ -44,14 +44,14 @@ export default class TestScene extends Phaser.Scene {
         this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
         this.load.image("platform_verde_lungo", "assets/images/environment_elements/platform_verde_3.png");
         this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
-<<<<<<<< HEAD:src/scenes/level_2.js
+
         this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
         this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
         this.load.image("platform_grigia_1", "assets/images/environment_elements/platform_grigia_1.png");
         this.load.image("platform_grigia_2", "assets/images/environment_elements/platform_grigia_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
         this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
-========
+
         this.load.image("platform_2", "assets/images/environment_elements/platform_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
         this.load.image("platform_verde_2", "assets/images/environment_elements/platform_verde_2.png");
@@ -59,7 +59,7 @@ export default class TestScene extends Phaser.Scene {
         this.load.image("platform_3", "assets/images/environment_elements/platform_3.png");
         this.load.image("platform_verde_3", "assets/images/environment_elements/platform_verde_3.png");
         this.load.image("flowers", "assets/images/environment_elements/mushroom_1.png");
->>>>>>>> test_branch_L1:src/scenes/level_1.js
+
     }
 
     create() {
@@ -86,57 +86,18 @@ export default class TestScene extends Phaser.Scene {
         //this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
         //#endregion
 
-<<<<<<<< HEAD:src/scenes/level_2.js
+
         const columns_inizio = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
         const columns_banca = new StaticPlatformsGroup(this, 7, 5500, 350, 100, 0, false, "column");
 
-========
->>>>>>>> test_branch_L1:src/scenes/level_1.js
+
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 9000, this.floorHeight-700, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 5000, this.floorHeight-600, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
-<<<<<<<< HEAD:src/scenes/level_2.js
-        
-        const punzoni = new StaticPlatformsGroup(this, 15, 6340, this.game.config.height - 40, 95, -0, true, 'punzoni');   
-        const columns_platform_1 = new StaticPlatformsGroup(this, 2, 2250, this.game.config.height - 10, 480, -0, true, 'column');
-        const columns_platform_2 = new StaticPlatformsGroup(this, 2, 2505, this.game.config.height - 150, 470, -0, true, 'column');
 
-        const punzoni_2 = new StaticPlatformsGroup(this, 2, 8300, this.game.config.height-20, 200, -0, true, 'punzoni');   
-        const columns_platform_3 = new StaticPlatformsGroup(this, 1, 8400, this.game.config.height, 0, 0, true, 'column');
-        
-        const punzoni_3 = new StaticPlatformsGroup(this, 2, 8985, this.game.config.height-120, 260, -0, true, 'punzoni'); 
-        const columns_platform_4 = new StaticPlatformsGroup(this, 2, 8900, this.game.config.height-20, 260, 0, true, 'column');
-        const columns_platform_5 = new StaticPlatformsGroup(this, 2, 8985, this.game.config.height+20, 260, 0, true, 'column');
-        const columns_platform_6 = new StaticPlatformsGroup(this, 2, 9065, this.game.config.height-10, 260, 0, true, 'column');
-          
-
-        const pavement = new StaticPlatformsGroup(this, 2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        const pavement_1 = new StaticPlatformsGroup(this, 1, 5800, 700, 0, 0, true, 'platform_1');
-        
-        //platform casine
-        const platforms_casa_1 = new StaticPlatformsGroup(this, 1, 840, this.game.config.height - 100, 2710, 30, true, 'platform_casa_1');
-        const platform_casa_2 = new StaticPlatformsGroup(this, 1, 1240, this.game.config.height - 127, 2110, 30, true, 'platform_casa_2');
-        
-        //platform verdi
-        const platforms_verde_alti_corto = new StaticPlatformsGroup(this, 2, 1570, this.game.config.height - 340, 450, -0, true, 'platform_verde_corto');
-        const platforms_verde_bassi_corto = new StaticPlatformsGroup(this, 2, 1795, this.game.config.height - 180, 0, -300, true, 'platform_verde_corto');
-        const platform_verde_lungo = new StaticPlatformsGroup(this, 1, 2530, this.game.config.height - 600, 0, -0, true, 'platform_verde_lungo');
-        const platform_verde_2 = new StaticPlatformsGroup(this, 2, 7300, this.game.config.height - 200, 250, -0, true, 'platform_verde_corto');
-        const platform_verde_3 = new StaticPlatformsGroup(this, 4, 7800, this.game.config.height - 260, 180, -90, true, 'platform_verde_corto');
-        const platform_verde_4 = new StaticPlatformsGroup(this, 2, 8550, 150, 100, 0, true, 'platform_verde_corto');
-       
-
-        //platform grige
-        const platforms_grigia_1 = new StaticPlatformsGroup(this, 2, 3300, this.game.config.height - 125, 790, 150, true, 'platform_grigia_1');
-        const platforms_grigia_2 = new StaticPlatformsGroup(this, 2, 3900, this.game.config.height - 60, 590, -0, true, 'platform_grigia_2');
-
-        //platform verdi piccoli
-        //const platforms_3 = new StaticPlatformsGroup(this, 2, 1500, this.game.config.height - 300, 330, -0, true, 'platform');
-========
->>>>>>>> test_branch_L1:src/scenes/level_1.js
-
+    
         const pavement = new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
         const pavement_1 = new StaticPlatformsGroup(this, 2, pavement.list[pavement.list.length - 1].x + pavement.list[pavement.list.length - 1].width, 500, 1000, 100, true, 'platform_3');
         const columns = new StaticPlatformsGroup(this, 3, 20, pavement.list[0].y - this.textures.get('column').getSourceImage().height, 100, 0, false, "column");
@@ -181,23 +142,11 @@ export default class TestScene extends Phaser.Scene {
         this.mP4 = new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, 'platform_verde_2', 1, 150, 50);
         this.mP5 = new MovingPlatformsGroup(this, 2, 7100, 480, 200, 0, 'punzoni', 1, 150, 50);
         this.mP6 = new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, 'platform_verde_2', 0, 200, 170);
-
-<<<<<<<< HEAD:src/scenes/level_2.js
-        this.mP1 = new MovingPlatformsGroup(this, 1, 3598, 220, 0, -20, 'platform_verde_1', 1, 250, 100);
-        this.mP2 = new MovingPlatformsGroup(this, 2, 4750, 220, 300, -0, 'platform_verde_corto', 1, 250, 100);
-        this.mP3 = new MovingPlatformsGroup(this, 1, 4900, 500, 300, -20, 'platform_verde_corto', 1, -250, 100);
-        this.mP4 = new MovingPlatformsGroup(this, 1, 4900, 470, 300, -20, 'punzoni', 1, -250, 100);
-        this.mP5 = new MovingPlatformsGroup(this, 1, 6470, 500, 0, 0, 'platform_verde_corto', 0, 100, 100);
-        this.mP6 = new MovingPlatformsGroup(this, 1, 6900, 450, 0, 0, 'platform_verde_corto', 0, -100, 100);
-        this.mP7 = new MovingPlatformsGroup(this, 1, 7100, 450, 0, 0, 'platform_verde_corto', 1, 100, 100);
        
-========
->>>>>>>> test_branch_L1:src/scenes/level_1.js
 
         
         //#region Creazione nemici
-<<<<<<<< HEAD:src/scenes/level_2.js
-        this.uominiGrigi = [];
+        //this.uominiGrigi = [];
         //for(let i = 0; i < 5; i++) {
         //    this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
         //    this.physics.add.existing(this.uominiGrigi[i]);
@@ -205,7 +154,7 @@ export default class TestScene extends Phaser.Scene {
         //    this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
         //}
 
-========
+
        /*  this.uominiGrigi = [];
         for(let i = 0; i < 5; i++) {
             this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, Math.floor(Math.random() * (pavement.list[1].x + pavement.list[1].width)), this.floorHeight)));
@@ -213,7 +162,7 @@ export default class TestScene extends Phaser.Scene {
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
         } */
  
->>>>>>>> test_branch_L1:src/scenes/level_1.js
+
         /* for(let i = 0; i < 5; i++) {
             this.uominiGrigi.push(new Enemy(this, this.movingPlatformsList[0].list[i].x, this.movingPlatformsList[0].list[i].y));
             this.physics.add.existing(this.uominiGrigi[this.uominiGrigi.length - 1]);
@@ -338,13 +287,6 @@ export default class TestScene extends Phaser.Scene {
             this.mP6.updateMovingPlatforms();
         }
 
-<<<<<<<< HEAD:src/scenes/level_2.js
-        if(this.updates % this.mP7.duration == 0) {
-            this.mP7.updateMovingPlatforms();
-        }
-
-========
->>>>>>>> test_branch_L1:src/scenes/level_1.js
         //#endregion
     }
 

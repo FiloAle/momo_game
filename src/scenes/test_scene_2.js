@@ -40,8 +40,16 @@ export default class TestScene2 extends Phaser.Scene {
         // Carichiamo gli asset grafici
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
         this.load.image("platform", "assets/images/environment_elements/platform.png");
+        this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
+        this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
+        this.load.image("platform_verde_lungo", "assets/images/environment_elements/platform_verde_3.png");
         this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
+        this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
+        this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
+        this.load.image("platform_grigia_1", "assets/images/environment_elements/platform_grigia_1.png");
+        this.load.image("platform_grigia_2", "assets/images/environment_elements/platform_grigia_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
+        this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
     }
 
     create() {
@@ -57,73 +65,81 @@ export default class TestScene2 extends Phaser.Scene {
 
         this.isCameraFollowingPlayer = false;
 
+        //#region Pavimento
+        this.floor = this.add.rectangle(-1000, this.game.config.height,
+            this.worldWidth + 1000, this.game.config.height - this.floorHeight,
+            0xFFFFFF, 0); // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
+        this.floor.setScrollFactor(0, 0);
+        this.floor.setOrigin(0, 1);
+        // Aggiungi il piano alla fisica
+        this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
+        //#endregion
+
+        const columns_inizio = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
+        const columns_banca = new StaticPlatformsGroup(this, 7, 5500, 350, 100, 0, false, "column");
+
         //#region Creazione player
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //#endregion
+        
+        const punzoni = new StaticPlatformsGroup(this, 10, 6250, this.game.config.height - 40, 95, -0, true, 'punzoni');   
+        const columns_platform_1 = new StaticPlatformsGroup(this, 2, 2250, this.game.config.height - 10, 480, -0, true, 'column');
+        const columns_platform_2 = new StaticPlatformsGroup(this, 2, 2505, this.game.config.height - 150, 470, -0, true, 'column');
 
-        const pavement = new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        const pavement_1 = new StaticPlatformsGroup(this, 1, pavement.list[pavement.list.length - 1].x + pavement.list[pavement.list.length - 1].width, 600, 0, 0, true, 'platform_1');
-        const columns = new StaticPlatformsGroup(this, 3, 20, pavement.list[0].y - this.textures.get('column').getSourceImage().height + 20, 100, 0, false, "column");
-        for(let i = 0; i < columns.list.length; i++) {
-            columns.list[i].setDepth(-1);
-        }
+        const pavement = new StaticPlatformsGroup(this, 2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
+        const pavement_1 = new StaticPlatformsGroup(this, 1, 5800, 700, 0, 0, true, 'platform_1');
+        
+        //platform casine
+        const platforms_casa_1 = new StaticPlatformsGroup(this, 1, 840, this.game.config.height - 100, 2710, 30, true, 'platform_casa_1');
+        const platform_casa_2 = new StaticPlatformsGroup(this, 1, 1240, this.game.config.height - 127, 2110, 30, true, 'platform_casa_2');
+        
+        //platform verdi
+        const platforms_verde_alti_corto = new StaticPlatformsGroup(this, 2, 1570, this.game.config.height - 340, 450, -0, true, 'platform_verde_corto');
+        const platforms_verde_bassi_corto = new StaticPlatformsGroup(this, 2, 1795, this.game.config.height - 180, 0, -300, true, 'platform_verde_corto');
+        const platform_verde_lungo = new StaticPlatformsGroup(this, 1, 2530, this.game.config.height - 600, 0, -0, true, 'platform_verde_lungo');
 
-        this.pavements = [];
-        this.pavements.push(pavement);
-        this.pavements.push(pavement_1);
+        //platform grige
+        const platforms_grigia_1 = new StaticPlatformsGroup(this, 2, 3300, this.game.config.height - 125, 790, 150, true, 'platform_grigia_1');
+        const platforms_grigia_2 = new StaticPlatformsGroup(this, 2, 3900, this.game.config.height - 60, 590, -0, true, 'platform_grigia_2');
+
+        //platform verdi piccoli
+        //const platforms_3 = new StaticPlatformsGroup(this, 2, 1500, this.game.config.height - 300, 330, -0, true, 'platform');
 
         this.player.setDepth(1);
-        
+
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 10000, 720);
         this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
         //#endregion
-        
-        // Creiamo un fungo
-        this.big_mushroom = this.physics.add.image(600, this.floorHeight, "mushroom2");
-        this.big_mushroom.setOrigin(0, 1);
-        this.big_mushroom.setScale(1, 1);
-
-        // Imposto il fungo come immovable e senza gravità, perchè voglio che
-        // l'oggetto non sia spostabile dal giocatore
-        this.big_mushroom.setImmovable(true);
-        this.big_mushroom.body.allowGravity = false;
-
-        //TODO: Sostituire TUTTI i this.floor !!!
-
-        // Aggiungo i collider necessari
-        this.physics.add.collider(this.big_mushroom, this.floor);
-        this.physics.add.collider(this.big_mushroom, this.player);
 
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 3, 200, 600, 400, -60, 'platform', 1, 200, 60));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 3598, 220, 0, -20, 'platform_verde_1', 1, 250, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4750, 220, 300, -0, 'platform_verde_corto', 1, 250, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 4900, 500, 300, -20, 'platform_verde_corto', 1, -250, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 4900, 470, 300, -20, 'punzoni', 1, -250, 100));
+       
 
+        
         //#region Creazione nemici
-        this.uominiGrigi = [];
-        for(let i = 0; i < 1; i++) {
-            this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 600, this.floorHeight, "grigi")));
-            this.uominiGrigi[i].body.allowGravity = true;
-            this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
-        }
+        //this.uominiGrigi = [];
+        //for(let i = 0; i < 5; i++) {
+        //    this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
+        //    this.physics.add.existing(this.uominiGrigi[i]);
+        //    this.physics.add.collider(this.uominiGrigi[i], this.floor);
+        //    this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
+        //}
 
         /* for(let i = 0; i < 5; i++) {
             this.uominiGrigi.push(new Enemy(this, this.movingPlatformsList[0].list[i].x, this.movingPlatformsList[0].list[i].y));
             this.physics.add.existing(this.uominiGrigi[this.uominiGrigi.length - 1]);
+            this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.floor);
             this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.movingPlatformsList[0].list[i]);
             this.uominiGrigi[this.uominiGrigi.length - 1].resize(); // Ridimensionamento hitbox
         } */
-
-        this.pavements.forEach(pavement => {
-            this.uominiGrigi.forEach(enemy => {
-                pavement.list.forEach(platform => {
-                    this.physics.add.collider(enemy, platform);
-                });
-            });
-        });
 
         for(let k = 0; k < this.uominiGrigi.length; k++) {
             this.uominiGrigi.forEach(enemy => {
