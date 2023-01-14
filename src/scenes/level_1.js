@@ -15,6 +15,8 @@ export default class TestScene2 extends Phaser.Scene {
     updates;
     playerStartedMoving;
     lastLivesDecrement;
+    nuvole;
+    flowers;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -46,6 +48,7 @@ export default class TestScene2 extends Phaser.Scene {
         this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
         this.load.image("platform_3", "assets/images/environment_elements/platform_3.png");
         this.load.image("platform_verde_3", "assets/images/environment_elements/platform_verde_3.png");
+        this.load.image("flowers", "assets/images/environment_elements/mushroom_1.png");
     }
 
     create() {
@@ -56,6 +59,10 @@ export default class TestScene2 extends Phaser.Scene {
         this.background = this.add.tileSprite(0, this.game.config.height - this.textures.get('b1').getSourceImage().height, this.game.width, this.textures.get('b1').getSourceImage().height, "b1");
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
+
+        this.nuvole = this.add.tileSprite(0, this.game.config.height - this.textures.get('nuvole').getSourceImage().height, this.game.width, this.textures.get('nuvole').getSourceImage().height, "nuvole");
+        this.nuvole.setOrigin(0, 0);
+        //this.nuvole.setScrollFactor(0, 0);
         //#endregion
 
         this.isCameraFollowingPlayer = false;
@@ -70,7 +77,7 @@ export default class TestScene2 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 9000, this.floorHeight-700, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
 
@@ -162,7 +169,39 @@ export default class TestScene2 extends Phaser.Scene {
         this.lifeBox.setOrigin(0, 0);
         this.lifeBox.setScrollFactor(0, 0);
         //#endregion
+
+        //collecting flowers
+        this.createflowers();     
     }
+
+    createflowers() {
+        this.flowers = this.physics.add.group({
+            key: 'flower',
+            repeat: 11,
+            setXY: { x: 12, y: 0, stepX: 70 }
+            });
+    
+            this.flowers.children.iterate((child) => {
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+     
+                });
+            
+            this.physics.add.collider(this.flowers, this.player);
+            this.physics.add.collider(this.flowers, this.MovingPlatformsGroup);
+            this.physics.add.collider(this.flowers, this.StaticPlatformsGroup);
+            this.physics.add.collider(this.flowers, this.platform);
+
+            this.physics.add.overlap(this.player, this.flowers, collectFlowers, null, this);
+
+            function collectFlowers (player, flower)
+            {
+                flower.disableBody(true, true);
+            }
+    }
+
+
+
+              //#endregion
 
     update() {
         // Azioni che vengono eseguite a ogni frame del gioco
@@ -214,6 +253,10 @@ export default class TestScene2 extends Phaser.Scene {
 
         if(this.updates % this.mP5.duration == 0) {
             this.mP5.updateMovingPlatforms();
+        }
+
+        if(this.updates % this.mP6.duration == 0) {
+            this.mP6.updateMovingPlatforms();
         }
 
         //#endregion
