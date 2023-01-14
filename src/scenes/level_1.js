@@ -4,7 +4,7 @@ import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
 import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
 
-export default class TestScene2 extends Phaser.Scene {
+export default class TestScene extends Phaser.Scene {
 
     background;         // oggetto relativo all'elemento "sfondo"
     player;             // oggetto relativo all'elemento "giocatore"
@@ -20,7 +20,7 @@ export default class TestScene2 extends Phaser.Scene {
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
-        super("test_scene_2");
+        super("test_scene");
     }
 
     init() {

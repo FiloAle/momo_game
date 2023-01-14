@@ -4,6 +4,8 @@ export default class Platform extends Phaser.GameObjects.Sprite {
     img;
     velocity;
     direction;
+    width;
+    platform;
 
     constructor(scene, x, y, solid, img, direction, velocity) {
         super(scene, x, y, img);
@@ -13,9 +15,11 @@ export default class Platform extends Phaser.GameObjects.Sprite {
         this.img = img;
         this.direction = direction;
         this.velocity = velocity;
+        this.width = scene.textures.get(img).getSourceImage().width;
 
         this.platform = this.scene.physics.add.image(x, y, img);
         this.platform.body.allowGravity = false;
+        this.platform.setOrigin(0, 0);
         this.platform.setImmovable(true);
 
         if(this.velocity != 0) {

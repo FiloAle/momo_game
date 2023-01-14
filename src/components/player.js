@@ -14,6 +14,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		super(scene, x, y, "playerrun");
         scene.add.existing(this);
         this.initialX = x;
+        this.initialY = y;
         this.floorHeight = y;
         this.setOrigin(0, 1); // Punto pivot in basso a sinistra
         this.setScale(0.35);   // Scala le dimensioni del giocatore
@@ -144,6 +145,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
         // Nel nostro caso la morte del giocatore consiste nel reset alla posizione iniziale
         // del livello
         this.x = this.initialX;
+        this.y = this.initialY - 20;
+        this.isJumping = false;
+        this.body.setVelocity(0, 0);
+        this.manageMovements();
     }
 
 }
