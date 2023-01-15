@@ -17,6 +17,7 @@ export default class Level1 extends Phaser.Scene {
     lastLivesDecrement;
     nuvole;
     flowers;
+    movingPlatforms;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -34,6 +35,7 @@ export default class Level1 extends Phaser.Scene {
         this.lastLivesDecrement = 0;
         this.playerStartedMoving = false;
         this.isFlowerActive = false;
+        this.movingPlatforms = [];
     }
 
     preload() {
@@ -73,7 +75,7 @@ export default class Level1 extends Phaser.Scene {
 
         this.nuvole = this.add.tileSprite(0, this.game.config.height - this.textures.get('nuvole').getSourceImage().height, this.game.width, this.textures.get('nuvole').getSourceImage().height, "nuvole");
         this.nuvole.setOrigin(0, 0);
-        //this.nuvole.setScrollFactor(0, 0);
+        this.nuvole.setScrollFactor(0, 0);
         //#endregion
 
         this.isCameraFollowingPlayer = false;
@@ -93,7 +95,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 5000, this.floorHeight-600, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
 
@@ -103,21 +105,21 @@ export default class Level1 extends Phaser.Scene {
         const columns = new StaticPlatformsGroup(this, 3, 20, pavement.list[0].y - this.textures.get('column').getSourceImage().height, 100, 0, false, "column");
         const platform_verde_2 = new StaticPlatformsGroup(this, 2, 700, pavement.list[0].y -120, 180, -70, true, "platform_verde_2");
         const platform_2 = new StaticPlatformsGroup(this, 2, 1070, 500, 200, 0, true, "platform_2");
-        const punzoni = new StaticPlatformsGroup(this, 2, 2550, this.game.config.height-250, 90, 0, true, "punzoni");
+        const punzoni = new StaticPlatformsGroup(this, 2, 2550, this.game.config.height-250, 90, 0, false, "punzoni");
         const platform_verde_3 = new StaticPlatformsGroup(this, 2, 2200, pavement.list[0].y -120, 400, -160, true, "platform_verde_2");
         const platform_verde_4 = new StaticPlatformsGroup(this, 1, 3600, pavement.list[0].y -230, 250, 0, true, "platform_verde_2");
         const columns_2 = new StaticPlatformsGroup(this, 3, 4060, this.game.config.height-130, 220, -30, true, "column");
         const pavement_2 = new StaticPlatformsGroup(this, 1, 5200, 600, 0, 0, true, 'platform_3');
         const platform_3 = new StaticPlatformsGroup(this, 2, 6550, 400, 0, 100, true, "platform_2");
-        const platform_verde_5 = new StaticPlatformsGroup(this, 3, 7000, this.game.config.height-150, 200,0, true, "platform_verde_2");
-        const platform_verde_6 = new StaticPlatformsGroup(this, 2, 7600, this.game.config.height-500, 0,310, true, "platform_verde_3");
-        const punzoni_2 = new StaticPlatformsGroup(this, 3, 7640, this.game.config.height-490, 400, 0, true, "punzoni");
-        const punzoni_3 = new StaticPlatformsGroup(this, 2, 7900, this.game.config.height-215, 400, 0, true, "punzoni");
-        const platform_verde_7 = new StaticPlatformsGroup(this, 3, 8650, this.game.config.height-190, 220,-40, true, "platform_verde_2");
-        const platform_verde_8 = new StaticPlatformsGroup(this, 1, 9300, this.game.config.height-280, 0,0, true, "platform_verde_3");
+        const platform_verde_5 = new StaticPlatformsGroup(this, 3, 7000, this.game.config.height-150, 200, 0, true, "platform_verde_2");
+        const platform_verde_6 = new StaticPlatformsGroup(this, 2, 7600, this.game.config.height-500, 0, 310, true, "platform_verde_3");
+        const punzoni_2 = new StaticPlatformsGroup(this, 3, 7640, this.game.config.height-490, 400, 0, false, "punzoni");
+        const punzoni_3 = new StaticPlatformsGroup(this, 2, 7900, this.game.config.height-215, 400, 0, false, "punzoni");
+        const platform_verde_7 = new StaticPlatformsGroup(this, 3, 8650, this.game.config.height-190, 220, -40, true, "platform_verde_2");
+        const platform_verde_8 = new StaticPlatformsGroup(this, 1, 9300, this.game.config.height-280, 0, 0, true, "platform_verde_3");
 
         for(let i = 0; i < punzoni_2.list.length; i++) {
-            punzoni_2.list[i].platform.flipY = true;
+            punzoni_2.list[i].flipY = true;
         }
 
         this.pavements = [];
@@ -136,23 +138,21 @@ export default class Level1 extends Phaser.Scene {
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         
         //MOVING PLATFORMS
-        this.mP1 = new MovingPlatformsGroup(this, 2, 3060, 220, 95, 0, 'platform_verde_2', 1, 250, 100);
-        this.mP2 = new MovingPlatformsGroup(this, 2, 4600, 450, 95, 0, 'platform_verde_2', 0, 250, 80);
-        this.mP3 = new MovingPlatformsGroup(this, 3, 5890, 500, 230, -20, 'column', 1, 100, 100);
-        this.mP4 = new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, 'platform_verde_2', 1, 150, 50);
-        this.mP5 = new MovingPlatformsGroup(this, 2, 7100, 480, 200, 0, 'punzoni', 1, 150, 50);
-        this.mP6 = new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, 'platform_verde_2', 0, 200, 170);
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 220, 95, 0, 'platform_verde_2', 1, 250, 100));
+        //this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4600, 450, 95, 0, 'platform_verde_2', 0, 250, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 3, 5890, 500, 230, -20, 'column', 1, 100, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, 'platform_verde_2', 1, 150, 50));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 480, 200, 0, 'punzoni', 1, 150, 50));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, 'platform_verde_2', 0, 200, 170));
        
-
-        
         //#region Creazione nemici
-        //this.uominiGrigi = [];
-        //for(let i = 0; i < 5; i++) {
-        //    this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
-        //    this.physics.add.existing(this.uominiGrigi[i]);
-        //    this.physics.add.collider(this.uominiGrigi[i], this.floor);
-        //    this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
-        //}
+        this.uominiGrigi = [];
+        for(let i = 0; i < 1; i++) {
+            this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 600, this.player.y, "grigi")));
+            this.uominiGrigi[i].body.allowGravity = true;
+            this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
+            this.physics.add.collider(this.uominiGrigi[i], pavement.list);
+        }
 
 
        /*  this.uominiGrigi = [];
@@ -189,11 +189,11 @@ export default class Level1 extends Phaser.Scene {
         this.player.resize(); // Ridimensionamento hitbox
 
         this.game.gameState.lives = 3;
-        const styleConfig = { color: '#FFFFFF', fontSize: 36 };
+        const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
 
         //#region Inserimento informazione vita
         const lifeMessage = "Lives: " + this.game.gameState.lives;
-        this.lifeBox = this.add.text(100, 0, lifeMessage, styleConfig);
+        this.lifeBox = this.add.text(50, 40, lifeMessage, styleConfig);
         this.lifeBox.setOrigin(0, 0);
         this.lifeBox.setScrollFactor(0, 0);
         //#endregion
@@ -207,121 +207,98 @@ export default class Level1 extends Phaser.Scene {
             key: 'flower',
             repeat: 11,
             setXY: { x: 12, y: 0, stepX: 70 }
-            });
+        });
     
-            this.flowers.children.iterate((child) => {
+        this.flowers.children.iterate((child) => {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-     
-                });
-            
-            this.physics.add.collider(this.flowers, this.player);
-            this.physics.add.collider(this.flowers, this.MovingPlatformsGroup);
-            this.physics.add.collider(this.flowers, this.StaticPlatformsGroup);
-            this.physics.add.collider(this.flowers, this.platform);
+        });
+        
+        this.physics.add.collider(this.flowers, this.player);
+        this.physics.add.collider(this.flowers, this.movingPlatforms);
+        //this.physics.add.collider(this.flowers, this.StaticPlatformsGroup);
+        //this.physics.add.collider(this.flowers, this.platform);
 
-            this.physics.add.overlap(this.player, this.flowers, collectFlowers, null, this);
+        this.physics.add.overlap(this.player, this.flowers, collectFlowers, null, this);
 
-            function collectFlowers (player, flower)
-            {
-                flower.disableBody(true, true);
-            }
+        function collectFlowers (player, flower)
+        {
+            flower.disableBody(true, true);
+        }
     }
-
-
-
-              //#endregion
 
     update() {
         // Azioni che vengono eseguite a ogni frame del gioco
-        this.player.manageMovements();
+        this.player.manageMovements(this.movingPlatforms);
         this.animateBackground();
         this.manageFlowers();
-
-       /*  for(let i = 0; i < this.uominiGrigi.length; i++) {
-            if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
-                //this.updateLives();
-            }
-        }  */
+        this.manageEnemies();
+        this.updateMovingPlatforms();
 
         if(this.player.body.y > this.game.config.height) {
             this.player.die();
+            this.updateLives();
         }
-        
-
-       /* if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
-            this.playerStartedMoving = true;
-            for(let i = 0; i < this.uominiGrigi.length; i++) {
-                this.uominiGrigi[i].start();
-            }
-        } */
-
-        /* if(this.playerStartedMoving) {
-            for(let i = 0; i < this.uominiGrigi.length; i++) {
-                this.uominiGrigi[i].manageMovements();
-            }
-        } 
-         */
-        //#region Aggiornamento movimento platforms mobili
-        this.updates++;
-        if(this.updates % this.mP1.duration == 0) {
-            this.mP1.updateMovingPlatforms();
-        }
-
-        if(this.updates % this.mP2.duration == 0) {
-            this.mP2.updateMovingPlatforms();
-        }
-
-        if(this.updates % this.mP3.duration == 0) {
-            this.mP3.updateMovingPlatforms();
-        }
-
-        if(this.updates % this.mP4.duration == 0) {
-            this.mP4.updateMovingPlatforms();
-        }
-
-        if(this.updates % this.mP5.duration == 0) {
-            this.mP5.updateMovingPlatforms();
-        }
-
-        if(this.updates % this.mP6.duration == 0) {
-            this.mP6.updateMovingPlatforms();
-        }
-
-        //#endregion
     }
 
     manageFlowers() {
         const minTimeBetweenFlowers = 500;    // Tempo minimo (in ms) tra un fiore e l'altro
-
         const timeFromPreviousFlower = this.time.now - this.lastFlower;
 
-        // Se F e' premuto ed e' passato abbastanza tempo tra il fiore precedente
-        // e adesso...
-
-        this.flower;
         if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
-            // Se sono qui devo creare e lanciare un fiore
-            this.lastFlower = this.time.now;      // Setto il tempo per il prossimo giro
+            this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
 
             // Creo un fiore
-            this.flower = new Flower(this, this.player.x + this.player.body.width / 2, this.player.y - 50, 10, this.player.flipX);
-            
+            this.flower = new Flower(this, this.player.x + this.player.body.width * 2, this.player.y - this.player.body.height / 2, 10, this.player.flipX);
+            this.flower.setDepth(0);
             this.isFlowerActive = true;
             
-            // Lo lancio
-            this.flower.fire();
+            this.flower.fire(); // Lo lancio
         }
 
-        /* for(let i = 0; i < this.uominiGrigi.length; i++) {
-            if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
+            if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
                 this.uominiGrigi[i].cure(this.flower);
                 this.isFlowerActive = false;
             }
-        } */
+        }
+    }
+
+    manageEnemies() {
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
+            if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
+                //this.updateLives();
+            }
+        }
+
+        if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
+            this.playerStartedMoving = true;
+            for(let i = 0; i < this.uominiGrigi.length; i++) {
+                this.uominiGrigi[i].start();
+            }
+        }
+
+        if(this.playerStartedMoving) {
+            for(let i = 0; i < this.uominiGrigi.length; i++) {
+                this.uominiGrigi[i].manageMovements();
+            }
+        }
+    }
+
+    updateMovingPlatforms() {
+        this.updates++;
+        for(let i = 0; i < this.movingPlatforms.length; i++)
+        {
+            for(let k = 0; k < this.movingPlatforms[i].list.length; k++) {
+                if(this.updates % this.movingPlatforms[i].duration == 0) {
+                    this.movingPlatforms[i].updateMovingPlatforms();
+                }
+            }
+        }
     }
 
     animateBackground() {
         this.background.x = - this.cameras.main.scrollX * 0.5;
+        this.nuvole.x = - this.cameras.main.scrollX * 0.7;
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
     }

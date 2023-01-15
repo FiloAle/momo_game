@@ -119,6 +119,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(0); 
         }
 
+        //#region Gestione collisione platform mobili
+        for(let i = 0; i < movingPlatformsList.length; i++) {
+            for(let k = 0; k < movingPlatformsList[i].list.length; k++) {
+                if(Phaser.Geom.Intersects.RectangleToRectangle(this.body, movingPlatformsList[i].list[k].body) && !this.isJumping) {
+                    this.body.setGravityY(100000);
+                }
+            }
+        }
+        //#endregion
+
         if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight && !this.isJumping && this.body.touching.down && !this.isKeyUpPressed) {
             this.isKeyUpPressed = true;
             this.isJumping = true;
@@ -145,16 +155,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.isJumping = true;
             this.body.setGravityY(0);
         }
-
-        //#region Gestione collisione platform mobili
-        for(let i = 0; i < movingPlatformsList.length; i++) {
-            for(let k = 0; k < movingPlatformsList[i].list.length; k++) {
-                if(Phaser.Geom.Intersects.RectangleToRectangle(this.body, movingPlatformsList[i].list[k].body) && !this.isJumping) {
-                    this.body.setGravityY(100000);
-                }
-            }
-        }
-        //#endregion
 
         // Gestiamo le animazioni separatamente
         this.manageAnimations();
