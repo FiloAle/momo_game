@@ -60,18 +60,6 @@ export default class TestScene1 extends Phaser.Scene {
         // Inserisci gli elementi dell'interfaccia utente
         this.createUI();
 
-        // Inserisci i funghetti nella scena
-        this.mushrooms = [];
-        for (let i = 0; i < 10; i++) {
-            const mushroom = this.add.image(400 + 400 * i, this.floorHeight, "mushroom");
-            mushroom.setOrigin(0, 1);
-            this.mushrooms.push(mushroom);
-        }
-        // Aggiungi i funghetti alla fisica
-        this.mushroomsGroup = this.physics.add.group(this.mushrooms);
-        this.physics.add.collider(this.mushroomsGroup, this.floor);
-        // Gestisci la raccolta dei funghi attraverso la fisica
-        this.physics.add.overlap(this.player, this.mushroomsGroup, this.updateScore, null, this);
     }
 
     createUI() {
@@ -96,7 +84,7 @@ export default class TestScene1 extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup({
             key: 'platform',
             repeat: 3,
-            setXY: { x: 768, y: this.game.config.height - 300, stepX: 1000, stepY: 50}
+            setXY: { x: 1500, y: this.game.config.height - 300, stepX: 1000, stepY: 50}
         });
 
         // Rendi le piattaforme "solide". Se il giocatore è su una piattaforma

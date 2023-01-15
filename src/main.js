@@ -1,7 +1,9 @@
 // Importiamo le scene (ne usiamo una diversa per ogni esempio)
 import SplashScreen from "./scenes/splash_screen.js"
-import TestScene1 from "./scenes/test_scene_1.js";
+import Level1 from "./scenes/level_1.js";
+import Level2 from "./scenes/level_2.js";
 import TestScene2 from "./scenes/test_scene_2.js";
+import TestScene3 from "./scenes/test_scene_3.js";
 import GameOver from "./scenes/gameover.js";
 
 // Definiamo la configurazione di lancio del gioco
@@ -9,8 +11,9 @@ const config = {
     type: Phaser.AUTO,
     width: 1280,
     height: 720,
+    autoRound: true,
     backgroundColor: 0x000000, // sfondo nero
-    scene: [ SplashScreen, TestScene1, TestScene2, GameOver ],
+    scene: [ SplashScreen, Level1, Level2, TestScene2, TestScene3, GameOver ],
     pixelArt: true,
     parent: "game_area", // Specifica il div contenitore
     physics: {
@@ -21,6 +24,9 @@ const config = {
             },
             debug: true
         }
+    },
+    render: {
+        roundPixels: true,
     }
 };
 

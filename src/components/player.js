@@ -8,12 +8,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
     isJumping;        // verifichiamo se l'animazione del giocatore è già in salto o no
     maxWidth;
     isKeyUpPressed;
+    currAnim;
 
     constructor(scene, x, y, maxWidth) {
         // Il costruttore della classe base Phaser.Scene prende come argomento la scena
 		super(scene, x, y, "playerrun");
         scene.add.existing(this);
         this.initialX = x;
+        this.initialY = y;
         this.floorHeight = y;
         this.setOrigin(0, 1); // Punto pivot in basso a sinistra
         this.setScale(0.5);   // Scala le dimensioni del giocatore
@@ -80,18 +82,19 @@ export default class Player extends Phaser.GameObjects.Sprite {
     manageAnimations() {
         // Gestiamo separatamente le animazioni
 
-        const curr_anim = this.anims.currentAnim.key;   // Otteniamo il nome dell'animazione corrente
+        this.currAnim = this.anims.currentAnim.key;   // Otteniamo il nome dell'animazione corrente
 
-        if (this.body.velocity.y != 0) {    // < 0 se voglio l'animazione solo in salita
+        if (this.body.velocity.y != 0 && !this.body.touching.down) {    // < 0 se voglio l'animazione solo in salita
             // Se mi sto muovendo verticalmente, l'animazione
             // è sempre playerJump
-            if (curr_anim != "playerJump") {
+            this.body.setGravityY(0);
+            if (this.currAnim != "playerJump") {
                 this.anims.play("playerJump");
             }
         } else if (this.body.velocity.x != 0) {
             // Se invece non mi muovo verticalmente, ma mi muovo
             // orizzontalmente, eseguirò l'animazione di Move
-            if (curr_anim != "playerMove") {
+            if (this.currAnim != "playerMove") {
                 this.anims.play("playerMove");
             }
             // e configurerò il flip corretto.
@@ -103,7 +106,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
     }
 
-    manageMovements() {
+    manageMovements(movingPlatformsList) {
         // E' stato premuto il tasto freccia sinistra e il giocatore è a destra del limite sinistro del quadro?
         if ((this.cursorKeys.left.isDown || this.keyA.isDown) && this.x >= 0) {
             this.body.setVelocityX(-200);// Velocità per spostamento verso sinistra
@@ -116,9 +119,20 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(0); 
         }
 
+        //#region Gestione collisione platform mobili
+        for(let i = 0; i < movingPlatformsList.length; i++) {
+            for(let k = 0; k < movingPlatformsList[i].list.length; k++) {
+                if(Phaser.Geom.Intersects.RectangleToRectangle(this.body, movingPlatformsList[i].list[k].body) && !this.isJumping) {
+                    this.body.setGravityY(100000);
+                }
+            }
+        }
+        //#endregion
+
         if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight && !this.isJumping && this.body.touching.down && !this.isKeyUpPressed) {
             this.isKeyUpPressed = true;
             this.isJumping = true;
+            this.body.setGravityY(0);
             this.body.setVelocityY(-550);  // Salto (caso con l'introduzione della fisica)
         }
         if(this.keySpace.isUp && this.keyW.isUp && this.cursorKeys.up.isUp)
@@ -133,7 +147,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
         if (this.body.touching.up) {
             this.isJumping = false;
+            this.body.setGravityY(0);
             this.body.setVelocityY(0);
+        }
+
+        if(this.body.velocity.y != 0 && !this.body.touching.down && !this.body.touching.up && !this.isJumping && (this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown)) {
+            this.isJumping = true;
+            this.body.setGravityY(0);
         }
 
         // Gestiamo le animazioni separatamente
@@ -144,6 +164,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
         // Nel nostro caso la morte del giocatore consiste nel reset alla posizione iniziale
         // del livello
         this.x = this.initialX;
+        this.y = this.initialY - 15;
+        this.isJumping = false;
+        this.body.setVelocity(0, 0);
+        //gameover
     }
 
 }

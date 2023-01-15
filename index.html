@@ -2,10 +2,29 @@
 <html>
     <head>
         <title>Momo: The Game</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
         <script src="lib/phaser.min.js"></script>
         <script type="module" src="src/main.js"></script>
+        <style media='screen' type='text/css'>
+            @font-face {
+              font-family: Montserrat;
+              src: url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Quicksand:wght@500;700&display=swap');
+              font-weight: 500;
+              font-weight: bold;
+            }
+            @font-face {
+              font-family: Quicksand;
+              src: url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Quicksand:wght@500;700&display=swap');
+              font-weight: 700;
+              font-weight: bold;
+            }
+      </style>
     </head>
     <body style="background-color:rgb(0, 0, 0);">
         <div id="game_area" style="text-align:center;"></div>
+        <div style="font-family: Montserrat; position: absolute; left:-1000px; visibility:hidden;">.</div>
+        <div style="font-family: Quicksand; position: absolute; left:-1000px; visibility:hidden;">.</div>
     </body>
 </html>

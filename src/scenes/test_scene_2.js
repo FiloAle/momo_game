@@ -11,10 +11,10 @@ export default class TestScene2 extends Phaser.Scene {
     floorHeight;        // Altezza del terreno (asse y) rispetto al riquadro di gioco
     lastFlower;         // Tempo dall'ultimo fiore lanciato
     isCameraFollowingPlayer;
-    mP1;
     updates;
     playerStartedMoving;
     lastLivesDecrement;
+    movingPlatforms;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -32,6 +32,7 @@ export default class TestScene2 extends Phaser.Scene {
         this.lastLivesDecrement = 0;
         this.playerStartedMoving = false;
         this.isFlowerActive = false;
+        this.movingPlatforms = [];
     }
 
     preload() {
@@ -51,33 +52,29 @@ export default class TestScene2 extends Phaser.Scene {
         this.background = this.add.tileSprite(0, this.game.config.height - this.textures.get('b1').getSourceImage().height, this.game.width, this.textures.get('b1').getSourceImage().height, "b1");
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
+        this.background.setDepth(-2);
         //#endregion
 
         this.isCameraFollowingPlayer = false;
 
-        //#region Pavimento
-        this.floor = this.add.rectangle(-1000, this.game.config.height,
-            this.worldWidth + 1000, this.game.config.height - this.floorHeight,
-            0xFFFFFF, 0); // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
-        this.floor.setScrollFactor(0, 0);
-        this.floor.setOrigin(0, 1);
-        // Aggiungi il piano alla fisica
-        this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
-        //#endregion
-
-        const columns = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
-
         //#region Creazione player
-        const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(thePlayer);
-        this.physics.add.collider(this.player, this.floor);
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //#endregion
-        
-        const pavement = new StaticPlatformsGroup(this, 2, 590, 910, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        const pavement_1 = new StaticPlatformsGroup(this, 1, 2948, 600, 0, 0, true, 'platform_1');
-        const platforms_1 = new StaticPlatformsGroup(this, 6, 850, this.game.config.height - 150, 500, -50, true, 'platform');
 
+        const pavement = new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
+        const pavement_1 = new StaticPlatformsGroup(this, 1, pavement.list[pavement.list.length - 1].x + pavement.list[pavement.list.length - 1].width, 600, 0, 0, true, 'platform_1');
+        const columns = new StaticPlatformsGroup(this, 3, 20, pavement.list[0].y - this.textures.get('column').getSourceImage().height + 20, 100, 0, false, "column");
+        for(let i = 0; i < columns.list.length; i++) {
+            columns.list[i].setDepth(-1);
+        }
+
+        this.pavements = [];
+        this.pavements.push(pavement);
+        this.pavements.push(pavement_1);
+
+        this.player.setDepth(1);
+        
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 10000, 720);
         this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
@@ -94,6 +91,8 @@ export default class TestScene2 extends Phaser.Scene {
         this.big_mushroom.setImmovable(true);
         this.big_mushroom.body.allowGravity = false;
 
+        //TODO: Sostituire TUTTI i this.floor !!!
+
         // Aggiungo i collider necessari
         this.physics.add.collider(this.big_mushroom, this.floor);
         this.physics.add.collider(this.big_mushroom, this.player);
@@ -101,24 +100,30 @@ export default class TestScene2 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-        this.mP1 = new MovingPlatformsGroup(this, 3, 200, 100, 250, -50, 'platform', 1, 200, 100);
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 3, 200, 600, 400, -60, 'platform', 1, 200, 60));
 
         //#region Creazione nemici
         this.uominiGrigi = [];
-        for(let i = 0; i < 5; i++) {
-            this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
-            this.physics.add.existing(this.uominiGrigi[i]);
-            this.physics.add.collider(this.uominiGrigi[i], this.floor);
+        for(let i = 0; i < 1; i++) {
+            this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 600, this.floorHeight, "grigi")));
+            this.uominiGrigi[i].body.allowGravity = true;
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
         }
 
         /* for(let i = 0; i < 5; i++) {
             this.uominiGrigi.push(new Enemy(this, this.movingPlatformsList[0].list[i].x, this.movingPlatformsList[0].list[i].y));
             this.physics.add.existing(this.uominiGrigi[this.uominiGrigi.length - 1]);
-            this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.floor);
             this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.movingPlatformsList[0].list[i]);
             this.uominiGrigi[this.uominiGrigi.length - 1].resize(); // Ridimensionamento hitbox
         } */
+
+        this.pavements.forEach(pavement => {
+            this.uominiGrigi.forEach(enemy => {
+                pavement.list.forEach(platform => {
+                    this.physics.add.collider(enemy, platform);
+                });
+            });
+        });
 
         for(let k = 0; k < this.uominiGrigi.length; k++) {
             this.uominiGrigi.forEach(enemy => {
@@ -130,11 +135,11 @@ export default class TestScene2 extends Phaser.Scene {
         this.player.resize(); // Ridimensionamento hitbox
 
         this.game.gameState.lives = 3;
-        const styleConfig = { color: '#FFFFFF', fontSize: 36 };
+        const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
 
         //#region Inserimento informazione vita
         const lifeMessage = "Lives: " + this.game.gameState.lives;
-        this.lifeBox = this.add.text(100, 0, lifeMessage, styleConfig);
+        this.lifeBox = this.add.text(50, 40, lifeMessage, styleConfig);
         this.lifeBox.setOrigin(0, 0);
         this.lifeBox.setScrollFactor(0, 0);
         //#endregion
@@ -142,35 +147,16 @@ export default class TestScene2 extends Phaser.Scene {
 
     update() {
         // Azioni che vengono eseguite a ogni frame del gioco
-        this.player.manageMovements();
+        this.player.manageMovements(this.movingPlatforms);
         this.animateBackground();
         this.manageFlowers();
+        this.manageEnemies();
+        this.updateMovingPlatforms();
 
-        for(let i = 0; i < this.uominiGrigi.length; i++) {
-            if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
-                this.updateLives();
-            }
+        if(this.player.body.y > this.game.config.height) {
+            this.player.die();
+            this.updateLives();
         }
-
-        if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
-            this.playerStartedMoving = true;
-            for(let i = 0; i < this.uominiGrigi.length; i++) {
-                this.uominiGrigi[i].start();
-            }
-        }
-
-        if(this.playerStartedMoving) {
-            for(let i = 0; i < this.uominiGrigi.length; i++) {
-                this.uominiGrigi[i].manageMovements();
-            }
-        }
-        
-        //#region Aggiornamento movimento platforms mobili
-        this.updates++;
-        if(this.updates % this.mP1.duration == 0) {
-            this.mP1.updateMovingPlatforms();
-        }
-        //#endregion
     }
 
     manageFlowers() {
@@ -187,8 +173,8 @@ export default class TestScene2 extends Phaser.Scene {
             this.lastFlower = this.time.now;      // Setto il tempo per il prossimo giro
 
             // Creo un fiore
-            this.flower = new Flower(this, this.player.x + this.player.body.width / 2, this.player.y - 50, 10, this.player.flipX);
-            
+            this.flower = new Flower(this, this.player.x + this.player.body.width * 2, this.player.y - this.player.body.height / 2, 10, this.player.flipX);
+            this.flower.setDepth(0);
             this.isFlowerActive = true;
             
             // Lo lancio
@@ -196,16 +182,48 @@ export default class TestScene2 extends Phaser.Scene {
         }
 
         for(let i = 0; i < this.uominiGrigi.length; i++) {
-            if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.getBounds(), this.uominiGrigi[i].getBounds()) && this.uominiGrigi[i].isEvil) {
+            if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
                 this.uominiGrigi[i].cure(this.flower);
                 this.isFlowerActive = false;
             }
         }
     }
 
+    updateMovingPlatforms() {
+        this.updates++;
+        for(let i = 0; i < this.movingPlatforms.length; i++)
+        {
+            for(let k = 0; k < this.movingPlatforms[i].list.length; k++) {
+                if(this.updates % this.movingPlatforms[i].duration == 0) {
+                    this.movingPlatforms[i].updateMovingPlatforms();
+                }
+            }
+        }
+    }
+
+    manageEnemies() {
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
+            if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
+                //this.updateLives();
+            }
+        }
+
+        if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
+            this.playerStartedMoving = true;
+            for(let i = 0; i < this.uominiGrigi.length; i++) {
+                this.uominiGrigi[i].start();
+            }
+        }
+
+        if(this.playerStartedMoving) {
+            for(let i = 0; i < this.uominiGrigi.length; i++) {
+                this.uominiGrigi[i].manageMovements();
+            }
+        }
+    }
+
     animateBackground() {
         this.background.x = - this.cameras.main.scrollX * 0.5;
-        //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
     }
 
