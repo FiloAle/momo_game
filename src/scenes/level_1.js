@@ -13,7 +13,6 @@ export default class Level1 extends Phaser.Scene {
     isCameraFollowingPlayer;
     mP1;
     updates;
-    playerStartedMoving;
     lastLivesDecrement;
     nuvole;
     flowers;
@@ -33,7 +32,6 @@ export default class Level1 extends Phaser.Scene {
         this.lastFlower = 0;
         this.updates = 0;
         this.lastLivesDecrement = 0;
-        this.playerStartedMoving = false;
         this.isFlowerActive = false;
         this.movingPlatforms = [];
     }
@@ -270,14 +268,7 @@ export default class Level1 extends Phaser.Scene {
             }
         }
 
-        if(this.player.x != this.player.initialX && !this.playerStartedMoving) {
-            this.playerStartedMoving = true;
-            for(let i = 0; i < this.uominiGrigi.length; i++) {
-                this.uominiGrigi[i].start();
-            }
-        }
-
-        if(this.playerStartedMoving) {
+        if(this.player.x != this.player.initialX) {
             for(let i = 0; i < this.uominiGrigi.length; i++) {
                 this.uominiGrigi[i].manageMovements();
             }
