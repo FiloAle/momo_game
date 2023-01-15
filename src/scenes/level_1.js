@@ -91,7 +91,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 2800, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
 
@@ -113,8 +113,8 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 8650, this.game.config.height-190, 220, -40, true, "platform_verde_2"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 9300, this.game.config.height-280, 0, 0, true, "platform_verde_3"));
 
-        for(let i = 0; i < this.staticPlatforms[12].list.length; i++) {
-            this.staticPlatforms[12].list[i].flipY = true;
+        for(let i = 0; i < this.staticPlatforms[13].list.length; i++) {
+            this.staticPlatforms[13].list[i].flipY = true;
         }
 
         this.pavements = [];
@@ -133,13 +133,12 @@ export default class Level1 extends Phaser.Scene {
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         
         //MOVING PLATFORMS
-        //this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 100, 95, 0, 'platform_verde_2', 1, 250, 100));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 200, 100, 0, 'platform_verde_2', 1, 100, 100));
-        //this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4600, 450, 95, 0, 'platform_verde_2', 0, 250, 80));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 3, 5890, 500, 230, -20, 'column', 1, 100, 100));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, 'platform_verde_2', 1, 150, 50));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 480, 200, 0, 'punzoni', 1, 150, 50));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, 'platform_verde_2', 0, 200, 170));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 100, 95, 0, true, 'platform_verde_2', 1, 250, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4600, 450, 95, 0, true, 'platform_verde_2', 0, 250, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 3, 5890, 500, 230, -20, true, 'column', 1, 100, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, true, 'platform_verde_2', 1, 150, 50));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 480, 200, 0, false, 'punzoni', 1, 150, 50));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, true, 'platform_verde_2', 0, 200, 170));
        
         //#region Creazione nemici
         this.uominiGrigi = [];

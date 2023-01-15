@@ -7,9 +7,10 @@ export default class MovingPlatformsGroup {
     duration;
     list;
 
-    constructor(scene, n, coordX, coordY, distX, distY, img, direction, velocity, duration) {
+    constructor(scene, n, coordX, coordY, distX, distY, solid, img, direction, velocity, duration) {
         this.scene = scene;
         this.velocity = 0;
+        this.solid = solid;
         this.direction = 0;
         this.duration = 0;
         this.list = [];
@@ -26,7 +27,7 @@ export default class MovingPlatformsGroup {
         
         for(let i = 0; i < n; i++)
         {
-            this.list.push(new Platform(this.scene, this.x, this.y, true, img, this.direction, this.velocity));
+            this.list.push(new Platform(this.scene, this.x, this.y, this.solid, img, this.direction, this.velocity));
             this.x += distX;
             this.y += distY;
         }
