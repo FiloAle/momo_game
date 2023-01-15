@@ -15,8 +15,9 @@ export default class Level1 extends Phaser.Scene {
     updates;
     lastLivesDecrement;
     nuvole;
-    flowers;
+    collectableFlowers;
     movingPlatforms;
+    staticPlatforms;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -33,7 +34,9 @@ export default class Level1 extends Phaser.Scene {
         this.updates = 0;
         this.lastLivesDecrement = 0;
         this.isFlowerActive = false;
+        this.collectableFlowers = [];
         this.movingPlatforms = [];
+        this.staticPlatforms = [];
     }
 
     preload() {
@@ -97,32 +100,32 @@ export default class Level1 extends Phaser.Scene {
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
 
-    
-        const pavement = new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1');
-        const pavement_1 = new StaticPlatformsGroup(this, 2, pavement.list[pavement.list.length - 1].x + pavement.list[pavement.list.length - 1].width, 500, 1000, 100, true, 'platform_3');
-        const columns = new StaticPlatformsGroup(this, 3, 20, pavement.list[0].y - this.textures.get('column').getSourceImage().height, 100, 0, false, "column");
-        const platform_verde_2 = new StaticPlatformsGroup(this, 2, 700, pavement.list[0].y -120, 180, -70, true, "platform_verde_2");
-        const platform_2 = new StaticPlatformsGroup(this, 2, 1070, 500, 200, 0, true, "platform_2");
-        const punzoni = new StaticPlatformsGroup(this, 2, 2550, this.game.config.height-250, 90, 0, false, "punzoni");
-        const platform_verde_3 = new StaticPlatformsGroup(this, 2, 2200, pavement.list[0].y -120, 400, -160, true, "platform_verde_2");
-        const platform_verde_4 = new StaticPlatformsGroup(this, 1, 3600, pavement.list[0].y -230, 250, 0, true, "platform_verde_2");
-        const columns_2 = new StaticPlatformsGroup(this, 3, 4060, this.game.config.height-130, 220, -30, true, "column");
-        const pavement_2 = new StaticPlatformsGroup(this, 1, 5200, 600, 0, 0, true, 'platform_3');
-        const platform_3 = new StaticPlatformsGroup(this, 2, 6550, 400, 0, 100, true, "platform_2");
-        const platform_verde_5 = new StaticPlatformsGroup(this, 3, 7000, this.game.config.height-150, 200, 0, true, "platform_verde_2");
-        const platform_verde_6 = new StaticPlatformsGroup(this, 2, 7600, this.game.config.height-500, 0, 310, true, "platform_verde_3");
-        const punzoni_2 = new StaticPlatformsGroup(this, 3, 7640, this.game.config.height-490, 400, 0, false, "punzoni");
-        const punzoni_3 = new StaticPlatformsGroup(this, 2, 7900, this.game.config.height-215, 400, 0, false, "punzoni");
-        const platform_verde_7 = new StaticPlatformsGroup(this, 3, 8650, this.game.config.height-190, 220, -40, true, "platform_verde_2");
-        const platform_verde_8 = new StaticPlatformsGroup(this, 1, 9300, this.game.config.height-280, 0, 0, true, "platform_verde_3");
 
-        for(let i = 0; i < punzoni_2.list.length; i++) {
-            punzoni_2.list[i].flipY = true;
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 20, this.staticPlatforms[0].list[0].y - this.textures.get('column').getSourceImage().height, 100, 0, false, "column"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 700, this.staticPlatforms[0].list[0].y -120, 180, -70, true, "platform_verde_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1070, 500, 200, 0, true, "platform_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2550, this.game.config.height-250, 90, 0, false, "punzoni"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2200, this.staticPlatforms[0].list[0].y -120, 400, -160, true, "platform_verde_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3600, this.staticPlatforms[0].list[0].y -230, 250, 0, true, "platform_verde_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4060, this.game.config.height-130, 220, -30, true, "column"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5200, 600, 0, 0, true, 'platform_3'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 6550, 400, 0, 100, true, "platform_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 7000, this.game.config.height-150, 200, 0, true, "platform_verde_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 7600, this.game.config.height-500, 0, 310, true, "platform_verde_3"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 7640, this.game.config.height-490, 400, 0, false, "punzoni"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 7900, this.game.config.height-215, 400, 0, false, "punzoni"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 8650, this.game.config.height-190, 220, -40, true, "platform_verde_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 9300, this.game.config.height-280, 0, 0, true, "platform_verde_3"));
+
+        for(let i = 0; i < this.staticPlatforms[12].list.length; i++) {
+            this.staticPlatforms[12].list[i].flipY = true;
         }
 
         this.pavements = [];
-        this.pavements.push(pavement);
-        this.pavements.push(pavement_1);
+        this.pavements.push(this.staticPlatforms[0]);
+        this.pavements.push(this.staticPlatforms[1]);
 
         this.player.setDepth(1);
         
@@ -149,11 +152,13 @@ export default class Level1 extends Phaser.Scene {
             this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 600, this.player.y, "grigi")));
             this.uominiGrigi[i].body.allowGravity = true;
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
-            this.physics.add.collider(this.uominiGrigi[i], pavement.list);
+            for(let k = 0; k < this.pavements.length; k++) {
+                this.physics.add.collider(this.uominiGrigi[i], this.pavements[k].list);
+            }   
         }
 
 
-       /*  this.uominiGrigi = [];
+        /*  this.uominiGrigi = [];
         for(let i = 0; i < 5; i++) {
             this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, Math.floor(Math.random() * (pavement.list[1].x + pavement.list[1].width)), this.floorHeight)));
             this.uominiGrigi[i].body.allowGravity = true;
@@ -197,38 +202,15 @@ export default class Level1 extends Phaser.Scene {
         //#endregion
 
         //collecting flowers
-        this.createflowers();     
-    }
-
-    createflowers() {
-        this.flowers = this.physics.add.group({
-            key: 'flower',
-            repeat: 11,
-            setXY: { x: 12, y: 0, stepX: 70 }
-        });
-    
-        this.flowers.children.iterate((child) => {
-            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-        });
-        
-        this.physics.add.collider(this.flowers, this.player);
-        this.physics.add.collider(this.flowers, this.movingPlatforms);
-        //this.physics.add.collider(this.flowers, this.StaticPlatformsGroup);
-        //this.physics.add.collider(this.flowers, this.platform);
-
-        this.physics.add.overlap(this.player, this.flowers, collectFlowers, null, this);
-
-        function collectFlowers (player, flower)
-        {
-            flower.disableBody(true, true);
-        }
+        this.createFlowers();     
     }
 
     update() {
         // Azioni che vengono eseguite a ogni frame del gioco
         this.player.manageMovements(this.movingPlatforms);
         this.animateBackground();
-        this.manageFlowers();
+        this.manageFlowersLaunch();
+        this.manageFlowersOverlap();
         this.manageEnemies();
         this.updateMovingPlatforms();
 
@@ -238,7 +220,42 @@ export default class Level1 extends Phaser.Scene {
         }
     }
 
-    manageFlowers() {
+    createFlowers() {
+        for(let i = 0; i < 10; i++) {
+            this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 600));
+        }
+
+        this.collectableFlowers.forEach(flower => {
+            flower.body.setAllowGravity(true);
+            flower.body.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        });
+
+        //this.physics.add.collider(this.flowers, this.player);
+
+        for(let i = 0; i < this.collectableFlowers.length; i++) {
+            for(let k = 0; k < this.movingPlatforms.length; k++) {
+                this.physics.add.collider(this.collectableFlowers[i], this.movingPlatforms[k].list);
+            }
+            
+            for(let k = 0; k < this.staticPlatforms.length; k++) {
+                if(this.staticPlatforms[k].solid) {
+                    this.physics.add.collider(this.collectableFlowers[i], this.staticPlatforms[k].list);
+                }
+            }
+        }
+        //this.physics.add.collider(this.flowers, this.platform);
+    }
+
+    manageFlowersOverlap() {
+        for(let i = 0; i < this.collectableFlowers.length; i++) {
+            if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].body, this.player.body)) {
+                this.collectableFlowers[i].destroy(true);
+                this.collectableFlowers.splice(i, 1);
+            }
+        }
+    }
+
+    manageFlowersLaunch() {
         const minTimeBetweenFlowers = 500;    // Tempo minimo (in ms) tra un fiore e l'altro
         const timeFromPreviousFlower = this.time.now - this.lastFlower;
 

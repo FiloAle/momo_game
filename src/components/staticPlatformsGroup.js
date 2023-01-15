@@ -3,9 +3,11 @@ import Platform from "./platform.js";
 export default class StaticPlatformsGroup {
     scene;
     list;
+    solid;
 
     constructor(scene, n, coordX, coordY, distX, distY, solid, img) {
         this.scene = scene;
+        this.solid = solid;
         this.list = [];
         this.#createStaticPlatforms(n, coordX, coordY, distX, distY, solid, img);
     }
