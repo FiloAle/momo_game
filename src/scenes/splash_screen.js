@@ -14,9 +14,6 @@ export default class SplashScreen extends Phaser.Scene {
     preload() {
         console.log("splash_screen - Executing preload()");
         // Carichiamo gli asset grafici
-        this.load.image("background_base", "assets/images/background/background.jpg"); // carica l'immagine di sfondo
-        this.load.image("b1", "assets/images/background/b1.jpg"); // carica l'immagine di sfondo
-        this.load.image("nuvole", "assets/images/background/nuvole.png"); 
         this.load.image("background_splash_screen", "assets/images/background/splash_screen.jpg"); // carica l'immagine di sfondo
 
         // Carichiamo l'immagine del giocatore in formato spritesheet (ci servirà nelle prossime scene)
@@ -37,6 +34,12 @@ export default class SplashScreen extends Phaser.Scene {
             frameHeight: 335,
         };
         this.load.spritesheet("grigi", "assets/images/characters/grigi.png", grigi_spritesheet_config);
+
+        const flower_spritesheet_config = {
+            frameWidth:  150,
+            frameHeight: 150,
+        }
+        this.load.spritesheet("animated_flower", "assets/images/weapons/animated_flower.png", flower_spritesheet_config);
 
         // Carichiamo gli asset grafici
         //this.load.image("pauseButton", "assets/UI/pause_button.png"); //caricamento bottone menu di pausa

@@ -42,6 +42,9 @@ export default class Level1 extends Phaser.Scene {
     preload() {
         console.log("test_scene_2 - Executing preload()");
         // Carichiamo gli asset grafici
+        this.load.image("bg_l1", "assets/images/background/bg_l1.png"); // carica l'immagine di sfondo
+        this.load.image("nuvole", "assets/images/background/nuvole.png"); 
+
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
         this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
         this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
@@ -62,7 +65,6 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("platform_3", "assets/images/environment_elements/platform_3.png");
         this.load.image("platform_verde_3", "assets/images/environment_elements/platform_verde_3.png");
         this.load.image("flowers", "assets/images/environment_elements/mushroom_1.png");
-
     }
 
     create() {
@@ -70,7 +72,7 @@ export default class Level1 extends Phaser.Scene {
         console.log("test_scene_2 - Executing create()");
 
         //#region Impostazione sfondo scena
-        this.background = this.add.tileSprite(0, this.game.config.height - this.textures.get('b1').getSourceImage().height, this.game.width, this.textures.get('b1').getSourceImage().height, "b1");
+        this.background = this.add.tileSprite(0, this.game.config.height - this.textures.get('bg_l1').getSourceImage().height, this.game.width, this.textures.get('bg_l1').getSourceImage().height, "bg_l1");
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
@@ -207,6 +209,8 @@ export default class Level1 extends Phaser.Scene {
         this.manageFlowersOverlap();
         this.manageEnemies();
         this.updateMovingPlatforms();
+
+        //console.log(this.player.body.angle);
         
         if(this.player.body.y > this.game.config.height) {
             console.log(this.player.x);
@@ -258,7 +262,7 @@ export default class Level1 extends Phaser.Scene {
             this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
 
             // Creo un fiore
-            this.flower = new Flower(this, this.player.x + this.player.body.width * 2, this.player.y - this.player.body.height / 2, 10, this.player.flipX);
+            this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2, 10, this.player.flipX);
             this.flower.setDepth(0);
             this.isFlowerActive = true;
             
