@@ -89,17 +89,11 @@ export default class Level1 extends Phaser.Scene {
         //this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
         //#endregion
 
-
-        const columns_inizio = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
-        const columns_banca = new StaticPlatformsGroup(this, 7, 5500, 350, 100, 0, false, "column");
-
-
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 2800, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
-
 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
@@ -139,7 +133,8 @@ export default class Level1 extends Phaser.Scene {
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         
         //MOVING PLATFORMS
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 220, 95, 0, 'platform_verde_2', 1, 250, 100));
+        //this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 100, 95, 0, 'platform_verde_2', 1, 250, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 200, 100, 0, 'platform_verde_2', 1, 100, 100));
         //this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4600, 450, 95, 0, 'platform_verde_2', 0, 250, 80));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 3, 5890, 500, 230, -20, 'column', 1, 100, 100));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, 'platform_verde_2', 1, 150, 50));
@@ -213,8 +208,9 @@ export default class Level1 extends Phaser.Scene {
         this.manageFlowersOverlap();
         this.manageEnemies();
         this.updateMovingPlatforms();
-
+        
         if(this.player.body.y > this.game.config.height) {
+            console.log(this.player.x);
             this.player.die();
             this.updateLives();
         }
@@ -296,10 +292,8 @@ export default class Level1 extends Phaser.Scene {
         this.updates++;
         for(let i = 0; i < this.movingPlatforms.length; i++)
         {
-            for(let k = 0; k < this.movingPlatforms[i].list.length; k++) {
-                if(this.updates % this.movingPlatforms[i].duration == 0) {
-                    this.movingPlatforms[i].updateMovingPlatforms();
-                }
+            if(this.updates % this.movingPlatforms[i].duration == 0) {
+                this.movingPlatforms[i].updateMovingPlatforms();
             }
         }
     }

@@ -5,7 +5,6 @@ export default class MovingPlatformsGroup {
     velocity;
     direction;
     duration;
-    lastDirectionChange;
     list;
 
     constructor(scene, n, coordX, coordY, distX, distY, img, direction, velocity, duration) {
@@ -13,7 +12,6 @@ export default class MovingPlatformsGroup {
         this.velocity = 0;
         this.direction = 0;
         this.duration = 0;
-        this.lastDirectionChange = 0;
         this.list = [];
         this.#createMovingPlatforms(n, coordX, coordY, distX, distY, img, direction, velocity, duration);
     }
@@ -25,7 +23,7 @@ export default class MovingPlatformsGroup {
         this.direction = direction;
         this.velocity = velocity;
         this.duration = duration;
-    
+        
         for(let i = 0; i < n; i++)
         {
             this.list.push(new Platform(this.scene, this.x, this.y, true, img, this.direction, this.velocity));

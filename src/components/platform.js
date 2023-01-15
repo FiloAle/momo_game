@@ -16,8 +16,8 @@ export default class Platform extends Phaser.GameObjects.Sprite {
         this.velocity = velocity;
         this.width = scene.textures.get(img).getSourceImage().width;
 
-        this.scene.add.existing(this);
-        this.scene.physics.add.existing(this);
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
         this.body.allowGravity = false;
         this.setOrigin(0, 0);
         this.body.setImmovable(true);
@@ -31,20 +31,18 @@ export default class Platform extends Phaser.GameObjects.Sprite {
         } 
 
         if(solid) {
-            this.scene.physics.add.collider(this, this.scene.player, () => {
-                this.scene.player.isJumping = false;
+            scene.physics.add.collider(this, scene.player, () => {
+                scene.player.isJumping = false;
             });
         }
     }
 
     updateMovement() {
-        if(this.velocity != 0) {
-            this.velocity = -this.velocity;
-            if(this.direction == 0) {
-                this.body.setVelocity(this.velocity, 0);
-            } else {
-                this.body.setVelocity(0, this.velocity);
-            }
+        this.velocity = -this.velocity;
+        if(this.direction == 0) {
+            this.body.setVelocity(this.velocity, 0);
+        } else {
+            this.body.setVelocity(0, this.velocity);
         }
     }
 }
