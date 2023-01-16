@@ -56,7 +56,7 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("platform_grigia_1", "assets/images/environment_elements/platform_grigia_1.png");
         this.load.image("platform_grigia_2", "assets/images/environment_elements/platform_grigia_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
-        this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
+        this.load.image("punzoni", "assets/images/environment_elements/punzone_2.png");
 
         this.load.image("platform_2", "assets/images/environment_elements/platform_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
