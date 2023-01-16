@@ -44,9 +44,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
             key: "playerMove",
             frames: this.anims.generateFrameNumbers("playerrun", {
                 start: 0, //iniziamo dal primo frame
-                end: 3, //e i primi 10 frame (fino alla fine della corsa)
+                end: 40, //e i primi 10 frame (fino alla fine della corsa)
             }),
-            frameRate: 10, //aggiorniamo l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
+            frameRate: 40, //aggiorniamo l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
             repeat: -1 //ripetiamo all'infinito la stessa animazione
         });
 
@@ -65,8 +65,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.anims.create({
             key: "playerJump",
             frames: this.anims.generateFrameNumbers("playerrun", {
-                start: 4, //iniziamo dal primo frame
-                end: 11, //e i primi 10 frame (fino alla fine della corsa)
+                start: 41, //iniziamo dal primo frame
+                end: 58, //e i primi 10 frame (fino alla fine della corsa)
             }),
             frameRate: 15, //aggiornimao l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
             repeat: -1
@@ -133,7 +133,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.isKeyUpPressed = true;
             this.isJumping = true;
             this.body.setGravityY(0);
-            this.body.setVelocityY(-550);  // Salto (caso con l'introduzione della fisica)
+            this.body.setVelocityY(-650);  // Salto (caso con l'introduzione della fisica)
         }
         if(this.keySpace.isUp && this.keyW.isUp && this.cursorKeys.up.isUp)
         {

@@ -21,7 +21,7 @@ export default class SplashScreen extends Phaser.Scene {
             frameWidth:  280,
             frameHeight: 335,
         };
-        this.load.spritesheet("playerrun", "assets/images/characters/playerrunandjump.png", player_spritesheet_config);
+        this.load.spritesheet("playerrun", "assets/images/characters/spritesheetmomo.png", player_spritesheet_config);
 
         const enemy_spritesheet_config = {
             frameWidth:  280,
@@ -71,7 +71,7 @@ export default class SplashScreen extends Phaser.Scene {
         this.creditsButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
 
         this.playButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
-            this.scene.start("level_1");
+            this.scene.start("level_2");
         });
     }
 

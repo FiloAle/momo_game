@@ -96,7 +96,7 @@ export default class Level1 extends Phaser.Scene {
         this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
-
+        
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 20, this.staticPlatforms[0].list[0].y - this.textures.get('column').getSourceImage().height, 100, 0, false, "column"));
