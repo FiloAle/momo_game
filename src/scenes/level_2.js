@@ -3,6 +3,7 @@ import Flower from "../components/flower.js"
 import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
 import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
+import FlowersGroup from "../components/flowersGroup.js";
 
 export default class Level2 extends Phaser.Scene {
 
@@ -225,15 +226,24 @@ export default class Level2 extends Phaser.Scene {
     }
 
     createFlowers() {
-        for(let i = 0; i < 10; i++) {
-            this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100));
+        /* for(let i = 0; i < 10; i++) {
+            this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
+        } */
+
+        this.collectableFlowers.push(new FlowersGroup(this, 5, 200, this.floorHeight - 50, 160, 0, "animated_flower"));
+
+        for(let i = 0; i < this.collectableFlowers.length; i++) {
+            for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
+                this.collectableFlowers[i].list[k].body.setAllowGravity(false);
+            }
         }
 
-
-        this.collectableFlowers.forEach(flower => {
-            flower.body.setAllowGravity(false);
+        /* this.collectableFlowers.forEach(flowersGroup => {
+            flowersGroup.list.foreach(flower => {
+                flower.body.setAllowGravity(false);
+            })
             //flower.body.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-        });
+        }); */
 
         //this.physics.add.collider(this.flowers, this.player);
 
@@ -253,9 +263,11 @@ export default class Level2 extends Phaser.Scene {
 
     manageFlowersOverlap() {
         for(let i = 0; i < this.collectableFlowers.length; i++) {
-            if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].body, this.player.body)) {
-                this.collectableFlowers[i].destroy(true);
-                this.collectableFlowers.splice(i, 1);
+            for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
+                if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].list[k].body, this.player.body)) {
+                    this.collectableFlowers[i].list[k].destroy(true);
+                    this.collectableFlowers[i].list.splice(k, 1);
+                }
             }
         }
     }

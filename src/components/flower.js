@@ -6,10 +6,11 @@ export default class Flower extends Phaser.GameObjects.Sprite {
     stepLength;
     movementSemiLength;
 
-    constructor(scene, x, y, stepLength, goingRight) {
+    constructor(scene, x, y, img, stepLength, goingRight) {
         // Il costruttore della classe base Phaser.Scene prende come argomento la scena
-		super(scene, x, y, "animated_flower");
+		super(scene, x, y, img);
         scene.add.existing(this);
+        this.img = img;
         this.initialX = x;
         this.goingRight = goingRight;
         this.stepLength = stepLength;
@@ -25,7 +26,7 @@ export default class Flower extends Phaser.GameObjects.Sprite {
     initAnimations() {
         this.anims.create({
             key: "flowerLaunch",
-            frames: this.anims.generateFrameNumbers("animated_flower", {
+            frames: this.anims.generateFrameNumbers(this.img, {
                 start: 19,
                 end: 37,
             }),
@@ -35,7 +36,7 @@ export default class Flower extends Phaser.GameObjects.Sprite {
 
         this.anims.create({
             key: "flowerFluttuating",
-            frames: this.anims.generateFrameNumbers("animated_flower", {
+            frames: this.anims.generateFrameNumbers(this.img, {
                 start: 50,
                 end: 109,
             }),
