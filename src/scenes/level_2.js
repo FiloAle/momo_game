@@ -96,7 +96,7 @@ export default class Level2 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.floor);
         //#endregion
        
-        
+
         const columns_inizio = new StaticPlatformsGroup(this, 3, 30, 390, 116, 0, false, "column_2");
         const columns_banca = new StaticPlatformsGroup(this, 9, 5265, 210, 120, 0, false, "column_2");
 
