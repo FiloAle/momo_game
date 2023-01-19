@@ -62,10 +62,14 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("platform_2", "assets/images/environment_elements/platform_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
         
-        //platform semplice 3D
-        this.load.image("platform_verde_2", "assets/images/environment_elements/platform/1.png");
-        //
+        //platform semplice 3D grigia
+        this.load.image("platform_3d_1", "assets/images/environment_elements/platform/1.png");
+        
+        //platforl 
         this.load.image("platform_3d_3", "assets/images/environment_elements/platform/3.png");
+
+        //platform semplice 3D marrone
+        this.load.image("platform_3d_4", "assets/images/environment_elements/platform/4.png");
 
 
         this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
@@ -105,7 +109,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 3000, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
         
@@ -117,14 +121,17 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 20, this.staticPlatforms[0].list[0].y - this.textures.get('column').getSourceImage().height, 116, 0, false, "column"));
 
         //platform tutorial
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 900, this.game.config.height-170, 250, 0, true, "platform_verde_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 900, this.game.config.height-170, 250, 0, true, "platform_3d_1"));
 
 
-        //platform 1 e 2
+        //platform 1 e 2 + sfondo 1 (giallo)
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 60, 0, 0, false, "sfondo_1"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-180, 250, -40, true, "platform_verde_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-180, 250, -40, true, "platform_3d_1"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-243, 250, -40, true, "platform_3d_3"));
         
+        //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3250, this.game.config.height-220, 250, -40, true, "platform_3d_4"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-243, 250, -40, true, "sfondo_2"));
 
         
         //this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
@@ -162,12 +169,12 @@ export default class Level1 extends Phaser.Scene {
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         
         //MOVING PLATFORMS
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 100, 95, 0, true, 'platform_verde_2', 1, 250, 100));
+        /* this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 100, 95, 0, true, 'platform_verde_2', 1, 250, 100));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4600, 450, 95, 0, true, 'platform_verde_2', 0, 250, 80));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 3, 5890, 500, 230, -20, true, 'column', 1, 100, 100));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, true, 'platform_verde_2', 1, 150, 50));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 480, 200, 0, false, 'punzoni', 1, 150, 50));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, true, 'platform_verde_2', 0, 200, 170));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, true, 'platform_verde_2', 0, 200, 170)); */
        
         //#region Creazione nemici
         this.uominiGrigi = [];
@@ -281,7 +288,7 @@ export default class Level1 extends Phaser.Scene {
             this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
 
             // Creo un fiore
-            this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2, 10, this.player.flipX);
+            this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2,"animated_flower", 10, this.player.flipX);
             this.flower.setDepth(0);
             this.isFlowerActive = true;
             
