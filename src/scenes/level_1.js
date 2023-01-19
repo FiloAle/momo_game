@@ -45,12 +45,13 @@ export default class Level1 extends Phaser.Scene {
         // Carichiamo gli asset grafici
         this.load.image("bg_l1", "assets/images/background/sfondo1-colore.jpg"); // carica l'immagine di sfondo
         this.load.image("nuvole", "assets/images/background/bg_2.png"); 
+        this.load.image("bg_3", "assets/images/background/bg_3.png"); // città sfondo
 
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
         this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
         this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
         this.load.image("platform_verde_lungo", "assets/images/environment_elements/platform_verde_3.png");
-        this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
+        this.load.image("platform_1", "assets/images/environment_elements/platform_base_1.png");
 
         this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
         this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
@@ -65,7 +66,7 @@ export default class Level1 extends Phaser.Scene {
         //platform semplice 3D grigia
         this.load.image("platform_3d_1", "assets/images/environment_elements/platform/1.png");
         
-        //platforl 
+        //platform
         this.load.image("platform_3d_3", "assets/images/environment_elements/platform/3.png");
 
         //platform semplice 3D marrone
@@ -96,6 +97,11 @@ export default class Level1 extends Phaser.Scene {
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
+        this.bg_3 = this.add.image(0, 0, "bg_3");
+        this.bg_3.setOrigin(0, 0);
+        this.bg_3.setScrollFactor(0, 0);
+        //#endregion
+        
         this.nuvole = this.add.image(0, 0, "nuvole");
         this.nuvole.setOrigin(0, 0);
         this.nuvole.setScrollFactor(0, 0);
@@ -113,37 +119,31 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 4000, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 1000, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
-        
-       
-        //pavimento 2D
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 18, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
 
         //colonne inizio 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 20, this.staticPlatforms[0].list[0].y - this.textures.get('column').getSourceImage().height, 116, 0, false, "column"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 30, 400, 116, 0, false, "column"));
 
         //platform tutorial
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 900, this.game.config.height-170, 250, 0, true, "platform_3d_1"));
 
-
         //platform 1 e 2 + sfondo 1 (giallo)
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 60, 0, 0, false, "sfondo_1"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 66, 0, 0, false, "sfondo_1"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-180, 250, -40, true, "platform_3d_1"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-243, 250, -40, true, "platform_3d_3"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-240, 250, -40, true, "platform_3d_3"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3250, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 306, 0, 0, false, "sfondo_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 310, 0, 0, false, "sfondo_2"));
 
         //platform doppia marrone
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4150, this.game.config.height-230, 80, 0, true, "platform_3d_4"));
         
         //gru, platform grigia base e platform grigia lunga dietro
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4400, 285, 0, 0, false, "sfondo_3"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4400, 290, 0, 0, false, "sfondo_3"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4670, this.game.config.height-600, 0, 0, true, "platform_3d_1"));
-
 
         //this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
         // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1070, 500, 200, 0, true, "platform_2"));
@@ -164,9 +164,11 @@ export default class Level1 extends Phaser.Scene {
         //     this.staticPlatforms[1].list[i].flipY = true;
         // }
 
+        //pavimento 2D
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 18, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
+
         this.pavements = [];
-        this.pavements.push(this.staticPlatforms[0]);
-        this.pavements.push(this.staticPlatforms[1]);
+        this.pavements.push(this.staticPlatforms[this.staticPlatforms.length - 1]);
 
         this.player.setDepth(1);
         
@@ -341,6 +343,7 @@ export default class Level1 extends Phaser.Scene {
     animateBackground() {
         this.background.x = - this.cameras.main.scrollX * 0.5;
         this.nuvole.x = - this.cameras.main.scrollX * 0.7;
+        this.bg_3.x = - this.cameras.main.scrollX * 0.6;
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
     }
