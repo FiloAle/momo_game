@@ -257,7 +257,7 @@ export default class Level1 extends Phaser.Scene {
         this.manageEnemies();
         this.updateMovingPlatforms();
 
-        //console.log(this.player.body.angle);
+        console.log(this.player.body.velocity.x);
         
         if(this.player.body.y > this.game.config.height) {
             console.log(this.player.x);

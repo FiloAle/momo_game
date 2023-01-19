@@ -22,7 +22,7 @@ const config = {
             gravity: {
                 y: 980,
             },
-            debug: false
+            debug: true
         }
     },
     render: {

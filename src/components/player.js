@@ -18,7 +18,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.initialY = y;
         this.floorHeight = y;
         this.setOrigin(0, 1); // Punto pivot in basso a sinistra
-        this.setScale(0.5);   // Scala le dimensioni del giocatore
+        this.setScale(0.55);   // Scala le dimensioni del giocatore
 
         // Inizializziamo i valori di alcune proprietà
         this.isJumping = false; //di default il giocatore non sta saltando
@@ -76,7 +76,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     resize() {
-        this.body.setSize(100, 335);
+        this.body.setSize(100, 288);
     }
 
     manageAnimations() {

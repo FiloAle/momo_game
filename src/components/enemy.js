@@ -48,7 +48,7 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     resize() {
-        this.body.setSize(100, 335);
+        this.body.setSize(100, 258);
         this.body.setGravityY(100000);
     }
 

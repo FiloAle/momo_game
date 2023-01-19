@@ -18,10 +18,10 @@ export default class SplashScreen extends Phaser.Scene {
 
         // Carichiamo l'immagine del giocatore in formato spritesheet (ci servirà nelle prossime scene)
         const player_spritesheet_config = {
-            frameWidth:  280,
-            frameHeight: 335,
+            frameWidth:  252,
+            frameHeight: 288,
         };
-        this.load.spritesheet("playerrun", "assets/images/characters/spritesheetmomo.png", player_spritesheet_config);
+        this.load.spritesheet("playerrun", "assets/images/characters/momo.png", player_spritesheet_config);
 
         const enemy_spritesheet_config = {
             frameWidth:  280,
@@ -31,7 +31,7 @@ export default class SplashScreen extends Phaser.Scene {
 
         const grigi_spritesheet_config = {
             frameWidth:  280,
-            frameHeight: 335,
+            frameHeight: 258,
         };
         this.load.spritesheet("grigi", "assets/images/characters/grigi.png", grigi_spritesheet_config);
 
