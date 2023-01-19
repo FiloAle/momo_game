@@ -15,7 +15,7 @@ export default class Flower extends Phaser.GameObjects.Sprite {
         this.goingRight = goingRight;
         this.stepLength = stepLength;
         this.floorHeight = y;
-        this.setScale(0.6);   // Scala le dimensioni del fiore
+        this.setScale(0.4);   // Scala le dimensioni del fiore
         scene.physics.add.existing(this);
         this.body.setAllowGravity(false);
         this.body.setSize(120, 120);

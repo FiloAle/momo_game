@@ -104,7 +104,6 @@ export default class Level2 extends Phaser.Scene {
         const platforms_casa_1 = new StaticPlatformsGroup(this, 1, 1200, this.game.config.height - 175, 2710, 30, true, 'platform_casa_1');
         const platform_casa_2 = new StaticPlatformsGroup(this, 1, 1690, this.game.config.height - 225, 2110, 30, true, 'platform_casa_2');
 
-
         //platform verdi
         const platforms_verde_alti_corto = new StaticPlatformsGroup(this, 2, 2060, this.game.config.height - 405, 470, -0, true, 'platform_verde_corto');
         const platforms_verde_bassi_corto = new StaticPlatformsGroup(this, 2, 2295, this.game.config.height - 235, 0, -360, true, 'platform_verde_corto');
@@ -205,6 +204,7 @@ export default class Level2 extends Phaser.Scene {
         //#endregion
 
         //collecting flowers
+        
         this.createFlowers();     
     
 
@@ -245,7 +245,19 @@ export default class Level2 extends Phaser.Scene {
             this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
         } */
 
-        this.collectableFlowers.push(new FlowersGroup(this, 5, 200, this.floorHeight - 50, 160, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1535, this.floorHeight - 35, 100, 0, "animated_flower"));
+        
+        //rombo platform
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 2115, this.game.config.height - 430, 470, -0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 2350, this.game.config.height - 260, 0, -360, "animated_flower"));
+
+        //platform lungo
+        this.collectableFlowers.push(new FlowersGroup(this, 4, 2790, this.game.config.height - 680, 200, -0, "animated_flower"));
+
+        //colonne alternate
+        this.collectableFlowers.push(new FlowersGroup( this, 2, 3450, this.game.config.height - 225, 480, -0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(  this, 2, 3755, this.game.config.height - 325, 470, -0, "animated_flower"));
+    
 
         //To do: sposta setAllowGravity(false) 
         for(let i = 0; i < this.collectableFlowers.length; i++) {
