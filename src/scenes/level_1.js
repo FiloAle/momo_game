@@ -78,7 +78,8 @@ export default class Level1 extends Phaser.Scene {
 
         //platform semplice 3D marrone
         this.load.image("platform_3d_4", "assets/images/environment_elements/platform/4.png");
-        this.load.image("platform_3d_marrone", "assets/images/environment_elements/platform/base_legno_grande_2.png");
+        this.load.image("platform_3d_4_2", "assets/images/environment_elements/platform/4_2.png");
+        
        
         //platform_3d_bordeaux
         this.load.image("platform_3d_5", "assets/images/environment_elements/platform/5.png");
@@ -141,7 +142,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 3200, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
 
@@ -157,13 +158,13 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-240, 0, 0, true, "platform_3d_3"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3500, this.game.config.height-230, 250, 0, true, "platform_3d_marrone")); //platform temporanea
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3250, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3500, this.game.config.height-230, 250, 0, true, "platform_3d_4_2")); //platform temporanea
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3200, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 310, 0, 0, false, "sfondo_2"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3650, this.game.config.height-438, 0, 0, true, "platform_3d_5"));
         
         //platform doppia marrone
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4150, this.game.config.height-230, 80, 0, true, "platform_3d_4"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4150, this.game.config.height-230, 0, 0, true, "platform_3d_4_2"));
         
         //gru, platform grigia base e platform grigia lunga dietro
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4500, this.game.config.height-330, 250, 0, true, "platform_3d_marrone")); //platform temporanea
