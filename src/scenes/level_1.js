@@ -30,7 +30,7 @@ export default class Level1 extends Phaser.Scene {
         // Definiamo l'altezza del terreno pari all'altezza del riquadro
         // di gioco, per posizionare il giocatore sul fondo della schermata.
         this.floorHeight = this.game.config.height - 30;
-        this.worldWidth = 14000;
+        this.worldWidth = 10000;
         this.lastFlower = 0;
         this.updates = 0;
         this.lastLivesDecrement = 0;
@@ -43,7 +43,7 @@ export default class Level1 extends Phaser.Scene {
     preload() {
         console.log("test_scene_2 - Executing preload()");
         // Carichiamo gli asset grafici
-        this.load.image("bg_l1", "assets/images/background/sfondo1-colore.png"); // carica l'immagine di sfondo
+        this.load.image("bg_l1", "assets/images/background/sfondo1-colore.jpg"); // carica l'immagine di sfondo
         this.load.image("nuvole", "assets/images/background/bg_2.png"); 
 
         this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
@@ -72,6 +72,7 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("platform_3d_4", "assets/images/environment_elements/platform/4.png");
 
 
+
         this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
         this.load.image("platform_3", "assets/images/environment_elements/platform_3.png");
         this.load.image("platform_verde_3", "assets/images/environment_elements/platform_verde_3.png");
@@ -80,6 +81,8 @@ export default class Level1 extends Phaser.Scene {
 
         //sfondi platform
         this.load.image("sfondo_1", "assets/images/environment_elements/sfondi_platform/sfondo_1.png");
+        this.load.image("sfondo_2", "assets/images/environment_elements/sfondi_platform/sfondo_2.png");
+        this.load.image("sfondo_3", "assets/images/environment_elements/sfondi_platform/sfondo_3.png");
 
     }
 
@@ -88,11 +91,12 @@ export default class Level1 extends Phaser.Scene {
         console.log("test_scene_2 - Executing create()");
 
         //#region Impostazione sfondo scena
-        this.background = this.add.tileSprite(0, this.game.config.height - this.textures.get('bg_l1').getSourceImage().height, this.game.width, this.textures.get('bg_l1').getSourceImage().height, "bg_l1");
+        this.background = this.add.image(0, 0, "bg_l1");
+        this.background.setScale(0.75, 1);
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
-        this.nuvole = this.add.tileSprite(0, this.game.config.height - this.textures.get('nuvole').getSourceImage().height, this.game.width, this.textures.get('nuvole').getSourceImage().height, "nuvole");
+        this.nuvole = this.add.image(0, 0, "nuvole");
         this.nuvole.setOrigin(0, 0);
         this.nuvole.setScrollFactor(0, 0);
         //#endregion
@@ -109,12 +113,12 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 3000, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 4000, this.floorHeight, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
         
        
-        //sfondo 2D
+        //pavimento 2D
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 18, 0, 690, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
 
         //colonne inizio 
@@ -130,10 +134,17 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-243, 250, -40, true, "platform_3d_3"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3250, this.game.config.height-220, 250, -40, true, "platform_3d_4"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-243, 250, -40, true, "sfondo_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3250, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 306, 0, 0, false, "sfondo_2"));
 
+        //platform doppia marrone
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4150, this.game.config.height-230, 80, 0, true, "platform_3d_4"));
         
+        //gru, platform grigia base e platform grigia lunga dietro
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4400, 285, 0, 0, false, "sfondo_3"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4670, this.game.config.height-600, 0, 0, true, "platform_3d_1"));
+
+
         //this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
         // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1070, 500, 200, 0, true, "platform_2"));
         // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2550, this.game.config.height-250, 90, 0, false, "punzoni"));
@@ -160,7 +171,7 @@ export default class Level1 extends Phaser.Scene {
         this.player.setDepth(1);
         
         //#region Posizionamento camera
-        this.cameras.main.setBounds(0, 0, 14000, 720);
+        this.cameras.main.setBounds(0, 0, 15000, 720);
         this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
         //#endregion
