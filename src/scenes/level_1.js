@@ -27,8 +27,7 @@ export default class Level1 extends Phaser.Scene {
 
     init() {
         console.log("test_scene_2 - Executing init()");
-        // Definiamo l'altezza del terreno pari all'altezza del riquadro
-        // di gioco, per posizionare il giocatore sul fondo della schermata.
+        // Definiamo l'altezza del terreno pari all'altezza del riquadro di gioco, per posizionare il giocatore sul fondo della schermata.
         this.floorHeight = this.game.config.height - 30;
         this.worldWidth = 10000;
         this.lastFlower = 0;
@@ -46,7 +45,7 @@ export default class Level1 extends Phaser.Scene {
         //BACKGROUND, CLOUDS, CITY
         this.load.image("sky", "assets/images/background/bg_sky.jpg");
         this.load.image("clouds", "assets/images/background/bg_clouds.png");
-        //this.load.image("city", "assets/images/background/bg_city.png"); 
+        this.load.image("hill", "assets/images/background/bg_hill.png"); 
         this.load.image("city_down", "assets/images/background/bg_city_down.png"); 
         this.load.image("city_up", "assets/images/background/bg_city_up.png"); 
 
@@ -137,9 +136,9 @@ export default class Level1 extends Phaser.Scene {
         this.city_up.setOrigin(0, 0);
         this.city_up.setScrollFactor(0, 0);
 
-        /* this.hill = this.add.image(0, 0.5, "hill_up");
+        this.hill = this.add.image(0, 0.5, "hill");
         this.hill.setOrigin(0, 0);
-        this.hill.setScrollFactor(0, 0); */
+        this.hill.setScrollFactor(0, 0);
         
         this.nuvole = this.add.image(0, 0, "clouds");
         this.nuvole.setOrigin(0, 0);
@@ -158,8 +157,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 4000, this.floorHeight-500, this.worldWidth));
-        //this.physics.add.collider(this.player, this.floor);
+        this.player = this.physics.add.existing(new Player(this, 4500, this.floorHeight-500, this.worldWidth));
         //#endregion
 
         //colonne inizio 
@@ -174,18 +172,18 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-240, 0, 0, true, "platform_3d_3"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3400, this.game.config.height-220, 250, 0, true, "p_hidden")); //platform temporanea
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3436, this.game.config.height-220, 250, 0, true, "p_hidden")); 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3200, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 310, 0, 0, false, "sfondo_2"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3650, this.game.config.height-422, 0, 0, true, "platform_3d_5"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3648, this.game.config.height-415, 0, 0, true, "platform_3d_5"));
         
-        //platform doppia marrone
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4150, this.game.config.height-230, 0, 0, true, "platform_3d_4_2"));
+        //ponte
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4100, this.game.config.height-230, 0, 0, true, "platform_3d_4_2"));
         
         //gru, platform grigia base e platform grigia lunga dietro
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 4500, this.game.config.height-310, 100, 0, true, "p_hidden_2")); //platform temporanea
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 4416, this.game.config.height-310, 100, 0, true, "p_hidden_2"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4400, 308, 0, 0, false, "sfondo_3"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4660, this.game.config.height-550, 0, 0, true, "platform_3d_1"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4660, this.game.config.height-520, 0, 0, true, "platform_3d_1"));
 
         //casa con camini
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5123, this.game.config.height-230, 0, 0, true, "platform_3d_7", 1, -70, 100));
@@ -202,7 +200,7 @@ export default class Level1 extends Phaser.Scene {
         //gru che va su e giù e gru gialla statica
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5800, this.game.config.height-350, 0, 0, true, "platform_3d_8", 1, 70, 100));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5900, this.game.config.height-250, 0, 0, true, "platform_3d_9"));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5790, this.game.config.height-380, 120, 0, true, "platform_3d_15", 1, 70, 100));
+        //this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5790, this.game.config.height-380, 120, 0, true, "platform_3d_15", 1, 70, 100));
 
         //3 gru grigie in movimento
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-250, 0, 0, true, "platform_3d_10",1, 50, 80));
@@ -212,12 +210,11 @@ export default class Level1 extends Phaser.Scene {
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7420, this.game.config.height-140, 0, 0, true, "platform_3d_12", 1, -80, 90));
 
         //torretta
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7605, this.game.config.height-190, 0, 0, true, "platform_3d_4_2")); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7620, this.game.config.height-500, 0, 0, false, "platform_3d_13_bg")); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-520, 0, 0, false, "platform_3d_13")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7605, this.game.config.height-10, 0, 0, true, "platform_3d_4_2")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7620, this.game.config.height-360, 0, 0, false, "platform_3d_13_bg")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-380, 0, 0, false, "platform_3d_13")); 
 
-
-
+        //platform vecchie
         //this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
         // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1070, 500, 200, 0, true, "platform_2"));
         // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2550, this.game.config.height-250, 90, 0, false, "punzoni"));
@@ -346,10 +343,15 @@ export default class Level1 extends Phaser.Scene {
             this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
         } */
 
-        this.collectableFlowers.push(new FlowersGroup(this, 3, 1150, this.floorHeight - 100, 150, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 1760, this.floorHeight - 280, 220, -80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1150, this.floorHeight - 100, 200, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 330, 220, -80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 4715, this.game.config.height-642, 0, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 4715, this.game.config.height-617, 0, 0, "animated_flower"));
+        
+        this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
+
+
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
         
 
 
@@ -427,8 +429,8 @@ export default class Level1 extends Phaser.Scene {
         this.background.x = - this.cameras.main.scrollX * 0.5;
         this.nuvole.x = - this.cameras.main.scrollX * 0.7;
         this.city_down.x = - this.cameras.main.scrollX * 0.6;
-        this.city_up.x = - this.cameras.main.scrollX * 0.67;
-        //this.hill.x = - this.cameras.main.scrollX * 0.67;
+        this.city_up.x = - this.cameras.main.scrollX * 0.65;
+        this.hill.x = - this.cameras.main.scrollX * 0.7;
         
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
