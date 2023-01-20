@@ -43,33 +43,20 @@ export default class Level1 extends Phaser.Scene {
     preload() {
         console.log("test_scene_2 - Executing preload()");
        
-        // platform vecchie
-        this.load.image("bg_l1", "assets/images/background/sfondo1-colore.jpg"); //carica l'immagine di sfondo
-        this.load.image("nuvole", "assets/images/background/bg_2_new.png");  //nuvole
-        this.load.image("bg_3", "assets/images/background/bg_3.png"); //città sfondo
+        //BACKGROUND, CLOUDS, CITY
+        this.load.image("sky", "assets/images/background/bg_sky.jpg");
+        this.load.image("clouds", "assets/images/background/bg_clouds.png");
+        //this.load.image("city", "assets/images/background/bg_city.png"); 
+        this.load.image("city_down", "assets/images/background/bg_city_down.png"); 
+        this.load.image("city_up", "assets/images/background/bg_city_up.png"); 
 
-        this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
-        this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
-        this.load.image("platform_verde_lungo", "assets/images/environment_elements/platform_verde_3.png");
-        this.load.image("platform_1", "assets/images/environment_elements/platform.base.verde.up.png"); //pavimento verde
-        this.load.image("platform_1_2", "assets/images/environment_elements/platform.base.verde.png");
+        //pavimento verde
+        this.load.image("platform_1", "assets/images/environment_elements/pavement_up.png");
+        this.load.image("platform_1_2", "assets/images/environment_elements/pavement.png");
 
-        this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
-        this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
-        this.load.image("platform_grigia_1", "assets/images/environment_elements/platform_grigia_1.png");
-        this.load.image("platform_grigia_2", "assets/images/environment_elements/platform_grigia_2.png");
-        this.load.image("column", "assets/images/environment_elements/column_2.png");
-        this.load.image("punzoni", "assets/images/environment_elements/punzone_2.png");
-
-        this.load.image("platform_2", "assets/images/environment_elements/platform_2.png");
+        //colonne
         this.load.image("column", "assets/images/environment_elements/column.png");
 
-        this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
-        this.load.image("platform_3", "assets/images/environment_elements/platform_3.png");
-        this.load.image("platform_verde_3", "assets/images/environment_elements/platform_verde_3.png");
-
-        //platform vecchie-end region
-        
         //platform semplice 3D grigia
         this.load.image("platform_3d_1", "assets/images/environment_elements/platform/base_cemento_piccola_2.png");
         
@@ -80,16 +67,21 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("platform_3d_4", "assets/images/environment_elements/platform/4.png");
         this.load.image("platform_3d_4_2", "assets/images/environment_elements/platform/4_2.png");
         
-       
-        //platform_3d_bordeaux
+        //platform_3d_bordeaux e hidden 1
         this.load.image("platform_3d_5", "assets/images/environment_elements/platform/5.png");
+        this.load.image("p_hidden", "assets/images/environment_elements/platform/p_hidden.png");
+
+        //hidden 2
+        this.load.image("p_hidden_2", "assets/images/environment_elements/platform/p_hidden_2.png");
 
         //camini
         this.load.image("platform_3d_6", "assets/images/environment_elements/platform/7.png");
         this.load.image("platform_3d_7", "assets/images/environment_elements/platform/8-9.png");
+        this.load.image("platform_3d_14", "assets/images/environment_elements/platform/base_mattoni_piccola.png");
 
         //pezzo di gru gialla
         this.load.image("platform_3d_8", "assets/images/environment_elements/platform/10.png");
+        this.load.image("platform_3d_15", "assets/images/environment_elements/platform/base_giallo_grande.png");
 
         //gru gialla intera
         this.load.image("platform_3d_9", "assets/images/environment_elements/platform/11.png");
@@ -98,15 +90,32 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("platform_3d_10", "assets/images/environment_elements/platform/12.png");
         this.load.image("platform_3d_11", "assets/images/environment_elements/platform/13.png");
         this.load.image("platform_3d_12", "assets/images/environment_elements/platform/14.png");
+        this.load.image("platform_3d_16", "assets/images/environment_elements/platform/base_metallo_piccola.png");
         
         //torretta
         this.load.image("platform_3d_13", "assets/images/environment_elements/platform/15.png");
+        this.load.image("platform_3d_13_bg", "assets/images/environment_elements/platform/15_bg.png");
 
         //sfondi platform
-        this.load.image("sfondo_1", "assets/images/environment_elements/sfondi_platform/sfondo_1.png");
-        this.load.image("sfondo_2", "assets/images/environment_elements/sfondi_platform/sfondo_2.png");
-        this.load.image("sfondo_3", "assets/images/environment_elements/sfondi_platform/sfondo_3.png");
-        this.load.image("sfondo_4", "assets/images/environment_elements/sfondi_platform/sfondo_4.png");
+        this.load.image("sfondo_1", "assets/images/environment_elements/buildings/bld_1.png");
+        this.load.image("sfondo_2", "assets/images/environment_elements/buildings/bld_2.png");
+        this.load.image("sfondo_3", "assets/images/environment_elements/buildings/bld_3.png");
+        this.load.image("sfondo_4", "assets/images/environment_elements/buildings/bld_4.png");
+
+        //platform vecchie
+        /* this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
+        this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
+        this.load.image("platform_verde_lungo", "assets/images/environment_elements/platform_verde_3.png");
+        this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
+        this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
+        this.load.image("platform_grigia_1", "assets/images/environment_elements/platform_grigia_1.png");
+        this.load.image("platform_grigia_2", "assets/images/environment_elements/platform_grigia_2.png");
+        this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
+        this.load.image("platform_3", "assets/images/environment_elements/platform_3.png");
+        this.load.image("platform_verde_3", "assets/images/environment_elements/platform_verde_3.png");
+        this.load.image("platform_2", "assets/images/environment_elements/platform_2.png");
+        this.load.image("punzoni", "assets/images/environment_elements/punzone_2.png"); */
+        //end region
 
     }
 
@@ -115,17 +124,24 @@ export default class Level1 extends Phaser.Scene {
         console.log("test_scene_2 - Executing create()");
 
         //#region Impostazione sfondo scena
-        this.background = this.add.image(0, 0, "bg_l1");
+        this.background = this.add.image(0, 0, "sky");
         this.background.setScale(0.75, 1);
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
-        this.bg_3 = this.add.image(0, 0.5, "bg_3");
-        this.bg_3.setOrigin(0, 0);
-        this.bg_3.setScrollFactor(0, 0);
-        //#endregion
+        this.city_down = this.add.image(0, 0.5, "city_down");
+        this.city_down.setOrigin(0, 0);
+        this.city_down.setScrollFactor(0, 0);
+       
+        this.city_up = this.add.image(0, 0.5, "city_up");
+        this.city_up.setOrigin(0, 0);
+        this.city_up.setScrollFactor(0, 0);
+
+        /* this.hill = this.add.image(0, 0.5, "hill_up");
+        this.hill.setOrigin(0, 0);
+        this.hill.setScrollFactor(0, 0); */
         
-        this.nuvole = this.add.image(0, 0, "nuvole");
+        this.nuvole = this.add.image(0, 0, "clouds");
         this.nuvole.setOrigin(0, 0);
         this.nuvole.setScrollFactor(0, 0);
         //#endregion
@@ -142,7 +158,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 3200, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 4000, this.floorHeight-500, this.worldWidth));
         //this.physics.add.collider(this.player, this.floor);
         //#endregion
 
@@ -150,7 +166,7 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 30, 400, 116, 0, false, "column"));
 
         //platform grigia piccola tutorial
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 900, this.game.config.height-170, 250, 0, true, "platform_3d_1"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 900, this.game.config.height-210, 250, 0, true, "platform_3d_1"));
 
         //platform 1 e 2 + sfondo 1 (giallo)
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 66, 0, 0, false, "sfondo_1"));
@@ -158,36 +174,48 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-240, 0, 0, true, "platform_3d_3"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3500, this.game.config.height-230, 250, 0, true, "platform_3d_4_2")); //platform temporanea
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3400, this.game.config.height-220, 250, 0, true, "p_hidden")); //platform temporanea
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3200, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 310, 0, 0, false, "sfondo_2"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3650, this.game.config.height-438, 0, 0, true, "platform_3d_5"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3650, this.game.config.height-422, 0, 0, true, "platform_3d_5"));
         
         //platform doppia marrone
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4150, this.game.config.height-230, 0, 0, true, "platform_3d_4_2"));
         
         //gru, platform grigia base e platform grigia lunga dietro
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4500, this.game.config.height-330, 250, 0, true, "platform_3d_marrone")); //platform temporanea
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 4500, this.game.config.height-310, 100, 0, true, "p_hidden_2")); //platform temporanea
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4400, 308, 0, 0, false, "sfondo_3"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4670, this.game.config.height-550, 0, 0, true, "platform_3d_1"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4660, this.game.config.height-550, 0, 0, true, "platform_3d_1"));
 
         //casa con camini
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5122, this.game.config.height-250, 0, 0, true, "platform_3d_7", 1, -70, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5123, this.game.config.height-230, 0, 0, true, "platform_3d_7", 1, -70, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5098, this.game.config.height-260, 0, 0, true, "platform_3d_14", 1, -70, 100));
+
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5345, this.game.config.height-330, 0, 0, true, "platform_3d_6",1, 50, 80));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5552, this.game.config.height-260, 0, 0, true, "platform_3d_7", 1, -80, 90));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5334, this.game.config.height-340, 0, 0, true, "platform_3d_14",1, 50, 80));
+
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5552, this.game.config.height-250, 0, 0, true, "platform_3d_7", 1, -80, 90));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5528, this.game.config.height-280, 0, 0, true, "platform_3d_14", 1, -80, 90));
+        
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5050, 535, 0, 0, false, "sfondo_4"));
 
         //gru che va su e giù e gru gialla statica
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5800, this.game.config.height-350, 0, 0, true, "platform_3d_8", 1, 70, 100));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5900, this.game.config.height-250, 0, 0, true, "platform_3d_9"));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5790, this.game.config.height-380, 120, 0, true, "platform_3d_15", 1, 70, 100));
 
         //3 gru grigie in movimento
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-260, 0, 0, true, "platform_3d_10",1, 50, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-250, 0, 0, true, "platform_3d_10",1, 50, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-270, 0, 0, true, "platform_3d_16",1, 50, 80));
+
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7100, this.game.config.height-160, 0, 0, true, "platform_3d_11", 1, -70, 100));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7420, this.game.config.height-150, 0, 0, true, "platform_3d_12", 1, -80, 90));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7420, this.game.config.height-140, 0, 0, true, "platform_3d_12", 1, -80, 90));
 
         //torretta
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-420, 0, 0, true, "platform_3d_13")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7605, this.game.config.height-190, 0, 0, true, "platform_3d_4_2")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7620, this.game.config.height-500, 0, 0, false, "platform_3d_13_bg")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-520, 0, 0, false, "platform_3d_13")); 
+
 
 
         //this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
@@ -318,7 +346,15 @@ export default class Level1 extends Phaser.Scene {
             this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
         } */
 
-        this.collectableFlowers.push(new FlowersGroup(this, 3, 1100, this.floorHeight - 70, 150, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 3, 1150, this.floorHeight - 100, 150, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1760, this.floorHeight - 280, 220, -80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 4715, this.game.config.height-642, 0, 0, "animated_flower"));
+        
+
+
+        //this.staticPlatforms[idGruppo].list[idPlatform].x + this.staticPlatforms[idGruppo].list[idPlatform].width / 2
+
 
         //To do: sposta setAllowGravity(false) 
         for(let i = 0; i < this.collectableFlowers.length; i++) {
@@ -390,7 +426,10 @@ export default class Level1 extends Phaser.Scene {
     animateBackground() {
         this.background.x = - this.cameras.main.scrollX * 0.5;
         this.nuvole.x = - this.cameras.main.scrollX * 0.7;
-        this.bg_3.x = - this.cameras.main.scrollX * 0.6;
+        this.city_down.x = - this.cameras.main.scrollX * 0.6;
+        this.city_up.x = - this.cameras.main.scrollX * 0.67;
+        //this.hill.x = - this.cameras.main.scrollX * 0.67;
+        
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
     }
