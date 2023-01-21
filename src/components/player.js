@@ -88,6 +88,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             // Se mi sto muovendo verticalmente, l'animazione
             // è sempre playerJump
             this.body.setGravityY(0);
+            this.flipX = this.body.velocity.x < 0;
             if (this.currAnim != "playerJump") {
                 this.anims.play("playerJump");
             }
@@ -129,7 +130,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
         //#endregion
 
-        if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && this.y >= this.displayHeight && !this.isJumping && this.body.touching.down && !this.isKeyUpPressed) {
+        if ((this.keySpace.isDown || this.keyW.isDown || this.cursorKeys.up.isDown) && !this.isJumping && this.body.touching.down && !this.isKeyUpPressed) {
             this.isKeyUpPressed = true;
             this.isJumping = true;
             this.body.setGravityY(0);
