@@ -41,22 +41,22 @@ export default class Level2 extends Phaser.Scene {
     preload() {
         console.log("test_scene_2 - Executing preload()");
         // Carichiamo gli asset grafici
-        this.load.image("bg_l1", "assets/images/background/bg_l1.png"); // carica l'immagine di sfondo
+        this.load.image("bg_l1", "assets/images/background/bg_sky.jpg"); // carica l'immagine di sfondo
         this.load.image("nuvole", "assets/images/background/nuvole.png"); 
 
-        this.load.image("mushroom2", "assets/images/environment_elements/mushroom_2.png");
-        this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
-        this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
-        this.load.image("platform_verde_lungo", "assets/images/environment_elements/platform_verde_3.png");
-        this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
-        this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
-        this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
-        this.load.image("platform_grigia_1", "assets/images/environment_elements/platform_grigia_1.png");
-        this.load.image("platform_grigia_2", "assets/images/environment_elements/platform_grigia_2.png");
+        this.load.image("mushroom2", "assets/images/environment_elements/old/mushroom_2.png");
+        this.load.image("platform_verde_1", "assets/images/environment_elements/old/platform_verde_1.png");
+        this.load.image("platform_verde_corto", "assets/images/environment_elements/old/platform_verde_2.png");
+        this.load.image("platform_verde_lungo", "assets/images/environment_elements/old/platform_verde_3.png");
+        this.load.image("platform_1", "assets/images/environment_elements/old/platform_1.png");
+        this.load.image("platform_casa_1", "assets/images/environment_elements/old/platform_casa_1.png");
+        this.load.image("platform_casa_2", "assets/images/environment_elements/old/platform_casa_2.png");
+        this.load.image("platform_grigia_1", "assets/images/environment_elements/old/platform_grigia_1.png");
+        this.load.image("platform_grigia_2", "assets/images/environment_elements/old/platform_grigia_2.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
-        this.load.image("column_2", "assets/images/environment_elements/column_2.png");
-        this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
-        this.load.image("platform_base_1", "assets/images/environment_elements/platform_base_1.png");
+        this.load.image("column_2", "assets/images/environment_elements/column.png");
+        this.load.image("punzoni", "assets/images/environment_elements/old/punzoni.png");
+        this.load.image("platform_base_1", "assets/images/environment_elements/pavement.png");
     }
 
     create() {
