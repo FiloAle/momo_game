@@ -4,6 +4,7 @@ import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
 import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
 import FlowersGroup from "../components/flowersGroup.js";
+import Platform from "../components/platform.js";
 
 export default class Level2 extends Phaser.Scene {
 
@@ -16,6 +17,7 @@ export default class Level2 extends Phaser.Scene {
     playerStartedMoving;
     lastLivesDecrement;
     movingPlatforms;
+    staticPlatforms;
     collectableFlowers;
 
     constructor() {
@@ -36,6 +38,7 @@ export default class Level2 extends Phaser.Scene {
         this.isFlowerActive = false;
         this.collectableFlowers = [];
         this.movingPlatforms = [];
+        this.staticPlatforms = [];
     }
 
     preload() {
@@ -64,6 +67,11 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("p_torre_media", "assets/images/environment_elements/platform/level_2/p_torre_media.png");
         this.load.image("p_torre_lunga", "assets/images/environment_elements/platform/level_2/p_torre_lunga.png");
         this.load.image("p_torretta", "assets/images/environment_elements/platform/level_2/p_torretta.png");
+        this.load.image("p_torre2", "assets/images/environment_elements/platform/level_2/p_torre2.png");
+
+
+        this.load.image("b_finestre", "assets/images/environment_elements/platform/level_2/b_finestre.png");
+        this.load.image("p_mattoncini", "assets/images/environment_elements/platform/level_2/mattoncini.png");
         
     }
 
@@ -99,65 +107,76 @@ export default class Level2 extends Phaser.Scene {
         // const columns_inizio = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
         // const columns_banca = new StaticPlatformsGroup(this, 7, 5500, 350, 100, 0, false, "column");
 
+        
         //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 2100, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 3000, this.floorHeight-500, this.worldWidth));
         this.physics.add.collider(this.player, this.floor);
         //#endregion
        
-
-        const columns_inizio = new StaticPlatformsGroup(this, 3, 30, 390, 116, 0, false, "column_2");
-        
+        //this.staticPlatforms.push(new StaticPlatformsGroup());
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 30, 390, 116, 0, false, "column_2"));
+    
         //platform casine
-        const platforms_casa_1 = new StaticPlatformsGroup(this, 1, 1200, this.game.config.height - 175, 2710, 30, true, 'platform_casa_1');
-        const platform_casa_2 = new StaticPlatformsGroup(this, 1, 1690, this.game.config.height - 225, 2110, 30, true, 'platform_casa_2');
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1200, this.game.config.height - 175, 2710, 30, true, 'platform_casa_1'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1690, this.game.config.height - 225, 2110, 30, true, 'platform_casa_2'));
 
         //platform verdi
-        const platforms_verde_alti_corto = new StaticPlatformsGroup(this, 2, 2060, this.game.config.height - 380, 470, -0, true, 'platform_verde_corto');
-        const platforms_verde_bassi_corto = new StaticPlatformsGroup(this, 2, 2295, this.game.config.height - 230, 0, -360, true, 'platform_verde_corto');
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2060, this.game.config.height - 380, 470, -0, true, 'platform_verde_corto'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2295, this.game.config.height - 230, 0, -360, true, 'platform_verde_corto'));
        
-        const platform_verde_lungo = new StaticPlatformsGroup(this, 1, 2800, this.game.config.height - 580, 0, -0, true, 'platform_verde_lungo');
-        const p_torre_lunga = new StaticPlatformsGroup(this, 1, 2500, this.game.config.height - 570, 0, -0, false, 'p_torre_lunga'); 
+       //DUNA GRANDE DOPO LE 4
+       this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2800, this.game.config.height - 580, 0, -0, true, 'platform_verde_lungo'));
+       this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2500, this.game.config.height - 570, 0, -0, false, 'p_torre_lunga')); 
         
         //4 DUNE
-        const p_torre_alto = new StaticPlatformsGroup(this, 1, 2144, 170, 0, 0, false, 'p_torre_alto');
-        const p_torre_media = new StaticPlatformsGroup(this, 2, 1900, this.game.config.height - 345, 475, 0, false, 'p_torre_media');
-        const p_torre_basso = new StaticPlatformsGroup(this, 1, 1956, this.game.config.height - 215, 0, 0, false, 'p_torre_basso');
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2144, 170, 0, 0, false, 'p_torre_alto'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1900, this.game.config.height - 345, 475, 0, false, 'p_torre_media'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1956, this.game.config.height - 215, 0, 0, false, 'p_torre_basso'));
 
-        const columns_platform_1 = new StaticPlatformsGroup(this, 2, 3300, this.game.config.height - 105, 480, -0, true, 'p_torretta');
-        const columns_platform_2 = new StaticPlatformsGroup(this, 2, 3555, this.game.config.height - 235, 470, -0, true, 'p_torretta');
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2770, this.game.config.height - 90, 440, -0, true, 'p_torretta'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3000, this.game.config.height - 220, 430, -0, true, 'p_torretta'));
 
-        //platform grige
-        const platforms_grigia_1 = new StaticPlatformsGroup(this, 2, 4300, this.game.config.height - 250, 790, 130, true, 'platform_grigia_1');
-        const platforms_grigia_2 = new StaticPlatformsGroup(this, 2, 4900, this.game.config.height - 235, 590, -0, true, 'platform_grigia_2');
-        
+        //platform torretta
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3610, this.game.config.height - 370, 490, -70, false, 'p_torre2'));
+        this.staticPlatforms[12].list.forEach(platform => {
+            platform.setDepth(2);
+        });
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4600, this.game.config.height - 235, 590, -0, true, 'platform_grigia_2'));
+
         //PAVIMENTO (X 40 per allungare il livello, poi sarà da spostare)
-        const pavement = new StaticPlatformsGroup(this, 40, 0, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1');
-        const pavement_2= new StaticPlatformsGroup(this, 3, 6400, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1');
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 40, 0, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 6400, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
         
         //INGRESSO BANCA
-        const columns_banca = new StaticPlatformsGroup(this, 9, 7265, 210, 120, 0, false, "column_2");
-        const entrata_banca = new StaticPlatformsGroup(this, 1, 7230, 500, 0, 0, true, 'platform_1');
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 9, 7265, 210, 120, 0, false, "column_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7230, 500, 0, 0, true, 'platform_1'));
 
         //punzoni parte difficile
-        const punzoni = new StaticPlatformsGroup(this, 14, 8400, this.game.config.height-55, 95, -0, false, 'punzoni');   
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 14, 8400, this.game.config.height-55, 95, -0, false, 'punzoni'));
        
         //2 punzoni con colonna
-        const columns_platform_7 = new StaticPlatformsGroup(this, 1, 11070, this.game.config.height-230, 0, 0, true, 'column_2');
-        const punzoni_2 = new StaticPlatformsGroup(this, 2, 11000, this.game.config.height-55, 170, -0, false, 'punzoni'); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11070, this.game.config.height-230, 0, 0, true, 'column_2'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11000, this.game.config.height-55, 170, -0, false, 'punzoni'));
         
         //SCALETTA BANCA con 2 colonne prima
-        const columns_platform_3 = new StaticPlatformsGroup(this, 2, 9300, this.game.config.height-140, 230, -40, true, 'column_2');
-        const platform_verde_3 = new StaticPlatformsGroup(this, 4, 9800, this.game.config.height - 250, 210, -90, true, 'platform_verde_corto');
-        const platform_verde_4 = new StaticPlatformsGroup(this, 2, 10580, 100, 95, 0, true, 'platform_verde_corto');
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 9300, this.game.config.height-140, 230, -40, true, 'column_2'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 9800, this.game.config.height - 250, 210, -90, true, 'platform_verde_corto'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 10580, 100, 95, 0, true, 'platform_verde_corto'));
 
         //COLONNE FINALI 
-        const punzoni_3 = new StaticPlatformsGroup(this, 2, 12350, this.game.config.height-235, 450, -0, false, 'punzoni'); 
-        const columns_platform_4 = new StaticPlatformsGroup(this, 2, 12030, this.game.config.height-185, 470, 0, true, 'column_2');
-        const columns_platform_5 = new StaticPlatformsGroup(this, 2, 12180, this.game.config.height-305, 450, 0, true, 'column_2');
-        const columns_platform_6 = new StaticPlatformsGroup(this, 2, 12340, this.game.config.height-215, 450, 0, true, 'column_2');
-       
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 12350, this.game.config.height-235, 450, -0, false, 'punzoni'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 12030, this.game.config.height-185, 470, 0, true, 'column_2'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 12180, this.game.config.height-305, 450, 0, true, 'column_2'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 12340, this.game.config.height-215, 450, 0, true, 'column_2'));
+
+        //MATTONCINI BANCA DEL TEMPO
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 8410, 0, 6100, 0, false, 'p_mattoncini'));
+         //finestra
+         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 10970, 0, 0, 0, false, 'b_finestre'));
+
+        this.player.setDepth(1);
         
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 14000, 720);
@@ -269,8 +288,8 @@ export default class Level2 extends Phaser.Scene {
         this.collectableFlowers.push(new FlowersGroup(this, 4, 2790, this.game.config.height - 680, 200, -0, "animated_flower"));
 
         //colonne alternate
-        this.collectableFlowers.push(new FlowersGroup( this, 2, 3450, this.game.config.height - 225, 480, -0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(  this, 2, 3755, this.game.config.height - 325, 470, -0, "animated_flower"));
+       /*  this.collectableFlowers.push(new FlowersGroup( this, 2, 3450, this.game.config.height - 225, 480, -0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(  this, 2, 3755, this.game.config.height - 325, 470, -0, "animated_flower")); */
     
 
         //To do: sposta setAllowGravity(false) 
