@@ -46,8 +46,9 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("sky", "assets/images/background/bg_sky.jpg");
         this.load.image("clouds", "assets/images/background/bg_clouds.png");
         this.load.image("hill", "assets/images/background/bg_hill.png"); 
-        this.load.image("city_down", "assets/images/background/bg_city_down.png"); 
-        this.load.image("city_up", "assets/images/background/bg_city_up.png"); 
+        this.load.image("hill_2", "assets/images/background/bg_hill_2.png"); 
+        this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
+        this.load.image("city", "assets/images/background/bg_city.png"); 
 
         //pavimento verde
         this.load.image("platform_1", "assets/images/environment_elements/pavement_up.png");
@@ -128,13 +129,17 @@ export default class Level1 extends Phaser.Scene {
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
-        this.city_down = this.add.image(0, 0.5, "city_down");
-        this.city_down.setOrigin(0, 0);
-        this.city_down.setScrollFactor(0, 0);
+        this.city = this.add.image(0, 0.5, "city");
+        this.city.setOrigin(0, 0);
+        this.city.setScrollFactor(0, 0);
        
-        this.city_up = this.add.image(0, 0.5, "city_up");
-        this.city_up.setOrigin(0, 0);
-        this.city_up.setScrollFactor(0, 0);
+        this.hill_3 = this.add.image(0, 0.5, "hill_3");
+        this.hill_3.setOrigin(0, 0);
+        this.hill_3.setScrollFactor(0, 0);
+
+        this.hill_2 = this.add.image(0, 0.5, "hill_2");
+        this.hill_2.setOrigin(0, 0);
+        this.hill_2.setScrollFactor(0, 0);
 
         this.hill = this.add.image(0, 0.5, "hill");
         this.hill.setOrigin(0, 0);
@@ -157,7 +162,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 4500, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight-500, this.worldWidth));
         //#endregion
 
         //colonne inizio 
@@ -428,8 +433,9 @@ export default class Level1 extends Phaser.Scene {
     animateBackground() {
         this.background.x = - this.cameras.main.scrollX * 0.5;
         this.nuvole.x = - this.cameras.main.scrollX * 0.7;
-        this.city_down.x = - this.cameras.main.scrollX * 0.6;
-        this.city_up.x = - this.cameras.main.scrollX * 0.65;
+        this.city.x = - this.cameras.main.scrollX * 0.6;
+        this.hill_2.x = - this.cameras.main.scrollX * 0.65;
+        this.hill_3.x = - this.cameras.main.scrollX * 0.6;
         this.hill.x = - this.cameras.main.scrollX * 0.7;
         
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;

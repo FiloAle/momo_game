@@ -71,7 +71,7 @@ export default class SplashScreen extends Phaser.Scene {
         this.creditsButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
 
         this.playButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
-            this.scene.start("level_2");
+            this.scene.start("level_1");
         });
     }
 
