@@ -19,6 +19,7 @@ export default class Level1 extends Phaser.Scene {
     collectableFlowers;
     movingPlatforms;
     staticPlatforms;
+    flowersCounter;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -37,9 +38,60 @@ export default class Level1 extends Phaser.Scene {
         this.collectableFlowers = [];
         this.movingPlatforms = [];
         this.staticPlatforms = [];
+        this.flowersCounter = 0;
     }
 
     preload() {
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        var flowerLoading = this.add.tileSprite(width - 100, height - 70, 150, 150, "animated_flower");
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect(width / 2 - 160, 270, 320, 50);
+        
+        var percentText = this.make.text({
+            x: width / 2,
+            y: height / 2 - 20,
+            text: '0%',
+            style: {
+                fontFamily: 'Montserrat',
+                fontSize: 18,
+                fill: '#ffffff'
+            }
+        });
+        percentText.setOrigin(0.5, 0.5);
+        
+        var assetText = this.make.text({
+            x: width / 2,
+            y: height / 2 + 20,
+            text: '',
+            style: {
+                fontFamily: 'Montserrat',
+                fontSize: 18,
+                fill: '#ffffff'
+            }
+        });
+        assetText.setOrigin(0.5, 0.5);
+        
+        this.load.on('progress', function (value) {
+            percentText.setText("Loading: " + parseInt(value * 100) + '%');
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect(width / 2 - 160 + 10, 280, 300 * value, 30);
+        });
+        
+        this.load.on('fileprogress', function (file) {
+            assetText.setText('Loading asset: ' + file.key);
+        });
+        this.load.on('complete', function () {
+            progressBar.destroy();
+            progressBox.destroy();
+            percentText.destroy();
+            assetText.destroy();
+        });
+
         console.log("test_scene_2 - Executing preload()");
        
         //BACKGROUND, CLOUDS, CITY
@@ -162,7 +214,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //#endregion
 
         //colonne inizio 
@@ -241,10 +293,10 @@ export default class Level1 extends Phaser.Scene {
 
         //pavimento 2D
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 697, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this,4, 0, 690, this.textures.get('platform_1_2').getSourceImage().width, 0, false, 'platform_1_2'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 690, this.textures.get('platform_1_2').getSourceImage().width, 0, false, 'platform_1_2'));
 
         this.pavements = [];
-        this.pavements.push(this.staticPlatforms[this.staticPlatforms.length - 1]);
+        this.pavements.push(this.staticPlatforms[this.staticPlatforms.length - 2]);
 
         this.player.setDepth(1);
         
@@ -276,38 +328,10 @@ export default class Level1 extends Phaser.Scene {
                 this.physics.add.collider(this.uominiGrigi[i], this.pavements[k].list);
             }   
         }
-
-
-        /*  this.uominiGrigi = [];
-        for(let i = 0; i < 5; i++) {
-            this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, Math.floor(Math.random() * (pavement.list[1].x + pavement.list[1].width)), this.floorHeight)));
-            this.uominiGrigi[i].body.allowGravity = true;
-            this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
-        } */
- 
-
-        /* for(let i = 0; i < 5; i++) {
-            this.uominiGrigi.push(new Enemy(this, this.movingPlatformsList[0].list[i].x, this.movingPlatformsList[0].list[i].y));
-            this.physics.add.existing(this.uominiGrigi[this.uominiGrigi.length - 1]);
-            this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.floor);
-            this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.movingPlatformsList[0].list[i]);
-            this.uominiGrigi[this.uominiGrigi.length - 1].resize(); // Ridimensionamento hitbox
-        } */
-
-        /* this.pavements.forEach(pavement => {
-            this.uominiGrigi.forEach(enemy => {
-                pavement.list.forEach(platform => {
-                    this.physics.add.collider(enemy, platform.platform);
-                });
-            });
-        });
-
-        for(let k = 0; k < this.uominiGrigi.length; k++) {
-            this.uominiGrigi.forEach(enemy => {
-                this.physics.add.collider(this.uominiGrigi[k], enemy);
-            });
-        }  */
         //#endregion
+
+        //Creazione fiori
+        this.createFlowers(); 
 
         this.player.resize(); // Ridimensionamento hitbox
 
@@ -315,14 +339,14 @@ export default class Level1 extends Phaser.Scene {
         const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
 
         //#region Inserimento informazione vita
-        const lifeMessage = "Lives: " + this.game.gameState.lives;
-        this.lifeBox = this.add.text(50, 40, lifeMessage, styleConfig);
+        this.lifeBox = this.add.text(50, 40, "Lives: " + this.game.gameState.lives, styleConfig);
         this.lifeBox.setOrigin(0, 0);
         this.lifeBox.setScrollFactor(0, 0);
         //#endregion
 
-        //collecting flowers
-        this.createFlowers();     
+        this.flowersBox = this.add.text(this.cameras.main.width - 50, 40, "Flowers: " + this.flowersCounter + "/11", styleConfig);
+        this.flowersBox.setOrigin(1, 0);
+        this.flowersBox.setScrollFactor(0, 0);
     }
 
     update() {
@@ -333,11 +357,8 @@ export default class Level1 extends Phaser.Scene {
         this.manageFlowersOverlap();
         this.manageEnemies();
         this.updateMovingPlatforms();
-
-        console.log(this.player.body.velocity.x);
         
         if(this.player.body.y > this.game.config.height) {
-            console.log(this.player.x);
             this.player.die();
             this.updateLives();
         }
@@ -359,7 +380,6 @@ export default class Level1 extends Phaser.Scene {
         this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
         
 
-
         //this.staticPlatforms[idGruppo].list[idPlatform].x + this.staticPlatforms[idGruppo].list[idPlatform].width / 2
 
 
@@ -378,6 +398,8 @@ export default class Level1 extends Phaser.Scene {
                 if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].list[k].body, this.player.body)) {
                     this.collectableFlowers[i].list[k].destroy(true);
                     this.collectableFlowers[i].list.splice(k, 1);
+                    this.flowersCounter++;
+                    this.flowersBox.setText("Flowers: " + this.flowersCounter + "/11");
                 }
             }
         }
@@ -409,7 +431,13 @@ export default class Level1 extends Phaser.Scene {
     manageEnemies() {
         for(let i = 0; i < this.uominiGrigi.length; i++) {
             if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
-                //this.updateLives();
+                if(this.player.body.velocity.y > 0 && this.player.y < (this.uominiGrigi[i].y + this.uominiGrigi[i].height)) {
+                    this.player.body.setVelocityY(-300);
+                    this.uominiGrigi[i].destroy(true);
+                    this.uominiGrigi.splice(i, 1);
+                } else {
+                    this.updateLives();
+                }
             }
         }
 

@@ -23,12 +23,6 @@ export default class SplashScreen extends Phaser.Scene {
         };
         this.load.spritesheet("playerrun", "assets/images/characters/momo.png", player_spritesheet_config);
 
-        const enemy_spritesheet_config = {
-            frameWidth:  280,
-            frameHeight: 335,
-        };
-        this.load.spritesheet("enemy", "assets/images/characters/enemy.png", enemy_spritesheet_config);
-
         const grigi_spritesheet_config = {
             frameWidth:  280,
             frameHeight: 258,

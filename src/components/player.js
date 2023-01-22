@@ -9,6 +9,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     maxWidth;
     isKeyUpPressed;
     currAnim;
+    lastVelocityX;
 
     constructor(scene, x, y, maxWidth) {
         // Il costruttore della classe base Phaser.Scene prende come argomento la scena
@@ -17,8 +18,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.initialX = x;
         this.initialY = y;
         this.floorHeight = y;
+        this.lastVelocityX = 0;
         this.setOrigin(0, 1); // Punto pivot in basso a sinistra
-        this.setScale(0.55);   // Scala le dimensioni del giocatore
+        this.setScale(0.5);   // Scala le dimensioni del giocatore
 
         // Inizializziamo i valori di alcune proprietà
         this.isJumping = false; //di default il giocatore non sta saltando
@@ -88,7 +90,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
             // Se mi sto muovendo verticalmente, l'animazione
             // è sempre playerJump
             this.body.setGravityY(0);
-            this.flipX = this.body.velocity.x < 0;
+            
+            if(this.body.velocity.x != 0) {
+                this.lastVelocityX = this.body.velocity.x;
+            }
+
+            this.flipX = this.lastVelocityX < 0;
+
             if (this.currAnim != "playerJump") {
                 this.anims.play("playerJump");
             }
@@ -98,8 +106,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
             if (this.currAnim != "playerMove") {
                 this.anims.play("playerMove");
             }
+            this.lastVelocityX = this.body.velocity.x;
             // e configurerò il flip corretto.
-            this.flipX = this.body.velocity.x < 0;
+            this.flipX = this.lastVelocityX < 0;
         } else {
             // Per finire, se il giocatore è fermo sia sulla x che sulla y
             // possiamo fermarlo
@@ -141,11 +150,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.isKeyUpPressed = false;
         }
 
-        // Se il giocatore non sta premendo la barra spaziatrice e il personaggio è con
-        // i piedi per terra, non c'è salto oppure è stato già gestito...
-        if (this.y >= this.floorHeight) {
-            this.isJumping = false;
-        }
         if (this.body.touching.up) {
             this.isJumping = false;
             this.body.setGravityY(0);
@@ -165,7 +169,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         // Nel nostro caso la morte del giocatore consiste nel reset alla posizione iniziale
         // del livello
         this.x = this.initialX;
-        this.y = this.initialY - 15;
+        this.y = this.initialY - 20;
         this.isJumping = false;
         this.body.setVelocity(0, 0);
         //gameover
