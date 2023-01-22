@@ -46,7 +46,7 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("sky", "assets/images/background/bg_sky.jpg");
         this.load.image("clouds", "assets/images/background/bg_clouds.png");
         this.load.image("hill", "assets/images/background/bg_hill.png"); 
-        this.load.image("hill_2", "assets/images/background/bg_hill_2.png"); 
+        this.load.image("hill_2", "assets/images/background/bg_hill.1.png"); 
         this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
         this.load.image("city", "assets/images/background/bg_city.png"); 
 
@@ -129,21 +129,22 @@ export default class Level1 extends Phaser.Scene {
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
-        this.city = this.add.image(0, 0.5, "city");
-        this.city.setOrigin(0, 0);
-        this.city.setScrollFactor(0, 0);
        
         this.hill_3 = this.add.image(0, 0.5, "hill_3");
         this.hill_3.setOrigin(0, 0);
         this.hill_3.setScrollFactor(0, 0);
 
+        this.hill = this.add.image(0, 0.5, "hill");
+        this.hill.setOrigin(0, 0);
+        this.hill.setScrollFactor(0, 0);
+
         this.hill_2 = this.add.image(0, 0.5, "hill_2");
         this.hill_2.setOrigin(0, 0);
         this.hill_2.setScrollFactor(0, 0);
 
-        this.hill = this.add.image(0, 0.5, "hill");
-        this.hill.setOrigin(0, 0);
-        this.hill.setScrollFactor(0, 0);
+        this.city = this.add.image(0, 0.5, "city");
+        this.city.setOrigin(0, 0);
+        this.city.setScrollFactor(0, 0);
         
         this.nuvole = this.add.image(0, 0, "clouds");
         this.nuvole.setOrigin(0, 0);
