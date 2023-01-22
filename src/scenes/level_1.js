@@ -97,10 +97,10 @@ export default class Level1 extends Phaser.Scene {
         //BACKGROUND, CLOUDS, CITY
         this.load.image("sky", "assets/images/background/bg_sky.jpg");
         this.load.image("clouds", "assets/images/background/bg_clouds.png");
-        this.load.image("hill", "assets/images/background/bg_hill.png"); 
-        this.load.image("hill_2", "assets/images/background/bg_hill_2.png"); 
-        this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
         this.load.image("city", "assets/images/background/bg_city.png"); 
+        this.load.image("hill_2", "assets/images/background/bg_hill_2.png"); 
+        this.load.image("hill", "assets/images/background/bg_hill.png"); 
+        this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
 
         //pavimento verde
         this.load.image("platform_1", "assets/images/environment_elements/pavement_up.png");
@@ -203,14 +203,6 @@ export default class Level1 extends Phaser.Scene {
         //#endregion
 
         this.isCameraFollowingPlayer = false;
-
-        //#region Pavimento
-        //this.floor = this.add.rectangle(-1000, this.game.config.height, this.worldWidth + 1000, this.game.config.height - this.floorHeight, 0xFFFFFF, 0); // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
-        //this.floor.setScrollFactor(0, 0);
-        //this.floor.setOrigin(0, 1);
-        // Aggiungi il piano alla fisica
-        //this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
-        //#endregion
 
         //#region Creazione player
         // Aggiungi il player alla fisica
