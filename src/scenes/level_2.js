@@ -41,7 +41,7 @@ export default class Level2 extends Phaser.Scene {
     preload() {
         console.log("test_scene_2 - Executing preload()");
         // Carichiamo gli asset grafici
-        this.load.image("bg_l1", "assets/images/background/bg_sky.jpg"); // carica l'immagine di sfondo
+        this.load.image("bg_city_l2", "assets/images/background/bg_city_l2.jpg"); // carica l'immagine di sfondo
         this.load.image("nuvole", "assets/images/background/nuvole.png"); 
 
         this.load.image("mushroom2", "assets/images/environment_elements/old/mushroom_2.png");
@@ -57,6 +57,14 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("column_2", "assets/images/environment_elements/column.png");
         this.load.image("punzoni", "assets/images/environment_elements/old/punzoni.png");
         this.load.image("platform_base_1", "assets/images/environment_elements/pavement.png");
+
+        //DEFINITIVE
+        this.load.image("p_torre_alto", "assets/images/environment_elements/platform/level_2/p_torre_alto.png");
+        this.load.image("p_torre_basso", "assets/images/environment_elements/platform/level_2/p_torre_basso.png");
+        this.load.image("p_torre_media", "assets/images/environment_elements/platform/level_2/p_torre_media.png");
+        this.load.image("p_torre_lunga", "assets/images/environment_elements/platform/level_2/p_torre_lunga.png");
+        this.load.image("p_torretta", "assets/images/environment_elements/platform/level_2/p_torretta.png");
+        
     }
 
     create() {
@@ -66,9 +74,10 @@ export default class Level2 extends Phaser.Scene {
         console.log("test_scene_2 - Executing create()");
 
          //#region Impostazione sfondo scena
-         this.background = this.add.tileSprite(0, this.game.config.height -  this.textures.get('imagesbg_l1').getSourceImage().height - 700, this.game.width, this.textures.get('bg_l1').getSourceImage().height, "bg_l1");
-         this.background.setOrigin(0, 0);
-         this.background.setScrollFactor(0, 0);
+        this.background = this.add.image(0, 0, "bg_city_l2");
+        this.background.setOrigin(0, 0);
+        this.background.setScale(0.75,1);
+        this.background.setScrollFactor(0, 0);
  
         // this.nuvole = this.add.tileSprite(0, this.game.config.height - this.textures.get('nuvole').getSourceImage().height, this.game.width, this.textures.get('nuvole').getSourceImage().height, "nuvole");
         // this.nuvole.setOrigin(0, 0);
@@ -93,7 +102,7 @@ export default class Level2 extends Phaser.Scene {
         //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(thePlayer);
+        this.player = this.physics.add.existing(new Player(this, 2100, this.floorHeight-500, this.worldWidth));
         this.physics.add.collider(this.player, this.floor);
         //#endregion
        
@@ -105,14 +114,19 @@ export default class Level2 extends Phaser.Scene {
         const platform_casa_2 = new StaticPlatformsGroup(this, 1, 1690, this.game.config.height - 225, 2110, 30, true, 'platform_casa_2');
 
         //platform verdi
-        const platforms_verde_alti_corto = new StaticPlatformsGroup(this, 2, 2060, this.game.config.height - 405, 470, -0, true, 'platform_verde_corto');
-        const platforms_verde_bassi_corto = new StaticPlatformsGroup(this, 2, 2295, this.game.config.height - 235, 0, -360, true, 'platform_verde_corto');
+        const platforms_verde_alti_corto = new StaticPlatformsGroup(this, 2, 2060, this.game.config.height - 380, 470, -0, true, 'platform_verde_corto');
+        const platforms_verde_bassi_corto = new StaticPlatformsGroup(this, 2, 2295, this.game.config.height - 230, 0, -360, true, 'platform_verde_corto');
+       
+        const platform_verde_lungo = new StaticPlatformsGroup(this, 1, 2800, this.game.config.height - 580, 0, -0, true, 'platform_verde_lungo');
+        const p_torre_lunga = new StaticPlatformsGroup(this, 1, 2500, this.game.config.height - 570, 0, -0, false, 'p_torre_lunga'); 
         
+        //4 DUNE
+        const p_torre_alto = new StaticPlatformsGroup(this, 1, 2144, 170, 0, 0, false, 'p_torre_alto');
+        const p_torre_media = new StaticPlatformsGroup(this, 2, 1900, this.game.config.height - 345, 475, 0, false, 'p_torre_media');
+        const p_torre_basso = new StaticPlatformsGroup(this, 1, 1956, this.game.config.height - 215, 0, 0, false, 'p_torre_basso');
 
-        const platform_verde_lungo = new StaticPlatformsGroup(this, 1, 2600, this.game.config.height - 650, 0, -0, true, 'platform_verde_lungo');
-
-        const columns_platform_1 = new StaticPlatformsGroup(this, 2, 3300, this.game.config.height - 105, 480, -0, true, 'column_2');
-        const columns_platform_2 = new StaticPlatformsGroup(this, 2, 3555, this.game.config.height - 235, 470, -0, true, 'column_2');
+        const columns_platform_1 = new StaticPlatformsGroup(this, 2, 3300, this.game.config.height - 105, 480, -0, true, 'p_torretta');
+        const columns_platform_2 = new StaticPlatformsGroup(this, 2, 3555, this.game.config.height - 235, 470, -0, true, 'p_torretta');
 
         //platform grige
         const platforms_grigia_1 = new StaticPlatformsGroup(this, 2, 4300, this.game.config.height - 250, 790, 130, true, 'platform_grigia_1');
