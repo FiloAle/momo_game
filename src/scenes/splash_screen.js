@@ -59,15 +59,15 @@ export default class SplashScreen extends Phaser.Scene {
         //creo una immagine per il bottone
         this.playButton = this.add.image(160, this.game.config.height / 2 + 100, "playButton");
         this.playButton.setOrigin(0.5, 0.5);
-        this.playButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
+        this.playButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
 
         this.storyButton = this.add.image(360, this.game.config.height / 2 + 100, "storyButton");
         this.storyButton.setOrigin(0.5, 0.5);
-        this.storyButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
+        this.storyButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
 
         this.creditsButton = this.add.image(560, this.game.config.height / 2 + 100, "creditsButton");
         this.creditsButton.setOrigin(0.5, 0.5);
-        this.creditsButton.setInteractive(); //imposta l'immagine in modo che possa essere cliccata
+        this.creditsButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
 
 
 
