@@ -191,7 +191,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 6000, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 7000, this.floorHeight-500, this.worldWidth));
         //#endregion
 
         //colonne inizio 
