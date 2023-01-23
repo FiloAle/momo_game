@@ -78,7 +78,11 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("p_base_banca", "assets/images/environment_elements/platform/level_2/p_base_banca.png");
         this.load.image("b_finestre", "assets/images/environment_elements/platform/level_2/b_finestre.png");
         this.load.image("p_pilastro", "assets/images/environment_elements/platform/level_2/p_pilastro.png");
-        
+
+        this.load.image("p_balaustra_scala_hidden", "assets/images/environment_elements/platform/level_2/p_balaustra_scala_hidden.png");
+        this.load.image("p_balaustra_hidden", "assets/images/environment_elements/platform/level_2/p_balaustra_hidden.png");
+        this.load.image("p_balaustra_scala", "assets/images/environment_elements/platform/level_2/p_balaustra_scala.png");
+        this.load.image("p_balaustra", "assets/images/environment_elements/platform/level_2/p_balaustra.png");
 
         this.load.image("p_mattoncini", "assets/images/environment_elements/platform/level_2/mattoncini.png");
         
@@ -120,7 +124,7 @@ export default class Level2 extends Phaser.Scene {
         //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 8280, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 9300, this.floorHeight-500, this.worldWidth));
         this.physics.add.collider(this.player, this.floor);
         //#endregion
        
@@ -135,15 +139,24 @@ export default class Level2 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2060, this.game.config.height - 360, 470, -0, true, 'platform_verde_corto'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2295, this.game.config.height - 220, 0, -350, true, 'platform_verde_corto'));
        
-       //DUNA GRANDE DOPO LE 4
-       this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2750, this.game.config.height - 580, 0, -0, true, 'platform_verde_lungo'));
-       this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2500, this.game.config.height - 570, 0, -0, false, 'p_torre_lunga')); 
+        //DUNA GRANDE DOPO LE 4
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2750, this.game.config.height - 580, 0, -0, true, 'platform_verde_lungo'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2500, this.game.config.height - 570, 0, -0, false, 'p_torre_lunga')); 
         
         //4 DUNE
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2144, 180, 0, 0, false, 'p_torre_alto'));
+        /* this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(0);
+        }); */
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1900, this.game.config.height - 335, 475, 0, false, 'p_torre_media'));
+        /* this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(0);
+        }); */
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1956, this.game.config.height - 205, 0, 0, false, 'p_torre_basso'));
-
+        /* this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(0);
+        });     */
+        this.player.setDepth(2);
         //torrette verdi come colonne
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2770, this.game.config.height - 90, 440, -0, true, 'p_torretta'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3000, this.game.config.height - 220, 430, -0, true, 'p_torretta'));
@@ -175,8 +188,6 @@ export default class Level2 extends Phaser.Scene {
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6570, 545, 300, -20, false, 'punzoni', 1, -150, 100));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6885, 550, 0, -20, true, 'platform_verde_1', 0, 100, 80));
 
-
-
         //PAVIMENTO (X 40 per allungare il livello, poi sarà da spostare)
        /*  this.staticPlatforms.push(new StaticPlatformsGroup(this, 40, 0, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 6400, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
@@ -204,9 +215,26 @@ export default class Level2 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 10980, this.game.config.height-55, 190, -0, false, 'punzoni')); */
         
         //SCALETTA BANCA con 2 colonne prima
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 9300, this.game.config.height-140, 230, -40, true, 'p_pilastro'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 9800, this.game.config.height - 250, 210, -90, true, 'platform_verde_corto'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 10380, 200, 95, 0, true, 'platform_verde_corto'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 9330, this.game.config.height-140, 230, -40, true, 'p_pilastro'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 9744, this.game.config.height - 260, 230, -90, true, 'p_balaustra_scala_hidden'));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(0.75,0.75);
+        });
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 9740, this.game.config.height - 350, 230, -90, false, 'p_balaustra_scala'));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(0.75,0.75);
+            platform.setDepth(2);
+        });
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 10420, 242, 95, 0, true, 'p_balaustra_hidden'));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(0.75,0.75);
+        });
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 10420, 150, 95, 0, false, 'p_balaustra'));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(0.75,0.75);
+            platform.setDepth(2);
+        });
+        
 
         //COLONNE FINALI 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11338, this.game.config.height-235, 450, -0, false, 'punzoni'));
@@ -229,9 +257,6 @@ export default class Level2 extends Phaser.Scene {
 
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-
-        
-        
         
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8470, 575, 0, 0,true, 'platform_verde_corto', 0, 100, 100));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8900, 525, 0, 0, true,'platform_verde_corto', 0, -100, 100));
@@ -316,7 +341,7 @@ export default class Level2 extends Phaser.Scene {
             this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
         } */
 
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 1535, this.floorHeight - 35, 100, 0, "animated_flower"));
+        //this.collectableFlowers.push(new FlowersGroup(this, 2, 1035, this.floorHeight - 35, 100, 0, "animated_flower"));
         
         //rombo platform
         this.collectableFlowers.push(new FlowersGroup(this, 2, 2115, this.game.config.height - 430, 470, -0, "animated_flower"));
