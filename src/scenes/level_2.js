@@ -67,12 +67,15 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("p_torre_media", "assets/images/environment_elements/platform/level_2/p_torre_media.png");
         this.load.image("p_torre_lunga", "assets/images/environment_elements/platform/level_2/p_torre_lunga.png");
         this.load.image("p_torretta", "assets/images/environment_elements/platform/level_2/p_torretta.png");
+        this.load.image("p_2verde_lego", "assets/images/environment_elements/platform/level_2/p_2verde_lego.png");
         this.load.image("p_torre2", "assets/images/environment_elements/platform/level_2/p_torre2.png");
         this.load.image("p_torretta_double", "assets/images/environment_elements/platform/level_2/p_torretta_double.png");
         this.load.image("p_hidden_2", "assets/images/environment_elements/platform/p_hidden_2.png");
         this.load.image("p_column_hora", "assets/images/environment_elements/platform/level_2/p_column_hora.png");
         this.load.image("p_column_hora_2", "assets/images/environment_elements/platform/level_2/p_column_hora_2.png");
-        this.load.image("p_neutral_beige", "assets/images/environment_elements/platform/level_2/p_neutral_beige.png");  
+        this.load.image("p_2beige_lego", "assets/images/environment_elements/platform/level_2/p_2beige_lego.png");
+        this.load.image("p_neutral_beige", "assets/images/environment_elements/platform/level_2/p_neutral_beige.png"); 
+        this.load.image("p_2neutre_lego", "assets/images/environment_elements/platform/level_2/p_2neutre_lego.png"); 
 
         this.load.image("p_entrata_banca", "assets/images/environment_elements/platform/level_2/p_entrata_banca.png");
         this.load.image("p_base_banca", "assets/images/environment_elements/platform/level_2/p_base_banca.png");
@@ -110,17 +113,13 @@ export default class Level2 extends Phaser.Scene {
         this.floor.setScrollFactor(0, 0);
         this.floor.setOrigin(0, 1);
         // Aggiungi il piano alla fisica
-        this.physics.add.existing(this.floor, true);    // true indica che il corpo e' statico
+        this.physics.add.existing(this.floor, true);  
         //#endregion
-
-        // const columns_inizio = new StaticPlatformsGroup(this, 3, 50, 552, 100, 0, false, "column");
-        // const columns_banca = new StaticPlatformsGroup(this, 7, 5500, 350, 100, 0, false, "column");
-
         
         //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 8280, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 4400, this.floorHeight-500, this.worldWidth));
         this.physics.add.collider(this.player, this.floor);
         //#endregion
        
@@ -145,8 +144,10 @@ export default class Level2 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1956, this.game.config.height - 205, 0, 0, false, 'p_torre_basso'));
 
         //torrette verdi come colonne
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2770, this.game.config.height - 90, 440, -0, true, 'p_torretta'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3000, this.game.config.height - 220, 430, -0, true, 'p_torretta'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2770, this.game.config.height - 90, 440, 0, true, 'p_torretta'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2750, this.game.config.height - 130, 440, 0, true, 'p_2verde_lego'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3000, this.game.config.height - 220, 430, 0, true, 'p_torretta'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2980, this.game.config.height - 260, 430, 0, true, 'p_2verde_lego'));
 
         //platform torrette gialle 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3610, this.game.config.height - 370, 490, -85, false, 'p_torre2'));
@@ -158,12 +159,18 @@ export default class Level2 extends Phaser.Scene {
             platform.setScale(0.70, 0.70);
         });
 
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 3880, this.game.config.height - 220, 0, 0, true, 'p_torretta_double',1, 60, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 3880, this.game.config.height - 220, 0, 0, false, 'p_torretta_double',1, 60, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3887, this.game.config.height - 250, 0, 0, true, 'p_2verde_lego',1, 60, 100));
   
-        //colonne sotto
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 8, 4380, this.game.config.height - 130, 155, 0, true, 'p_column_hora'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4446, this.game.config.height - 350, 460, 0, true, 'p_column_hora_2'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4700, this.game.config.height - 490, 450, 0, true, 'p_column_hora_2'));
+        //colonne dopo torretta
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4446, this.game.config.height - 130, 460, 0, true, 'p_column_hora'));
+        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 8, 4390, this.game.config.height - 170, 155, 0, true, 'p_2beige_lego'));
+
+        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4446, this.game.config.height - 450, 460, 0, true, 'p_column_hora_2'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4456, this.game.config.height - 300, 460, 0, true, 'p_2beige_lego'));
+        
+       //this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4700, this.game.config.height - 550, 450, 0, true, 'p_column_hora_2'));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4610, this.game.config.height - 450, 450, 0, true, 'p_2beige_lego',0, 60, 150)); 
 
         //
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5700, this.game.config.height - 220, 0, 0, true, 'p_neutral_beige'));
