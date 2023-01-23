@@ -1,10 +1,25 @@
 import Player from "../components/player.js"
+import Flower from "../components/flower.js"
+import FlowersGroup from "../components/flowersGroup.js";
+import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
+import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
+import Enemy from "../components/enemy.js";
 
 export default class TestScene1 extends Phaser.Scene {
 
-    background;       // oggetto relativo all'elemento "sfondo"
-    player;           // oggetto relativo all'elemento "giocatore"
-    floorHeight;      // Altezza del terreno (asse y) rispetto al riquadro di gioco
+    background;         // oggetto relativo all'elemento "sfondo"
+    player;             // oggetto relativo all'elemento "giocatore"
+    floorHeight;        // Altezza del terreno (asse y) rispetto al riquadro di gioco
+    lastFlower;         // Tempo dall'ultimo fiore lanciato
+    isCameraFollowingPlayer;
+    mP1;
+    updates;
+    lastLivesDecrement;
+    nuvole;
+    collectableFlowers;
+    movingPlatforms;
+    staticPlatforms;
+    flowersCounter;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -13,138 +28,434 @@ export default class TestScene1 extends Phaser.Scene {
 
     init() {
         console.log("test_scene_1 - Executing init()");
-        // Definiamo l'altezza del terreno pari all'altezza del riquadro
-        // di gioco, per posizionare il giocatore sul fondo della schermata.
+        // Definiamo l'altezza del terreno pari all'altezza del riquadro di gioco, per posizionare il giocatore sul fondo della schermata.
         this.floorHeight = this.game.config.height - 30;
         this.worldWidth = 10000;
+        this.lastFlower = 0;
+        this.updates = 0;
+        this.lastLivesDecrement = 0;
+        this.isFlowerActive = false;
+        this.collectableFlowers = [];
+        this.movingPlatforms = [];
+        this.staticPlatforms = [];
+        this.flowersCounter = -2;
+        this.hasPlayerStartedMoving = false;
     }
 
     preload() {
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        var flowerLoading = this.add.tileSprite(width - 100, height - 70, 150, 150, "animated_flower");
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect(width / 2 - 160, 270, 320, 50);
+        
+        var percentText = this.make.text({
+            x: width / 2,
+            y: height / 2 - 20,
+            text: '0%',
+            style: {
+                fontFamily: 'Montserrat',
+                fontSize: 18,
+                fill: '#ffffff'
+            }
+        });
+        percentText.setOrigin(0.5, 0.5);
+        
+        var assetText = this.make.text({
+            x: width / 2,
+            y: height / 2 + 20,
+            text: '',
+            style: {
+                fontFamily: 'Montserrat',
+                fontSize: 18,
+                fill: '#ffffff'
+            }
+        });
+        assetText.setOrigin(0.5, 0.5);
+        
+        this.load.on('progress', function (value) {
+            percentText.setText("Loading: " + parseInt(value * 100) + '%');
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect(width / 2 - 160 + 10, 280, 300 * value, 30);
+        });
+        
+        this.load.on('fileprogress', function (file) {
+            assetText.setText('Loading asset: ' + file.key);
+        });
+        this.load.on('complete', function () {
+            progressBar.destroy();
+            progressBox.destroy();
+            percentText.destroy();
+            assetText.destroy();
+        });
+
         console.log("test_scene_1 - Executing preload()");
-        // Carichiamo gli asset grafici
-        this.load.image("platform", "assets/images/environment_elements/platform.png");
-        this.load.image("mushroom", "assets/images/environment_elements/mushroom_1.png");
+       
+        //BACKGROUND, CLOUDS, CITY
+        this.load.image("sky", "assets/images/background/bg_sky.jpg");
+        this.load.image("clouds", "assets/images/background/bg_clouds.png");
+        this.load.image("city", "assets/images/background/bg_city.png"); 
+        this.load.image("hill_2", "assets/images/background/bg_hill.1-1.png"); 
+        this.load.image("hill", "assets/images/background/bg_hill_new.png"); 
+        this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
+
+        //pavimento verde
+        this.load.image("platform_1", "assets/images/environment_elements/pavement_up.png");
+        this.load.image("platform_1_2", "assets/images/environment_elements/pavement.png");
+
+        //colonne
+        this.load.image("column", "assets/images/environment_elements/column.png");
+
+        //platform semplice 3D grigia
+        this.load.image("platform_3d_1", "assets/images/environment_elements/platform/base_cemento_piccola_2.png");
+        
+        //platform
+        this.load.image("platform_3d_3", "assets/images/environment_elements/platform/3.png");
+
+        //platform semplice 3D marrone
+        this.load.image("platform_3d_4", "assets/images/environment_elements/platform/4.png");
+        this.load.image("platform_3d_4_2", "assets/images/environment_elements/platform/4_2.png");
+        
+        //platform_3d_bordeaux e hidden 1
+        this.load.image("platform_3d_5", "assets/images/environment_elements/platform/5.png");
+        this.load.image("p_hidden", "assets/images/environment_elements/platform/p_hidden.png");
+
+        //hidden 2
+        this.load.image("p_hidden_2", "assets/images/environment_elements/platform/p_hidden_2.png");
+
+        //camini
+        this.load.image("platform_3d_6", "assets/images/environment_elements/platform/7.png");
+        this.load.image("platform_3d_7", "assets/images/environment_elements/platform/8-9.png");
+        this.load.image("platform_3d_14", "assets/images/environment_elements/platform/base_mattoni_piccola.png");
+
+        //pezzo di gru gialla
+        this.load.image("platform_3d_8", "assets/images/environment_elements/platform/10.png");
+        this.load.image("platform_3d_15", "assets/images/environment_elements/platform/base_giallo_grande.png");
+
+        //gru gialla intera
+        this.load.image("p_gru", "assets/images/environment_elements/platform/p_gru.png");
+
+        //gru grigie
+        this.load.image("p_torretta_1", "assets/images/environment_elements/platform/p_torretta1.png");
+        this.load.image("p_torretta_2", "assets/images/environment_elements/platform/p_torretta2.png");
+        this.load.image("p_torretta_3", "assets/images/environment_elements/platform/p_torretta3.png");
+        this.load.image("platform_3d_16", "assets/images/environment_elements/platform/base_metallo_piccola.png");
+        
+        //torretta
+        this.load.image("p_torre", "assets/images/environment_elements/platform/p_torre.png");
+        this.load.image("p_torre_bg", "assets/images/environment_elements/platform/15_bg.png");
+
+        //sfondi platform
+        this.load.image("sfondo_1", "assets/images/environment_elements/buildings/bld_1.png");
+        this.load.image("sfondo_2", "assets/images/environment_elements/buildings/bld_2.png");
+        this.load.image("sfondo_3", "assets/images/environment_elements/buildings/building_3.png");
+        this.load.image("sfondo_4", "assets/images/environment_elements/buildings/bld_4.png");
     }
 
     create() {
         // Qui le istruzioni su cosa creare e dove nel mondo di gioco
         console.log("test_scene_1 - Executing create()");
-        // Sfondo
-        this.background = this.add.tileSprite(0, -280, 6000, 1000, "background_base");
+
+        //#region Impostazione sfondo scena
+        this.background = this.add.image(0, 0, "sky");
+        this.background.setScale(0.75, 1);
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
 
-        // Crea un piano sul quale fermare gli oggetti soggetti alla fisica (gravità)
-        this.floor = this.add.rectangle(0, this.game.config.height,
-            this.worldWidth, this.game.config.height - this.floorHeight,
-            0xFFFFFF, 0);
-        this.floor.setOrigin(0, 1);
-        // Aggiungi il piano alla fisica (e rendiamolo statico mettendo a 'true' il secondo parametro)
-        this.physics.add.existing(this.floor, true);
+       
+        this.hill_3 = this.add.image(0, 0.5, "hill_3");
+        this.hill_3.setOrigin(0, 0);
+        this.hill_3.setScrollFactor(0, 0);
 
-        // Player
-        const thePlayer = new Player(this, 0, this.floorHeight, 10000);
+        this.hill = this.add.image(0, 0.5, "hill");
+        this.hill.setOrigin(0, 0);
+        this.hill.setScrollFactor(0, 0);
+
+        this.hill_2 = this.add.image(0, 0.5, "hill_2");
+        this.hill_2.setOrigin(0, 0);
+        this.hill_2.setScrollFactor(0, 0);
+
+        this.city = this.add.image(0, 0.5, "city");
+        this.city.setOrigin(0, 0);
+        this.city.setScrollFactor(0, 0);
+        
+        this.nuvole = this.add.image(0, 0, "clouds");
+        this.nuvole.setOrigin(0, 0);
+        this.nuvole.setScrollFactor(0, 0);
+        //#endregion
+
+        this.isCameraFollowingPlayer = false;
+
+        //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(thePlayer);
-        this.physics.add.collider(this.player, this.floor);
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight-500, this.worldWidth));
+        //#endregion
 
-        // Imposta la camera per seguire i movimenti del giocatore lungo l'asse x
-        this.cameras.main.setBounds(0, 0, 10000, 720);
-        this.cameras.main.startFollow(this.player);
+        //colonne inizio 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 0, 400, 116, 0, false, "column"));
+
+        //platform grigia piccola tutorial
+        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 800, this.game.config.height-210, 250, 0, true, "platform_3d_1"));
+
+        //platform 1 e 2 + sfondo 1 (giallo)
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 66, 0, 0, false, "sfondo_1"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-185, 250, -40, true, "platform_3d_1"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-240, 0, 0, true, "platform_3d_3"));
+        
+        //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3436, this.game.config.height-220, 250, 0, true, "p_hidden")); 
+        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3200, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 310, 0, 0, false, "sfondo_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3648, this.game.config.height-415, 0, 0, true, "platform_3d_5"));
+        
+        //platform mobile prima del ponte
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 4150, this.game.config.height-180, 0, 0, true, "platform_3d_4",1, -180, 150));
+        
+        //gru e platform grigia lunga dietro
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 4366, this.game.config.height-400, 100, 0, true, "p_hidden_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4350, 220, 0, 0, false, "sfondo_3"));
+        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2);
+
+        //casa con camini
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5123, this.game.config.height-230, 0, 0, true, "platform_3d_7", 1, -100, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5098, this.game.config.height-260, 0, 0, true, "platform_3d_14", 1, -100, 80));
+
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5345, this.game.config.height-380, 0, 0, true, "platform_3d_6",1, 120, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5334, this.game.config.height-390, 0, 0, true, "platform_3d_14",1, 120, 80));
+
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5552, this.game.config.height-230, 0, 0, true, "platform_3d_7", 1, -100, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5528, this.game.config.height-260, 0, 0, true, "platform_3d_14", 1, -100, 80));
+        
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5050, 535, 0, 0, false, "sfondo_4"));
+
+        //gru che va su e giù e gru gialla statica
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5800, this.game.config.height-570, 0, 0, true, "platform_3d_4", 1, 130, 200));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 6125, this.game.config.height-125, 100, 0, true, "p_hidden_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5900, this.game.config.height-200, 0, 0, false, "p_gru"));
+        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2);
+        
+        //this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5790, this.game.config.height-380, 120, 0, true, "platform_3d_15", 1, 70, 100));
+
+        //3 gru grigie in movimento
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-250, 0, 0, true, "p_torretta_1",1, 50, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-270, 0, 0, true, "platform_3d_16",1, 50, 80));
+
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7100, this.game.config.height-160, 0, 0, true, "p_torretta_2", 1, -70, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7420, this.game.config.height-140, 0, 0, true, "p_torretta_3", 1, -80, 90));
+
+        //torretta
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7605, this.game.config.height-10, 0, 0, true, "platform_3d_4_2")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7620, this.game.config.height-360, 0, 0, false, "p_torre_bg")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-380, 0, 0, false, "p_torre"));
+        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2);
+
+        //pavimento 2D
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 697, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 690, this.textures.get('platform_1_2').getSourceImage().width, 0, false, 'platform_1_2'));
+
+        this.pavements = [];
+        this.pavements.push(this.staticPlatforms[this.staticPlatforms.length - 2]);
+
+        this.player.setDepth(1);
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(2);
+        });
+        
+        //#region Posizionamento camera
+        this.cameras.main.setBounds(0, 0, 15000, 720);
+        this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
+        //#endregion
 
-        // Inserisci delle piattaforme
-        this.createStaticPlatforms();
-        this.createMovingPlatforms();
+        // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
+        this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        
+        //#region Creazione nemici
+        this.uominiGrigi = [];
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 600, 700, 0, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 800, 700, 1200, "grigi")));
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
+            this.uominiGrigi[i].body.allowGravity = true;
+            this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
+            for(let k = 0; k < this.pavements.length; k++) {
+                this.physics.add.collider(this.uominiGrigi[i], this.pavements[k].list);
+            }   
+        }
+        //#endregion
 
-        // Inserisci gli elementi dell'interfaccia utente
-        this.createUI();
+        //Creazione fiori
+        this.createFlowers(); 
 
-    }
+        this.player.resize(); // Ridimensionamento hitbox
 
-    createUI() {
-        const styleConfig = { color: '#FFFFFF', fontSize: 36 };
+        this.game.gameState.lives = 3;
+        const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
 
-        // Inserisci il testo con il punteggio corrente
-        const scoreMessage = "Score: " + this.game.gameState.score;
-        this.scoreBox = this.add.text(700, 0, scoreMessage, styleConfig);
-        this.scoreBox.setOrigin(0, 0);
-        this.scoreBox.setScrollFactor(0, 0);
-
-        // Inserisci il testo con il punteggio corrente
-        const lifeMessage = "Lives: " + this.game.gameState.lives;
-        this.lifeBox = this.add.text(400, 0, lifeMessage, styleConfig);
+        //#region Inserimento informazione vita
+        this.lifeBox = this.add.text(50, 40, "Lives: " + this.game.gameState.lives, styleConfig);
         this.lifeBox.setOrigin(0, 0);
         this.lifeBox.setScrollFactor(0, 0);
+        //#endregion
 
-    }
-
-    createStaticPlatforms() {
-        // Aggiungi le piattaforme come un gruppo di oggetti statici
-        this.platforms = this.physics.add.staticGroup({
-            key: 'platform',
-            repeat: 3,
-            setXY: { x: 1500, y: this.game.config.height - 300, stepX: 1000, stepY: 50}
-        });
-
-        // Rendi le piattaforme "solide". Se il giocatore è su una piattaforma
-        // allora il suo stato è "non sta saltando" (questo per riprodurre l'animazione
-        // del giocatore fermo).
-        this.physics.add.collider(this.platforms, this.player, () => {
-            this.player.isJumping = false;
-        });
-    }
-
-    createMovingPlatforms() {
-        // Aggiungi le piattaforme come un gruppo di oggetti dinamici
-        this.movingPlatforms = this.physics.add.group();
-        this.movingPlatforms.create(4800, Phaser.Math.Between(this.game.config.height - 100, this.game.config.height - 400), 'platform');
-        this.movingPlatforms.create(6600, Phaser.Math.Between(this.game.config.height - 100, this.game.config.height - 400), 'platform');
-        this.movingPlatforms.create(7200, Phaser.Math.Between(this.game.config.height - 100, this.game.config.height - 400), 'platform');
-        // ...sottrai le piattaforme all'effetto della gravità!
-        this.movingPlatforms.children.iterate( function (platform) {
-                platform.setImmovable(true);
-                platform.body.allowGravity = false;
-                platform.body.setVelocityX(Phaser.Math.Between(-100, 100));
-        });
-
-        // Rendi le piattaforme "solide". Se il giocatore è su una piattaforma
-        // allora il suo stato è "non sta saltando" (questo per riprodurre l'animazione
-        // del giocatore fermo).
-        this.physics.add.collider(this.movingPlatforms, this.player, () => {
-            this.player.isJumping = false;
-        });
+        this.flowersBox = this.add.text(this.cameras.main.width - 50, 40, "Flowers: " + (this.flowersCounter + 2) + "/11", styleConfig);
+        this.flowersBox.setOrigin(1, 0);
+        this.flowersBox.setScrollFactor(0, 0);
     }
 
     update() {
         // Azioni che vengono eseguite a ogni frame del gioco
-        this.player.manageMovements();
+        this.player.manageMovements(this.movingPlatforms);
         this.animateBackground();
-        this.randomPlatformsMovementChange();
+        this.manageFlowersLaunch();
+        this.manageFlowersOverlap();
+        this.manageEnemies();
+        this.updateMovingPlatforms();
+        
+        if(this.player.body.y > this.game.config.height) {
+            this.player.die();
+            this.updateLives();
+        }
+    }
+
+    createFlowers() {
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 330, 220, -80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 4715, this.game.config.height-450, 0, 0, "animated_flower"));
+        
+        this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
+
+
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
+
+        for(let i = 0; i < this.collectableFlowers.length; i++) {
+            for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
+                this.collectableFlowers[i].list[k].body.setAllowGravity(false);
+            }
+        }
+    }
+
+    manageFlowersOverlap() {
+        for(let i = 0; i < this.collectableFlowers.length; i++) {
+            for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
+                if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].list[k].body, this.player.body)) {
+                    this.collectableFlowers[i].list[k].destroy(true);
+                    this.collectableFlowers[i].list.splice(k, 1);
+                    if(this.flowersCounter < 0) {
+                        this.flowersCounter = 0;
+                    }
+                    this.flowersCounter++;
+                    this.flowersBox.setText("Flowers: " + this.flowersCounter + "/11");
+                }
+            }
+        }
+    }
+
+    manageFlowersLaunch() {
+        const minTimeBetweenFlowers = 500;    // Tempo minimo (in ms) tra un fiore e l'altro
+        const timeFromPreviousFlower = this.time.now - this.lastFlower;
+
+        if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
+            if(this.flowersCounter != 0) {
+                if(this.flowersCounter < 0) {
+                    this.flowersCounter++;
+                } else if(this.flowersCounter > 0) {
+                    this.flowersCounter--;
+                    this.flowersBox.setText("Flowers: " + this.flowersCounter + "/11");
+                } 
+                this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
+
+                // Creo un fiore
+                this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2,"animated_flower", 10, this.player.flipX);
+                this.flower.setDepth(0);
+                this.isFlowerActive = true;
+                
+                this.flower.fire(); // Lo lancio
+            } 
+        }
+
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
+            if(this.uominiGrigi[i] != undefined) {
+                if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
+                    this.uominiGrigi[i].cure(this.flower);
+                    console.warn(this.uominiGrigi[i]);
+                    this.isFlowerActive = false;
+                }
+            }
+        }
+    }
+
+    manageEnemies() {
+        //gestione collisione player (-1 vita o uccisione uomo grigio)
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
+            if(this.uominiGrigi[i] != undefined) {
+                if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
+                    if(this.player.body.velocity.y > 0 && this.player.y < (this.uominiGrigi[i].y + this.uominiGrigi[i].height)) {
+                        this.player.body.setVelocityY(-300);
+                        this.uominiGrigi[i].destroy(true);
+                        this.uominiGrigi[i] = undefined;
+                    } else {
+                        this.updateLives();
+                    }
+                }
+            } 
+        }
+
+        //gestione movimenti uomini grigi da secondo (id: 1) in poi
+        for(let i = 1; i < this.uominiGrigi.length; i++) {
+            if(this.uominiGrigi[i] != undefined) {
+                this.uominiGrigi[i].manageMovements();
+            }
+        }
+
+        //gestione movimenti primo uomo grigio (id: 0)
+        if(this.player.x != this.player.initialX && this.uominiGrigi[0] != undefined) {
+            this.uominiGrigi[0].followPlayer();
+        }
+    }
+
+    updateMovingPlatforms() {
+        this.updates++;
+        for(let i = 0; i < this.movingPlatforms.length; i++)
+        {
+            if(this.updates % this.movingPlatforms[i].duration == 0) {
+                this.movingPlatforms[i].updateMovingPlatforms();
+            }
+        }
     }
 
     animateBackground() {
-        this.background.tilePositionX = this.cameras.main.scrollX * 0.5;
-        this.cameras.main.followOffset.y = this.player.body.y + this.player.height/2 - this.game.config.height / 2;
+        this.background.x = - this.cameras.main.scrollX * 0.5;
+        this.nuvole.x = - this.cameras.main.scrollX * 0.7;
+        this.city.x = - this.cameras.main.scrollX * 0.6;
+        this.hill_2.x = - this.cameras.main.scrollX * 0.65;
+        this.hill_3.x = - this.cameras.main.scrollX * 0.6;
+        this.hill.x = - this.cameras.main.scrollX * 0.7;
+        
+        //this.cameras.main.y = - (this.player.body.y / 2) + 250;
+        //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
     }
 
-    randomPlatformsMovementChange() {
-        this.movingPlatforms.children.iterate( function (platform) {
-            // Genera un cambio di velocità casuale (destra o sinistra) con una probabilità
-            // 1 su 100 (ricordiamo che la update() viene invocata diverse volte al secondo).
-            // Cosa accadrebbe se variassiamo velocità ad ogni frame, quindi N volte al secondo?
-            if (Phaser.Math.Between(0, 100) == 50) {
-                const updatedSpeed = Phaser.Math.Between(-100, 100);
-                platform.body.setVelocityX(updatedSpeed);
-            }
-        });
-    }
-
-    updateScore(player, mushroom) {
-        // Rimuove il funghetto dalla scena
-        mushroom.destroy();
+    updateLives() {
         // Aggiorna il punteggio
-        this.game.gameState.score += 10;
-        this.scoreBox.setText("Score: " + this.game.gameState.score);
+        const minTimeLivesDecrement = 2000;    // Tempo minimo (in ms) tra una perdita di vita e l'altra
+
+        const timeFromLastLivesDecrement = this.time.now - this.lastLivesDecrement;
+
+        if(timeFromLastLivesDecrement > minTimeLivesDecrement && this.game.gameState.lives > 0) {
+            // Se sono qui devo togliere una vita
+            this.lastLivesDecrement = this.time.now;
+
+            this.game.gameState.lives--;
+            this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+        }
+
+        if(this.game.gameState.lives == 0) {
+            this.player.die();
+            //schermata game over
+        }
     }
 }

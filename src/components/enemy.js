@@ -5,9 +5,10 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     isEvil;
     img;
 
-    constructor(scene, x, y, img) {
+    constructor(scene, x, y, xMax, img) {
 		super(scene, x, y, img);
         this.lives = 2;
+        this.xMax = xMax;
         this.velocity = 150;
         this.img = img;
         this.scene = scene;
@@ -55,14 +56,16 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     manageMovements() {
-        if(this.body.x >= parseInt(this.scene.player.body.x) - 2 && this.body.x <= parseInt(this.scene.player.body.x) + 2 || !this.isEvil) {
+        if(this.isEvil) {
+            if(this.body.velocity.x == 0) {
+                this.body.setVelocityX(this.velocity);
+            } else if(this.body.x > this.xMax) {
+                this.body.setVelocityX(-this.velocity);
+            } else if (this.body.x < this.initialX) {
+                this.body.setVelocityX(this.velocity);
+            }
+        } else {
             this.body.setVelocityX(0);
-        }
-        else if(this.body.x < parseInt(this.scene.player.body.x)) {
-            this.body.setVelocityX(this.velocity);
-        }
-        else if (this.body.x > parseInt(this.scene.player.body.x)) {
-            this.body.setVelocityX(-this.velocity);
         }
 
         this.manageAnimations();
@@ -84,6 +87,18 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
 
             this.flipX = this.body.velocity.x < 0;
         }
+    }
+
+    followPlayer() {
+        if(this.body.x >= parseInt(this.scene.player.body.x) - 2 && this.body.x <= parseInt(this.scene.player.body.x) + 2 || !this.isEvil) {
+            this.body.setVelocityX(0);
+        } else if(this.body.x < parseInt(this.scene.player.body.x)) {
+            this.body.setVelocityX(this.velocity);
+        } else if (this.body.x > parseInt(this.scene.player.body.x)) {
+            this.body.setVelocityX(-this.velocity);
+        }
+
+        this.manageAnimations();
     }
 
     cure(f) {
