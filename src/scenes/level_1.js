@@ -38,7 +38,7 @@ export default class Level1 extends Phaser.Scene {
         this.collectableFlowers = [];
         this.movingPlatforms = [];
         this.staticPlatforms = [];
-        this.flowersCounter = 0;
+        this.flowersCounter = -2;
     }
 
     preload() {
@@ -136,39 +136,23 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("platform_3d_15", "assets/images/environment_elements/platform/base_giallo_grande.png");
 
         //gru gialla intera
-        this.load.image("platform_3d_9", "assets/images/environment_elements/platform/11.png");
+        this.load.image("p_gru", "assets/images/environment_elements/platform/p_gru.png");
 
         //gru grigie
-        this.load.image("platform_3d_10", "assets/images/environment_elements/platform/12.png");
-        this.load.image("platform_3d_11", "assets/images/environment_elements/platform/13.png");
-        this.load.image("platform_3d_12", "assets/images/environment_elements/platform/14.png");
+        this.load.image("p_torretta_1", "assets/images/environment_elements/platform/p_torretta1.png");
+        this.load.image("p_torretta_2", "assets/images/environment_elements/platform/p_torretta2.png");
+        this.load.image("p_torretta_3", "assets/images/environment_elements/platform/p_torretta3.png");
         this.load.image("platform_3d_16", "assets/images/environment_elements/platform/base_metallo_piccola.png");
         
         //torretta
-        this.load.image("platform_3d_13", "assets/images/environment_elements/platform/15.png");
-        this.load.image("platform_3d_13_bg", "assets/images/environment_elements/platform/15_bg.png");
+        this.load.image("p_torre", "assets/images/environment_elements/platform/p_torre.png");
+        this.load.image("p_torre_bg", "assets/images/environment_elements/platform/15_bg.png");
 
         //sfondi platform
         this.load.image("sfondo_1", "assets/images/environment_elements/buildings/bld_1.png");
         this.load.image("sfondo_2", "assets/images/environment_elements/buildings/bld_2.png");
         this.load.image("sfondo_3", "assets/images/environment_elements/buildings/bld_3.png");
         this.load.image("sfondo_4", "assets/images/environment_elements/buildings/bld_4.png");
-
-        //platform vecchie
-        /* this.load.image("platform_verde_1", "assets/images/environment_elements/platform_verde_1.png");
-        this.load.image("platform_verde_corto", "assets/images/environment_elements/platform_verde_2.png");
-        this.load.image("platform_verde_lungo", "assets/images/environment_elements/platform_verde_3.png");
-        this.load.image("platform_casa_1", "assets/images/environment_elements/platform_casa_1.png");
-        this.load.image("platform_casa_2", "assets/images/environment_elements/platform_casa_2.png");
-        this.load.image("platform_grigia_1", "assets/images/environment_elements/platform_grigia_1.png");
-        this.load.image("platform_grigia_2", "assets/images/environment_elements/platform_grigia_2.png");
-        this.load.image("punzoni", "assets/images/environment_elements/punzoni.png");
-        this.load.image("platform_3", "assets/images/environment_elements/platform_3.png");
-        this.load.image("platform_verde_3", "assets/images/environment_elements/platform_verde_3.png");
-        this.load.image("platform_2", "assets/images/environment_elements/platform_2.png");
-        this.load.image("punzoni", "assets/images/environment_elements/punzone_2.png"); */
-        //end region
-
     }
 
     create() {
@@ -232,6 +216,7 @@ export default class Level1 extends Phaser.Scene {
         //gru e platform grigia lunga dietro
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 4416, this.game.config.height-310, 100, 0, true, "p_hidden_2"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4400, 308, 0, 0, false, "sfondo_3"));
+        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2);
 
         //casa con camini
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5123, this.game.config.height-230, 0, 0, true, "platform_3d_7", 1, -70, 100));
@@ -247,20 +232,20 @@ export default class Level1 extends Phaser.Scene {
 
         //gru che va su e giù e gru gialla statica
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5800, this.game.config.height-480, 0, 0, true, "platform_3d_8", 1, 70, 200));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5900, this.game.config.height-130, 0, 0, true, "platform_3d_9"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5900, this.game.config.height-250, 0, 0, true, "p_gru"));
         //this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5790, this.game.config.height-380, 120, 0, true, "platform_3d_15", 1, 70, 100));
 
         //3 gru grigie in movimento
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-250, 0, 0, true, "platform_3d_10",1, 50, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-250, 0, 0, true, "p_torretta_1",1, 50, 80));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-270, 0, 0, true, "platform_3d_16",1, 50, 80));
 
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7100, this.game.config.height-160, 0, 0, true, "platform_3d_11", 1, -70, 100));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7420, this.game.config.height-140, 0, 0, true, "platform_3d_12", 1, -80, 90));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7100, this.game.config.height-160, 0, 0, true, "p_torretta_2", 1, -70, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7420, this.game.config.height-140, 0, 0, true, "p_torretta_3", 1, -80, 90));
 
         //torretta
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7605, this.game.config.height-10, 0, 0, true, "platform_3d_4_2")); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7620, this.game.config.height-360, 0, 0, false, "platform_3d_13_bg")); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-380, 0, 0, false, "platform_3d_13"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7620, this.game.config.height-360, 0, 0, false, "p_torre_bg")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-380, 0, 0, false, "p_torre"));
         //this.StaticPlatformsGroup[18].setDepth(1); 
 
         //platform vecchie
@@ -336,7 +321,7 @@ export default class Level1 extends Phaser.Scene {
         this.lifeBox.setScrollFactor(0, 0);
         //#endregion
 
-        this.flowersBox = this.add.text(this.cameras.main.width - 50, 40, "Flowers: " + this.flowersCounter + "/11", styleConfig);
+        this.flowersBox = this.add.text(this.cameras.main.width - 50, 40, "Flowers: " + (this.flowersCounter + 2) + "/11", styleConfig);
         this.flowersBox.setOrigin(1, 0);
         this.flowersBox.setScrollFactor(0, 0);
     }
@@ -390,6 +375,9 @@ export default class Level1 extends Phaser.Scene {
                 if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].list[k].body, this.player.body)) {
                     this.collectableFlowers[i].list[k].destroy(true);
                     this.collectableFlowers[i].list.splice(k, 1);
+                    if(this.flowersCounter < 0) {
+                        this.flowersCounter = 0;
+                    }
                     this.flowersCounter++;
                     this.flowersBox.setText("Flowers: " + this.flowersCounter + "/11");
                 }
@@ -402,14 +390,22 @@ export default class Level1 extends Phaser.Scene {
         const timeFromPreviousFlower = this.time.now - this.lastFlower;
 
         if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
-            this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
+            if(this.flowersCounter != 0) {
+                if(this.flowersCounter < 0) {
+                    this.flowersCounter++;
+                } else if(this.flowersCounter > 0) {
+                    this.flowersCounter--;
+                    this.flowersBox.setText("Flowers: " + this.flowersCounter + "/11");
+                } 
+                this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
 
-            // Creo un fiore
-            this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2,"animated_flower", 10, this.player.flipX);
-            this.flower.setDepth(0);
-            this.isFlowerActive = true;
-            
-            this.flower.fire(); // Lo lancio
+                // Creo un fiore
+                this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2,"animated_flower", 10, this.player.flipX);
+                this.flower.setDepth(0);
+                this.isFlowerActive = true;
+                
+                this.flower.fire(); // Lo lancio
+            } 
         }
 
         for(let i = 0; i < this.uominiGrigi.length; i++) {

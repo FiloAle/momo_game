@@ -7,6 +7,8 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
 
     constructor(scene, x, y, img) {
 		super(scene, x, y, img);
+        this.lives = 2;
+        this.velocity = 150;
         this.img = img;
         this.scene = scene;
         this.isEvil = true;
@@ -57,16 +59,20 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(0);
         }
         else if(this.body.x < parseInt(this.scene.player.body.x)) {
-            this.body.setVelocityX(150);
+            this.body.setVelocityX(this.velocity);
         }
         else if (this.body.x > parseInt(this.scene.player.body.x)) {
-            this.body.setVelocityX(-150);
+            this.body.setVelocityX(-this.velocity);
         }
 
         this.manageAnimations();
     }
 
     manageAnimations() {
+        if(this.velocity == 75) {
+            this.anims.msPerFrame = 60;
+        }
+
         const curr_anim = this.anims.currentAnim.key;   // Otteniamo il nome dell'animazione corrente
 
         if (this.body.velocity.x == 0 || this.body.touching.left || this.body.touching.right) {
@@ -81,7 +87,10 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     cure(f) {
-        this.isEvil = false;
+        if(--this.lives == 0) {
+            this.isEvil = false;
+        }
+        this.velocity = 75;
         f.destroy();
     }
 }
