@@ -42,6 +42,8 @@ export default class TestScene2 extends Phaser.Scene {
         this.load.image("platform", "assets/images/environment_elements/platform.png");
         this.load.image("platform_1", "assets/images/environment_elements/platform_1.png");
         this.load.image("column", "assets/images/environment_elements/column.png");
+
+        this.load.image("city_l2", "assets/images/background/bg_city_l2.jpg");
     }
 
     create() {
