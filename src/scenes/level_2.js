@@ -68,8 +68,15 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("p_torre_lunga", "assets/images/environment_elements/platform/level_2/p_torre_lunga.png");
         this.load.image("p_torretta", "assets/images/environment_elements/platform/level_2/p_torretta.png");
         this.load.image("p_torre2", "assets/images/environment_elements/platform/level_2/p_torre2.png");
+        this.load.image("p_torretta_double", "assets/images/environment_elements/platform/level_2/p_torretta_double.png");
+        this.load.image("p_hidden_2", "assets/images/environment_elements/platform/p_hidden_2.png");
+        this.load.image("p_column_hora", "assets/images/environment_elements/platform/level_2/p_column_hora.png");
+        this.load.image("p_column_hora_2", "assets/images/environment_elements/platform/level_2/p_column_hora_2.png");
+        this.load.image("p_neutral_beige", "assets/images/environment_elements/platform/level_2/p_neutral_beige.png");
+        
 
-
+        this.load.image("p_entrata_banca", "assets/images/environment_elements/platform/level_2/p_entrata_banca.png");
+        this.load.image("p_base_banca", "assets/images/environment_elements/platform/level_2/p_base_banca.png");
         this.load.image("b_finestre", "assets/images/environment_elements/platform/level_2/b_finestre.png");
         this.load.image("p_mattoncini", "assets/images/environment_elements/platform/level_2/mattoncini.png");
         
@@ -111,7 +118,7 @@ export default class Level2 extends Phaser.Scene {
         //#region Creazione player
         const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 3000, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 7000, this.floorHeight-500, this.worldWidth));
         this.physics.add.collider(this.player, this.floor);
         //#endregion
        
@@ -138,20 +145,47 @@ export default class Level2 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2770, this.game.config.height - 90, 440, -0, true, 'p_torretta'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3000, this.game.config.height - 220, 430, -0, true, 'p_torretta'));
 
-        //platform torretta
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3610, this.game.config.height - 370, 490, -70, false, 'p_torre2'));
-        this.staticPlatforms[12].list.forEach(platform => {
+        //platform torrette gialle 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3610, this.game.config.height - 370, 490, -85, false, 'p_torre2'));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
         });
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4600, this.game.config.height - 235, 590, -0, true, 'platform_grigia_2'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3610, this.game.config.height - 105, 490, -85, true, 'p_hidden_2'));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(0.70, 0.70);
+        });
+
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 3880, this.game.config.height - 220, 0, 0, true, 'p_torretta_double',1, 60, 100));
+  
+        //colonne sotto
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 8, 4380, this.game.config.height - 130, 155, 0, true, 'p_column_hora'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4450, this.game.config.height - 357, 460, 0, true, 'p_column_hora_2'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4700, this.game.config.height - 500, 450, 0, true, 'p_column_hora_2'));
+
+        //
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5000, this.game.config.height - 130, 155, 0, true, 'p_neutral_beige'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5200, this.game.config.height - 357, 460, 0, true, 'p_torretta_bouble'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 5400, this.game.config.height - 500, 450, 0, true, 'p_neutral_beige'));
+
+
 
         //PAVIMENTO (X 40 per allungare il livello, poi sarà da spostare)
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 40, 0, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
+       /*  this.staticPlatforms.push(new StaticPlatformsGroup(this, 40, 0, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 6400, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
-        
+         */
         //INGRESSO BANCA
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 9, 7265, 210, 120, 0, false, "column_2"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7230, 500, 0, 0, true, 'platform_1'));
+        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 9, 7265, 210, 120, 0, false, "column_2"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7238, 0, 0, 0, false, "p_entrata_banca"));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(0.88, 0.88);
+            platform.setDepth(2);
+
+        });
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7230, 550, 0, 0, true, 'p_base_banca'));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(2);
+
+        });
 
         //punzoni parte difficile
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 14, 8400, this.game.config.height-55, 95, -0, false, 'punzoni'));
@@ -189,7 +223,7 @@ export default class Level2 extends Phaser.Scene {
 
 
         //MOVING PLATFORMS
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 4598, 295, 0, -20, true, 'platform_verde_1', 1, 150, 100));
+        //this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 4598, 295, 0, -20, true, 'platform_verde_1', 1, 150, 100));
         
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 6350, 295, 300, -0, true, 'platform_verde_corto', 1, 150, 100));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6500, 575, 300, -20, true, 'platform_verde_corto', 1, -150, 100));
