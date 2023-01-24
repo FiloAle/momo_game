@@ -4,6 +4,8 @@ import FlowersGroup from "../components/flowersGroup.js";
 import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
 import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
+import PopUp from "../components/popup.js";
+import PauseMenu from "../components/pauseMenu.js";
 
 export default class Level1 extends Phaser.Scene {
 
@@ -20,6 +22,8 @@ export default class Level1 extends Phaser.Scene {
     movingPlatforms;
     staticPlatforms;
     flowersCounter;
+    checkpoints;
+    lastCheckpoint;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -42,6 +46,7 @@ export default class Level1 extends Phaser.Scene {
     }
 
     preload() {
+        //#region loading screen
         var width = this.cameras.main.width;
         var height = this.cameras.main.height;
 
@@ -91,6 +96,7 @@ export default class Level1 extends Phaser.Scene {
             percentText.destroy();
             assetText.destroy();
         });
+        //#endregion
 
         console.log("test_scene_2 - Executing preload()");
        
@@ -139,7 +145,6 @@ export default class Level1 extends Phaser.Scene {
 
         //gru gialla intera
         this.load.image("p_gru", "assets/images/environment_elements/platform/p_gru.png");
-        this.load.image("p_cemento_grande", "assets/images/environment_elements/platform/base_cemento_grande_2.png");
         this.load.image("p_giallo_lego", "assets/images/environment_elements/platform/p_giallo_lego.png");
 
         //torretta
@@ -158,14 +163,13 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("p_marrone_lego_albero_2", "assets/images/environment_elements/platform/p_marrone_lego_albero_2.png");
         this.load.image("ringhiera", "assets/images/environment_elements/platform/ringhiera.png");
         
-
-
-        
         //sfondi platform
         this.load.image("sfondo_1", "assets/images/environment_elements/buildings/bld_1.png");
         this.load.image("sfondo_2", "assets/images/environment_elements/buildings/bld_2.png");
         this.load.image("sfondo_3", "assets/images/environment_elements/buildings/building_3.png");
         this.load.image("sfondo_4", "assets/images/environment_elements/buildings/bld_4.png");
+
+        this.load.image("pause", "assets/UI/pause_button.png");
     }
 
     create() {
@@ -199,11 +203,22 @@ export default class Level1 extends Phaser.Scene {
         this.nuvole.setOrigin(0, 0);
         this.nuvole.setScrollFactor(0, 0);
 
-     /*    this.tree = this.add.image(0, 0, "bg_tree");
+        /*  this.tree = this.add.image(0, 0, "bg_tree");
         this.tree.setOrigin(7000, 0);
         this.tree.setScrollFactor(0, 0); */
     
         //#endregion
+
+        this.pauseButton = this.add.image(this.game.config.width / 2, 20, "pause");
+        this.pauseButton.setOrigin(0.5, 0);
+        this.pauseButton.setScrollFactor(0, 0);
+        this.pauseButton.setInteractive({ useHandCursor: true });
+
+        this.pauseButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
+            this.pauseMenu = new PauseMenu(this);
+            this.scene.pause(this);
+            this.scene.add('pause_menu', this.pauseMenu, true);
+        });
 
         this.isCameraFollowingPlayer = false;
 
@@ -211,6 +226,9 @@ export default class Level1 extends Phaser.Scene {
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight-500, this.worldWidth));
         //#endregion
+
+        this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 500, y: this.floorHeight}, {x: 4600, y: 320}];
+        this.lastCheckpoint = this.checkpoints[0];
 
         //colonne inizio 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 0, 400, 116, 0, false, "column"));
@@ -380,6 +398,8 @@ export default class Level1 extends Phaser.Scene {
         this.flowersBox = this.add.text(this.cameras.main.width - 50, 40, "Flowers: " + (this.flowersCounter + 2) + "/11", styleConfig);
         this.flowersBox.setOrigin(1, 0);
         this.flowersBox.setScrollFactor(0, 0);
+
+        this.popup1 = new PopUp(this, "Ciao Momo, sono qui per aiutarti!   \nPer raggiungere la dimora di Mastro Hora dovrai fare un lungo viaggio.   \n\nEsplora ciò che ti circonda e trova la strada più sicura.", 0);
     }
 
     update() {
@@ -390,29 +410,40 @@ export default class Level1 extends Phaser.Scene {
         this.manageFlowersOverlap();
         this.manageEnemies();
         this.updateMovingPlatforms();
+        this.managePlatformsOverlap();
         
-        if(this.player.body.y > this.game.config.height) {
-            this.player.die();
+        if(this.updates % 60 == 0) {
+            console.log(this.player.x + " " + this.player.y);
+        }
+
+        for(let i = 0; this.checkpoints.length > 0 && i < this.checkpoints.length; i++) {
+            if(this.player.x > this.checkpoints[i].x) {
+                this.lastCheckpoint = this.checkpoints[i];
+                this.checkpoints.splice(i, 1);
+            }
+        }
+        
+        if(this.player.y > this.game.config.height) {
             this.updateLives();
+        }
+
+        if(this.player.body.x > 300 && this.player.body.x < 302 && !this.popup1.hasBeenDisplayed) {
+            this.scene.pause(this);
+            this.scene.add('popup1', this.popup1, true);
+        }
+
+        if(this.player.x > 13765) {
+            this.scene.start('level_2');
+            this.scene.stop(this);
         }
     }
     
 
     createFlowers() {
-        /* for(let i = 0; i < 10; i++) {
-            this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
-        } */
-
-        
-        //this.collectableFlowers.push(new FlowersGroup(this, 2, 1150, this.floorHeight - 100, 200, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 330, 220, -80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
-        
         this.collectableFlowers.push(new FlowersGroup(this, 1, 4655, this.game.config.height-510, 0, 0, "animated_flower"));
-        
         this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
-
-
         this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
 
         //albero doppio punzoni
@@ -422,18 +453,34 @@ export default class Level1 extends Phaser.Scene {
         this.collectableFlowers.push(new FlowersGroup(this, 1, 12540, this.game.config.height-200, 0, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 12910, this.game.config.height-200, 200, -60, "animated_flower"));
 
-        
-
-        //this.staticPlatforms[idGruppo].list[idPlatform].x + this.staticPlatforms[idGruppo].list[idPlatform].width / 2
-
-
         //To do: sposta setAllowGravity(false) 
         for(let i = 0; i < this.collectableFlowers.length; i++) {
             for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
                 this.collectableFlowers[i].list[k].body.setAllowGravity(false);
             }
         }
-        //this.physics.add.collider(this.flowers, this.platform);
+    }
+
+    managePlatformsOverlap() {
+        for(let i = 0; i < this.staticPlatforms.length; i++) {
+            if(this.staticPlatforms[i].damaging) {
+                for(let k = 0; k < this.staticPlatforms[i].list.length; k++) {
+                    if(Phaser.Geom.Intersects.RectangleToRectangle(this.staticPlatforms[i].list[k].body, this.player.body)) {
+                        this.updateLives();
+                    }
+                }
+            }
+        }
+
+        for(let i = 0; i < this.movingPlatforms.length; i++) {
+            if(this.movingPlatforms[i].damaging) {
+                for(let k = 0; k < this.movingPlatforms[i].list.length; k++) {
+                    if(Phaser.Geom.Intersects.RectangleToRectangle(this.movingPlatforms[i].list[k].body, this.player.body)) {
+                        this.updateLives();
+                    }
+                }
+            }
+        }
     }
 
     manageFlowersOverlap() {
@@ -476,30 +523,41 @@ export default class Level1 extends Phaser.Scene {
         }
 
         for(let i = 0; i < this.uominiGrigi.length; i++) {
-            if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
-                this.uominiGrigi[i].cure(this.flower);
-                this.isFlowerActive = false;
+            if(this.uominiGrigi[i] != undefined) {
+                if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
+                    this.uominiGrigi[i].cure(this.flower);
+                    this.isFlowerActive = false;
+                }
             }
         }
     }
 
     manageEnemies() {
+        //gestione collisione player (-1 vita o uccisione uomo grigio)
         for(let i = 0; i < this.uominiGrigi.length; i++) {
-            if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
-                if(this.player.body.velocity.y > 0 && this.player.y < (this.uominiGrigi[i].y + this.uominiGrigi[i].height)) {
-                    this.player.body.setVelocityY(-300);
-                    this.uominiGrigi[i].destroy(true);
-                    this.uominiGrigi.splice(i, 1);
-                } else {
-                    this.updateLives();
+            if(this.uominiGrigi[i] != undefined) {
+                if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
+                    if(this.player.body.velocity.y > 0 && this.player.y < (this.uominiGrigi[i].y + this.uominiGrigi[i].height)) {
+                        this.player.body.setVelocityY(-300);
+                        this.uominiGrigi[i].destroy(true);
+                        this.uominiGrigi[i] = undefined;
+                    } else {
+                        this.updateLives();
+                    }
                 }
+            } 
+        }
+
+        //gestione movimenti uomini grigi da secondo (id: 1) in poi
+        for(let i = 1; i < this.uominiGrigi.length; i++) {
+            if(this.uominiGrigi[i] != undefined) {
+                this.uominiGrigi[i].manageMovements();
             }
         }
 
-        if(this.player.x != this.player.initialX) {
-            for(let i = 0; i < this.uominiGrigi.length; i++) {
-                this.uominiGrigi[i].manageMovements();
-            }
+        //gestione movimenti primo uomo grigio (id: 0)
+        if(this.player.x != this.player.initialX && this.uominiGrigi[0] != undefined) {
+            this.uominiGrigi[0].followPlayer();
         }
     }
 
@@ -520,8 +578,6 @@ export default class Level1 extends Phaser.Scene {
         this.hill_2.x = - this.cameras.main.scrollX * 0.65;
         this.hill_3.x = - this.cameras.main.scrollX * 0.6;
         this.hill.x = - this.cameras.main.scrollX * 0.7;
-        // this.tree.x = - this.cameras.main.scrollX * 0.6;
-
         
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
@@ -539,6 +595,9 @@ export default class Level1 extends Phaser.Scene {
 
             this.game.gameState.lives--;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+
+            this.player.x = this.lastCheckpoint.x;
+            this.player.y = this.lastCheckpoint.y - 20;
         }
 
         if(this.game.gameState.lives == 0) {
