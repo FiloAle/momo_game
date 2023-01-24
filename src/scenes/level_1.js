@@ -115,7 +115,7 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("p_grigio_lego_cemento", "assets/images/environment_elements/platform/p_grigio_lego_cemento.png");
         
         //platform
-        this.load.image("platform_3d_3", "assets/images/environment_elements/platform/3.png");
+        //this.load.image("p_grey_big", "assets/images/environment_elements/platform/p_grey_big.png");
 
         //platform semplice 3D marrone
         this.load.image("p_marrone_lego", "assets/images/environment_elements/platform/p_marrone_lego.png");
@@ -215,17 +215,13 @@ export default class Level1 extends Phaser.Scene {
         //colonne inizio 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 0, 400, 116, 0, false, "column"));
 
-        //platform grigia piccola tutorial
-        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 800, this.game.config.height-210, 250, 0, true, "platform_3d_1"));
-
         //platform 1 e 2 + sfondo 1 (giallo)
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 66, 0, 0, false, "sfondo_1"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-185, 250, -40, true, "p_grigio_lego_cemento"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-240, 0, 0, true, "platform_3d_3"));
+        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1838, this.game.config.height-300, 0, 0, true, "p_grey_big"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3436, this.game.config.height-220, 250, 0, true, "p_hidden")); 
-        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3200, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 310, 0, 0, false, "sfondo_2"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3610, this.game.config.height-428, 0, 0, true, "p_rossa_lego_2"));
         
