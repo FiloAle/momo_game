@@ -30,7 +30,7 @@ export default class Level1 extends Phaser.Scene {
         console.log("test_scene_2 - Executing init()");
         // Definiamo l'altezza del terreno pari all'altezza del riquadro di gioco, per posizionare il giocatore sul fondo della schermata.
         this.floorHeight = this.game.config.height - 30;
-        this.worldWidth = 10000;
+        this.worldWidth = 14000;
         this.lastFlower = 0;
         this.updates = 0;
         this.lastLivesDecrement = 0;
@@ -94,13 +94,15 @@ export default class Level1 extends Phaser.Scene {
 
         console.log("test_scene_2 - Executing preload()");
        
-        //BACKGROUND, CLOUDS, CITY
+        //BACKGROUND, CLOUDS, CITY, TREE
         this.load.image("sky", "assets/images/background/bg_sky.jpg");
         this.load.image("clouds", "assets/images/background/bg_clouds.png");
         this.load.image("city", "assets/images/background/bg_city.png"); 
         this.load.image("hill_2", "assets/images/background/bg_hill.1-1.png"); 
         this.load.image("hill", "assets/images/background/bg_hill_new.png"); 
         this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
+        this.load.image("bg_tree", "assets/images/background/bg_tree.png"); 
+        
 
         //pavimento verde
         this.load.image("platform_1", "assets/images/environment_elements/pavement_up.png");
@@ -146,6 +148,18 @@ export default class Level1 extends Phaser.Scene {
 
         this.load.image("p_beige_lego", "assets/images/environment_elements/platform/p_beige_lego.png");
         this.load.image("p_beige_lego_2", "assets/images/environment_elements/platform/beige_lego_2.png");
+
+        //rami albero
+        this.load.image("p_tree", "assets/images/environment_elements/platform/p_tree.png");
+        this.load.image("p_tree_2", "assets/images/environment_elements/platform/p_tree_2.png");
+        this.load.image("p_tree_3", "assets/images/environment_elements/platform/p_tree_3.png");
+
+        this.load.image("p_marrone_lego_albero", "assets/images/environment_elements/platform/p_marrone_lego_albero.png");
+        this.load.image("p_marrone_lego_albero_2", "assets/images/environment_elements/platform/p_marrone_lego_albero_2.png");
+        this.load.image("ringhiera", "assets/images/environment_elements/platform/ringhiera.png");
+        
+
+
         
         //sfondi platform
         this.load.image("sfondo_1", "assets/images/environment_elements/buildings/bld_1.png");
@@ -184,6 +198,11 @@ export default class Level1 extends Phaser.Scene {
         this.nuvole = this.add.image(0, 0, "clouds");
         this.nuvole.setOrigin(0, 0);
         this.nuvole.setScrollFactor(0, 0);
+
+     /*    this.tree = this.add.image(0, 0, "bg_tree");
+        this.tree.setOrigin(7000, 0);
+        this.tree.setScrollFactor(0, 0); */
+    
         //#endregion
 
         this.isCameraFollowingPlayer = false;
@@ -249,6 +268,41 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2);
 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6800, this.game.config.height-150, 300, 0, true, "p_beige_lego_2", 0, 130, 260));
+
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 30, 7600, this.game.config.height, 200 , 0, true, "p_beige_lego_2")); 
+
+        //piattaforme albero
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11000, this.game.config.height-200, 200 , 0, true, "p_tree")); 
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(1.5,1.5)
+        });
+
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11000, 0, 0 , 0, false, "p_tree_3"));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(1.5,1.5);
+            platform.setDepth(2);
+        }); 
+    
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 11900, this.game.config.height-120, 0 , 0, true, "p_marrone_lego_albero_2", 0, 100, 100)); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 12400, this.game.config.height-120, 0 , 0, true, "p_tree_2")); 
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(1.2,1.2)
+        });
+
+        //ringhiera con gradini
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 13260, this.game.config.height-220, 300 , 0, true, "p_hidden"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 13250, this.game.config.height-320, 700 , 0, false, "ringhiera")); 
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(0.5, 0.5)
+            platform.setDepth(2);
+        });  
+
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 12850, this.game.config.height-150, 200, -70, true, "p_marrone_lego_albero")); 
+
+        //albero
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 12730, 0, 0 , 0, false, "bg_tree"));
+        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2); 
+
          
 
         //platform vecchie
@@ -284,7 +338,7 @@ export default class Level1 extends Phaser.Scene {
         });
         
         //#region Posizionamento camera
-        this.cameras.main.setBounds(0, 0, 15000, 720);
+        this.cameras.main.setBounds(0, 0, 14000, 720);
         this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
         //#endregion
@@ -346,21 +400,32 @@ export default class Level1 extends Phaser.Scene {
             this.updateLives();
         }
     }
+    
 
     createFlowers() {
         /* for(let i = 0; i < 10; i++) {
             this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
         } */
 
+        
         //this.collectableFlowers.push(new FlowersGroup(this, 2, 1150, this.floorHeight - 100, 200, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 330, 220, -80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 4715, this.game.config.height-450, 0, 0, "animated_flower"));
+        
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 4655, this.game.config.height-510, 0, 0, "animated_flower"));
         
         this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
 
 
         this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
+
+        //albero doppio punzoni
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 11150, this.game.config.height-500, 400, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 11350, this.game.config.height-245, 0, 0, "animated_flower"));
+
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 12540, this.game.config.height-200, 0, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 12910, this.game.config.height-200, 200, -60, "animated_flower"));
+
         
 
         //this.staticPlatforms[idGruppo].list[idPlatform].x + this.staticPlatforms[idGruppo].list[idPlatform].width / 2
@@ -459,6 +524,8 @@ export default class Level1 extends Phaser.Scene {
         this.hill_2.x = - this.cameras.main.scrollX * 0.65;
         this.hill_3.x = - this.cameras.main.scrollX * 0.6;
         this.hill.x = - this.cameras.main.scrollX * 0.7;
+        // this.tree.x = - this.cameras.main.scrollX * 0.6;
+
         
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
