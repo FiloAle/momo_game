@@ -225,7 +225,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //#endregion
 
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
@@ -236,8 +236,8 @@ export default class Level1 extends Phaser.Scene {
 
         //platform 1 e 2 + sfondo 1 (giallo)
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 66, 0, 0, false, "sfondo_1"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-185, 250, -40, true, "p_grigio_lego_cemento"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1838, this.game.config.height-300, 0, 0, true, "platform_enorme"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-125, 250, -40, true, "p_grigio_lego_cemento"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2060, this.game.config.height-170, 0, 0, true, "platform_enorme"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3436, this.game.config.height-220, 250, 0, true, "p_hidden")); 
@@ -401,8 +401,15 @@ export default class Level1 extends Phaser.Scene {
         this.flowersBox.setScrollFactor(0, 0);
 
         this.popup_movimento = new PopUp(this, "Ciao! Ecco alcuni suggerimenti prima di iniziare la tua avventura:   \n\nPremi ⇦ e ⇨ o [A] e [D] per muoverti, \n⇧ o [W] o [BARRA SPAZIATRICE] per saltare    ", 0);
-        this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono qui per aiutarti!   \nPer raggiungere la dimora di Mastro Hora dovrai fare un lungo viaggio.   \n\nEsplora ciò che ti circonda e trova la strada più sicura.", 1);
-        this.popup_spiegazione2 = new PopUp(this, "Dovrai stare molto attenta perché i Signori Grigi hanno scoperto il nostro piano e stanno cercando di fermarti! \nLungo la strada raccogli tutti gli Orefiori che trovi \ne usali per liberare i Signori Grigi dalla loro condizione e farli tornare uomini buoni. \nNon ti daranno più la caccia!", 2);
+        this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la dimora di Mastro Hora.  \nTi aspetta un lungo viaggio: Esplora ciò che ti circonda e trova la strada più sicura.", 1);
+        this.popup_spiegazione2 = new PopUp(this, "Ehi Momo, dove scappi? Non ti ho ancora detto dei pericoli che puoi incontrare...\nDovrai stare molto attenta perché i Signori Grigi hanno scoperto il nostro piano e stanno cercando di fermarti!   \nTrova un modo per sconfiggerli o per liberarli dalla loro condizione facendoli tornare buoni.", 2);
+        this.popup_uccisione = new PopUp(this, "Ecco un Signore Grigio. Attenta, ti sta inseguendo! Se ti raggiunge perderai una vita.   \nGli OraFiori che raccoglierai durante il percorso ti aiuteranno a salvarli.   \nPremi [F] per lanciarli, ma attenta perché non te ne basterà uno solo... \nEccotene due per provare.", 3);
+        this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno X per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa. ", 4);
+
+        this.scene.pause(this);
+        this.scene.add('popup_movimento', this.popup_movimento, true);
+
+
     }
 
     update() {
@@ -430,21 +437,25 @@ export default class Level1 extends Phaser.Scene {
             this.updateLives();
         }
 
-        if(this.player.body.x > 300 && this.player.body.x < 302 && !this.popup_movimento.hasBeenDisplayed) {
-            this.scene.pause(this);
-            this.scene.add('popup_movimento', this.popup_movimento, true);
-        }
-
-        if(this.player.body.x > 860 && this.player.body.x < 862 && !this.popup_spiegazione.hasBeenDisplayed) {
+        if(this.player.body.x > 360 && this.player.body.x < 362 && !this.popup_spiegazione.hasBeenDisplayed) {
             this.scene.pause(this);
             this.scene.add('popup_spiegazione', this.popup_spiegazione, true);
         }
 
-        if(this.player.body.x > 862 && this.player.body.x < 864 && !this.popup_spiegazione2.hasBeenDisplayed && this.popup_spiegazione.hasBeenDisplayed) {
+        if(this.player.body.x > 550 && this.player.body.x < 552 && !this.popup_spiegazione2.hasBeenDisplayed && this.popup_spiegazione.hasBeenDisplayed) {
             this.scene.pause(this);
             this.scene.add('popup_spiegazione2', this.popup_spiegazione2, true);
         }
 
+        if(this.player.body.x > 840 && this.player.body.x < 842 && !this.popup_uccisione.hasBeenDisplayed ) {
+            this.scene.pause(this);
+            this.scene.add('popup_uccisione', this.popup_uccisione, true);
+        }
+
+        if(this.player.body.x > 2180 && this.player.body.x < 2182 && !this.popup_uccisione_2.hasBeenDisplayed ) {
+            this.scene.pause(this);
+            this.scene.add('popup_uccisione_2', this.popup_uccisione_2, true);
+        }
 
 
         if(this.player.x > 13765) {
@@ -455,7 +466,7 @@ export default class Level1 extends Phaser.Scene {
     
 
     createFlowers() {
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 330, 220, -80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 230, 220, -80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 4655, this.game.config.height-510, 0, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
