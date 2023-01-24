@@ -287,7 +287,7 @@ export default class Level2 extends Phaser.Scene {
         } */
         //#endregion
 
-    this.player.resize(); // Ridimensionamento hitbox
+        this.player.resize(); // Ridimensionamento hitbox
 
         this.game.gameState.lives = 3;
         const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
@@ -303,17 +303,32 @@ export default class Level2 extends Phaser.Scene {
         
         this.createFlowers();     
     
+        this.initialTime = 90;
+        this.timer = this.add.text(this.game.config.width / 2, 40, 'Countdown: ' + this.formatTime(this.initialTime), styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0);
+        // Each 1000 ms call onEvent
+        this.timerEvent = this.time.addEvent({ delay: 1000, callback: this.onTimerEvent, callbackScope: this, loop: true });
+    }
 
 
-    /*      //timer
-         this.startTime = new Date();
-         this.totalTime = 120;
-         this.timeElapsed = 0;
-         this.createTimer();
-         this.gameTimer = game.time.events.loop(100, function(){
-             this.updateTimer();
-         }); */
-
+    formatTime(seconds) {
+        // Minutes
+        let minutes = Math.floor(seconds / 60);
+        // Seconds
+        let partInSeconds = seconds % 60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2, '0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
+    }
+    
+    onTimerEvent() {
+        if(this.initialTime > 0) {
+            this.initialTime -= 1; // One second
+            this.timer.setText('Countdown: ' + this.formatTime(this.initialTime));
+        } else {
+            console.warn("HAI PERSO!");
+            this.time.removeEvent(this.timerEvent);
+        }
     }
 
 
