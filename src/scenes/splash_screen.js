@@ -108,7 +108,7 @@ export default class SplashScreen extends Phaser.Scene {
 
 
         this.playButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
-            this.scene.start("test_scene_1");
+            this.scene.start("level_1");
         });
     }
 

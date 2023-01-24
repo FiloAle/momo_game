@@ -30,7 +30,7 @@ export default class Level1 extends Phaser.Scene {
         console.log("test_scene_2 - Executing init()");
         // Definiamo l'altezza del terreno pari all'altezza del riquadro di gioco, per posizionare il giocatore sul fondo della schermata.
         this.floorHeight = this.game.config.height - 30;
-        this.worldWidth = 10000;
+        this.worldWidth = 14000;
         this.lastFlower = 0;
         this.updates = 0;
         this.lastLivesDecrement = 0;
@@ -94,13 +94,15 @@ export default class Level1 extends Phaser.Scene {
 
         console.log("test_scene_2 - Executing preload()");
        
-        //BACKGROUND, CLOUDS, CITY
+        //BACKGROUND, CLOUDS, CITY, TREE
         this.load.image("sky", "assets/images/background/bg_sky.jpg");
         this.load.image("clouds", "assets/images/background/bg_clouds.png");
         this.load.image("city", "assets/images/background/bg_city.png"); 
         this.load.image("hill_2", "assets/images/background/bg_hill.1-1.png"); 
         this.load.image("hill", "assets/images/background/bg_hill_new.png"); 
         this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
+        this.load.image("bg_tree", "assets/images/background/bg_tree.png"); 
+        
 
         //pavimento verde
         this.load.image("platform_1", "assets/images/environment_elements/pavement_up.png");
@@ -109,18 +111,18 @@ export default class Level1 extends Phaser.Scene {
         //colonne
         this.load.image("column", "assets/images/environment_elements/column.png");
 
-        //platform semplice 3D grigia
-        this.load.image("platform_3d_1", "assets/images/environment_elements/platform/base_cemento_piccola_2.png");
+        //platform cemento
+        this.load.image("p_grigio_lego_cemento", "assets/images/environment_elements/platform/p_grigio_lego_cemento.png");
         
         //platform
-        this.load.image("platform_3d_3", "assets/images/environment_elements/platform/3.png");
+        //this.load.image("p_grey_big", "assets/images/environment_elements/platform/p_grey_big.png");
 
         //platform semplice 3D marrone
-        this.load.image("platform_3d_4", "assets/images/environment_elements/platform/4.png");
+        this.load.image("p_marrone_lego", "assets/images/environment_elements/platform/p_marrone_lego.png");
         this.load.image("platform_3d_4_2", "assets/images/environment_elements/platform/4_2.png");
         
         //platform_3d_bordeaux e hidden 1
-        this.load.image("platform_3d_5", "assets/images/environment_elements/platform/5.png");
+        this.load.image("p_rossa_lego_2", "assets/images/environment_elements/platform/p_rossa_lego.png");
         this.load.image("p_hidden", "assets/images/environment_elements/platform/p_hidden.png");
 
         //hidden 2
@@ -129,7 +131,7 @@ export default class Level1 extends Phaser.Scene {
         //camini
         this.load.image("platform_3d_6", "assets/images/environment_elements/platform/7.png");
         this.load.image("platform_3d_7", "assets/images/environment_elements/platform/8-9.png");
-        this.load.image("platform_3d_14", "assets/images/environment_elements/platform/base_mattoni_piccola.png");
+        this.load.image("p_grigio_lego", "assets/images/environment_elements/platform/p_grigio_lego.png");
 
         //pezzo di gru gialla
         this.load.image("platform_3d_8", "assets/images/environment_elements/platform/10.png");
@@ -137,17 +139,28 @@ export default class Level1 extends Phaser.Scene {
 
         //gru gialla intera
         this.load.image("p_gru", "assets/images/environment_elements/platform/p_gru.png");
+        this.load.image("p_cemento_grande", "assets/images/environment_elements/platform/base_cemento_grande_2.png");
+        this.load.image("p_giallo_lego", "assets/images/environment_elements/platform/p_giallo_lego.png");
 
-        //gru grigie
-        this.load.image("p_torretta_1", "assets/images/environment_elements/platform/p_torretta1.png");
-        this.load.image("p_torretta_2", "assets/images/environment_elements/platform/p_torretta2.png");
-        this.load.image("p_torretta_3", "assets/images/environment_elements/platform/p_torretta3.png");
-        this.load.image("platform_3d_16", "assets/images/environment_elements/platform/base_metallo_piccola.png");
-        
         //torretta
         this.load.image("p_torre", "assets/images/environment_elements/platform/p_torre.png");
         this.load.image("p_torre_bg", "assets/images/environment_elements/platform/15_bg.png");
 
+        this.load.image("p_beige_lego", "assets/images/environment_elements/platform/p_beige_lego.png");
+        this.load.image("p_beige_lego_2", "assets/images/environment_elements/platform/beige_lego_2.png");
+
+        //rami albero
+        this.load.image("p_tree", "assets/images/environment_elements/platform/p_tree.png");
+        this.load.image("p_tree_2", "assets/images/environment_elements/platform/p_tree_2.png");
+        this.load.image("p_tree_3", "assets/images/environment_elements/platform/p_tree_3.png");
+
+        this.load.image("p_marrone_lego_albero", "assets/images/environment_elements/platform/p_marrone_lego_albero.png");
+        this.load.image("p_marrone_lego_albero_2", "assets/images/environment_elements/platform/p_marrone_lego_albero_2.png");
+        this.load.image("ringhiera", "assets/images/environment_elements/platform/ringhiera.png");
+        
+
+
+        
         //sfondi platform
         this.load.image("sfondo_1", "assets/images/environment_elements/buildings/bld_1.png");
         this.load.image("sfondo_2", "assets/images/environment_elements/buildings/bld_2.png");
@@ -185,34 +198,35 @@ export default class Level1 extends Phaser.Scene {
         this.nuvole = this.add.image(0, 0, "clouds");
         this.nuvole.setOrigin(0, 0);
         this.nuvole.setScrollFactor(0, 0);
+
+     /*    this.tree = this.add.image(0, 0, "bg_tree");
+        this.tree.setOrigin(7000, 0);
+        this.tree.setScrollFactor(0, 0); */
+    
         //#endregion
 
         this.isCameraFollowingPlayer = false;
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 7000, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight-500, this.worldWidth));
         //#endregion
 
         //colonne inizio 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 0, 400, 116, 0, false, "column"));
 
-        //platform grigia piccola tutorial
-        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 800, this.game.config.height-210, 250, 0, true, "platform_3d_1"));
-
         //platform 1 e 2 + sfondo 1 (giallo)
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 66, 0, 0, false, "sfondo_1"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-185, 250, -40, true, "platform_3d_1"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2038, this.game.config.height-240, 0, 0, true, "platform_3d_3"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-185, 250, -40, true, "p_grigio_lego_cemento"));
+        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1838, this.game.config.height-300, 0, 0, true, "p_grey_big"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3436, this.game.config.height-220, 250, 0, true, "p_hidden")); 
-        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3200, this.game.config.height-220, 0, 0, true, "platform_3d_4"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3400, 310, 0, 0, false, "sfondo_2"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3648, this.game.config.height-415, 0, 0, true, "platform_3d_5"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3610, this.game.config.height-428, 0, 0, true, "p_rossa_lego_2"));
         
         //platform mobile prima del ponte
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 4150, this.game.config.height-180, 0, 0, true, "platform_3d_4",1, -180, 150));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 4150, this.game.config.height-180, 0, 0, true, "p_marrone_lego",1, -180, 150));
         
         //gru e platform grigia lunga dietro
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 4366, this.game.config.height-400, 100, 0, true, "p_hidden_2"));
@@ -221,36 +235,70 @@ export default class Level1 extends Phaser.Scene {
 
         //casa con camini
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5123, this.game.config.height-230, 0, 0, true, "platform_3d_7", 1, -100, 80));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5098, this.game.config.height-260, 0, 0, true, "platform_3d_14", 1, -100, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5098, this.game.config.height-260, 0, 0, true, "p_grigio_lego", 1, -100, 80));
 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5345, this.game.config.height-380, 0, 0, true, "platform_3d_6",1, 120, 80));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5334, this.game.config.height-390, 0, 0, true, "platform_3d_14",1, 120, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5334, this.game.config.height-390, 0, 0, true, "p_grigio_lego",1, 120, 80));
 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5552, this.game.config.height-230, 0, 0, true, "platform_3d_7", 1, -100, 80));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5528, this.game.config.height-260, 0, 0, true, "platform_3d_14", 1, -100, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5528, this.game.config.height-260, 0, 0, true, "p_grigio_lego", 1, -100, 80));
         
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5050, 535, 0, 0, false, "sfondo_4"));
 
         //gru che va su e giù e gru gialla statica
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5800, this.game.config.height-570, 0, 0, true, "platform_3d_4", 1, 130, 200));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 6125, this.game.config.height-125, 100, 0, true, "p_hidden_2"));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5800, this.game.config.height-570, 0, 0, true, "p_marrone_lego", 1, 130, 200));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 6115, this.game.config.height-125, 100, 0, true, "p_hidden_2"));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(1.25,1.25)
+        });
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5900, this.game.config.height-200, 0, 0, false, "p_gru"));
         this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2);
-        
-        //this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 5790, this.game.config.height-380, 120, 0, true, "platform_3d_15", 1, 70, 100));
 
-        //3 gru grigie in movimento
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-250, 0, 0, true, "p_torretta_1",1, 50, 80));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, this.game.config.height-270, 0, 0, true, "platform_3d_16",1, 50, 80));
-
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7100, this.game.config.height-160, 0, 0, true, "p_torretta_2", 1, -70, 100));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 7420, this.game.config.height-140, 0, 0, true, "p_torretta_3", 1, -80, 90));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 6250, 170, 400, 0, true, "p_giallo_lego"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 6050, 320, 400, 0, true, "p_giallo_lego"));
 
         //torretta
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7605, this.game.config.height-10, 0, 0, true, "platform_3d_4_2")); 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7620, this.game.config.height-360, 0, 0, false, "p_torre_bg")); 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-380, 0, 0, false, "p_torre"));
         this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2);
+
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6800, this.game.config.height-150, 300, 0, true, "p_beige_lego_2", 0, 130, 260));
+
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 30, 7600, this.game.config.height, 200 , 0, true, "p_beige_lego_2")); 
+
+        //piattaforme albero
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11000, this.game.config.height-200, 200 , 0, true, "p_tree")); 
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(1.5,1.5)
+        });
+
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11000, 0, 0 , 0, false, "p_tree_3"));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(1.5,1.5);
+            platform.setDepth(2);
+        }); 
+    
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 11900, this.game.config.height-120, 0 , 0, true, "p_marrone_lego_albero_2", 0, 100, 100)); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 12400, this.game.config.height-120, 0 , 0, true, "p_tree_2")); 
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(1.2,1.2)
+        });
+
+        //ringhiera con gradini
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 13260, this.game.config.height-220, 300 , 0, true, "p_hidden"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 13250, this.game.config.height-320, 700 , 0, false, "ringhiera")); 
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setScale(0.5, 0.5)
+            platform.setDepth(2);
+        });  
+
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 12850, this.game.config.height-150, 200, -70, true, "p_marrone_lego_albero")); 
+
+        //albero
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 12730, 0, 0 , 0, false, "bg_tree"));
+        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2); 
+
          
 
         //platform vecchie
@@ -286,7 +334,7 @@ export default class Level1 extends Phaser.Scene {
         });
         
         //#region Posizionamento camera
-        this.cameras.main.setBounds(0, 0, 15000, 720);
+        this.cameras.main.setBounds(0, 0, 14000, 720);
         this.cameras.main.startFollow(this.player); // Posizione camera centrata su player, inizia follow quando arriva a metà schermata
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
         //#endregion
@@ -348,21 +396,32 @@ export default class Level1 extends Phaser.Scene {
             this.updateLives();
         }
     }
+    
 
     createFlowers() {
         /* for(let i = 0; i < 10; i++) {
             this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
         } */
 
+        
         //this.collectableFlowers.push(new FlowersGroup(this, 2, 1150, this.floorHeight - 100, 200, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 330, 220, -80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 4715, this.game.config.height-450, 0, 0, "animated_flower"));
+        
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 4655, this.game.config.height-510, 0, 0, "animated_flower"));
         
         this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
 
 
         this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
+
+        //albero doppio punzoni
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 11150, this.game.config.height-500, 400, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 11350, this.game.config.height-245, 0, 0, "animated_flower"));
+
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 12540, this.game.config.height-200, 0, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 12910, this.game.config.height-200, 200, -60, "animated_flower"));
+
         
 
         //this.staticPlatforms[idGruppo].list[idPlatform].x + this.staticPlatforms[idGruppo].list[idPlatform].width / 2
@@ -461,6 +520,8 @@ export default class Level1 extends Phaser.Scene {
         this.hill_2.x = - this.cameras.main.scrollX * 0.65;
         this.hill_3.x = - this.cameras.main.scrollX * 0.6;
         this.hill.x = - this.cameras.main.scrollX * 0.7;
+        // this.tree.x = - this.cameras.main.scrollX * 0.6;
+
         
         //this.cameras.main.y = - (this.player.body.y / 2) + 250;
         //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
