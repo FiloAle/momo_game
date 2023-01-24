@@ -126,6 +126,7 @@ export default class Level1 extends Phaser.Scene {
         //platform semplice 3D marrone
         this.load.image("p_marrone_lego", "assets/images/environment_elements/platform/p_marrone_lego.png");
         this.load.image("platform_3d_4_2", "assets/images/environment_elements/platform/4_2.png");
+        this.load.image("platform_enorme", "assets/images/environment_elements/platform/platform_enorme.png");
         
         //platform_3d_bordeaux e hidden 1
         this.load.image("p_rossa_lego_2", "assets/images/environment_elements/platform/p_rossa_lego.png");
@@ -227,7 +228,7 @@ export default class Level1 extends Phaser.Scene {
         this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight-500, this.worldWidth));
         //#endregion
 
-        this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 500, y: this.floorHeight}, {x: 4600, y: 320}];
+        this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
         this.lastCheckpoint = this.checkpoints[0];
 
         //colonne inizio 
@@ -236,7 +237,7 @@ export default class Level1 extends Phaser.Scene {
         //platform 1 e 2 + sfondo 1 (giallo)
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 66, 0, 0, false, "sfondo_1"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-185, 250, -40, true, "p_grigio_lego_cemento"));
-        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1838, this.game.config.height-300, 0, 0, true, "p_grey_big"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1838, this.game.config.height-300, 0, 0, true, "platform_enorme"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3436, this.game.config.height-220, 250, 0, true, "p_hidden")); 
@@ -399,7 +400,9 @@ export default class Level1 extends Phaser.Scene {
         this.flowersBox.setOrigin(1, 0);
         this.flowersBox.setScrollFactor(0, 0);
 
-        this.popup1 = new PopUp(this, "Ciao Momo, sono qui per aiutarti!   \nPer raggiungere la dimora di Mastro Hora dovrai fare un lungo viaggio.   \n\nEsplora ciò che ti circonda e trova la strada più sicura.", 0);
+        this.popup_movimento = new PopUp(this, "Ciao! Ecco alcuni suggerimenti prima di iniziare la tua avventura:   \n\nPremi ⇦ e ⇨ o [A] e [D] per muoverti, \n⇧ o [W] o [BARRA SPAZIATRICE] per saltare    ", 0);
+        this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono qui per aiutarti!   \nPer raggiungere la dimora di Mastro Hora dovrai fare un lungo viaggio.   \n\nEsplora ciò che ti circonda e trova la strada più sicura.", 1);
+        this.popup_spiegazione2 = new PopUp(this, "Dovrai stare molto attenta perché i Signori Grigi hanno scoperto il nostro piano e stanno cercando di fermarti! \nLungo la strada raccogli tutti gli Orefiori che trovi \ne usali per liberare i Signori Grigi dalla loro condizione e farli tornare uomini buoni. \nNon ti daranno più la caccia!", 2);
     }
 
     update() {
@@ -427,10 +430,22 @@ export default class Level1 extends Phaser.Scene {
             this.updateLives();
         }
 
-        if(this.player.body.x > 300 && this.player.body.x < 302 && !this.popup1.hasBeenDisplayed) {
+        if(this.player.body.x > 300 && this.player.body.x < 302 && !this.popup_movimento.hasBeenDisplayed) {
             this.scene.pause(this);
-            this.scene.add('popup1', this.popup1, true);
+            this.scene.add('popup_movimento', this.popup_movimento, true);
         }
+
+        if(this.player.body.x > 860 && this.player.body.x < 862 && !this.popup_spiegazione.hasBeenDisplayed) {
+            this.scene.pause(this);
+            this.scene.add('popup_spiegazione', this.popup_spiegazione, true);
+        }
+
+        if(this.player.body.x > 862 && this.player.body.x < 864 && !this.popup_spiegazione2.hasBeenDisplayed && this.popup_spiegazione.hasBeenDisplayed) {
+            this.scene.pause(this);
+            this.scene.add('popup_spiegazione2', this.popup_spiegazione2, true);
+        }
+
+
 
         if(this.player.x > 13765) {
             this.scene.start('level_2');
@@ -597,7 +612,7 @@ export default class Level1 extends Phaser.Scene {
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
 
             this.player.x = this.lastCheckpoint.x;
-            this.player.y = this.lastCheckpoint.y - 20;
+            this.player.y = this.lastCheckpoint.y - 30;
         }
 
         if(this.game.gameState.lives == 0) {
