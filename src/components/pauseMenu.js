@@ -23,7 +23,7 @@ export default class PauseMenu extends Phaser.Scene {
 
     create() {
         // Posizioniamo gli elementi nella scena
-        this.background = this.add.image(0, 0, "pauseBG");
+        this.background = this.add.image(0, 0, "pauseBG").setAlpha(0.8);
         this.background.setOrigin(0,0);
 
         //creo una immagine per il bottone

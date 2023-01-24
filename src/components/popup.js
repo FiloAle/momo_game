@@ -7,7 +7,7 @@ export default class PopUp extends Phaser.Scene {
     constructor(originScene, message, id) {
         super("popup_" + id);
         this.originScene = originScene;
-        this.message = message;
+        this.message = message + "\n\nPremi [ESC] o [I] per continuare.";
         this.hasBeenDisplayed = false;
     }
 
@@ -21,10 +21,11 @@ export default class PopUp extends Phaser.Scene {
     }
 
     create() {
-        this.img = this.add.image(0, 0, "popup").setOrigin(0, 0);
-        this.add.image(122, 80, "cassiopea");
+        this.img = this.add.image(0, -20, "popup").setOrigin(0, 0);
+        this.add.image(122, 96, "cassiopea");
         this.img.flipX = true;
         this.keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
+        this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
         const styleConfig = { color: '#000000', fontFamily: 'Montserrat', fontSize: 18 };
 
@@ -34,7 +35,7 @@ export default class PopUp extends Phaser.Scene {
     }
 
     update() {
-        if(this.keyI.isDown) {
+        if(this.keyESC.isDown || this.keyI.isDown) {
             this.scene.resume(this.originScene);
             this.scene.remove(this);
         }

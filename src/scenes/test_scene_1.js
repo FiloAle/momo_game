@@ -22,6 +22,8 @@ export default class TestScene1 extends Phaser.Scene {
     movingPlatforms;
     staticPlatforms;
     flowersCounter;
+    checkpoints;
+    lastCheckpoint;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -50,7 +52,7 @@ export default class TestScene1 extends Phaser.Scene {
 
         var progressBar = this.add.graphics();
         var progressBox = this.add.graphics();
-        var flowerLoading = this.add.tileSprite(width - 100, height - 70, 150, 150, "animated_flower");
+        this.add.tileSprite(width - 100, height - 70, 150, 150, "animated_flower");
         progressBox.fillStyle(0x222222, 0.8);
         progressBox.fillRect(width / 2 - 160, 270, 320, 50);
         
@@ -207,8 +209,11 @@ export default class TestScene1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //#endregion
+
+        this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 500, y: this.floorHeight}, {x: 4600, y: 320}];
+        this.lastCheckpoint = this.checkpoints[0];
 
         //colonne inizio 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 0, 400, 116, 0, false, "column"));
@@ -321,6 +326,37 @@ export default class TestScene1 extends Phaser.Scene {
         this.flowersBox.setScrollFactor(0, 0);
 
         this.popup1 = new PopUp(this, "Ciao Momo, sono qui per aiutarti!   \nPer raggiungere la dimora di Mastro Hora dovrai fare un lungo viaggio.   \n\nEsplora ciò che ti circonda e trova la strada più sicura.", 0);
+        
+        this.initialTime = 90;
+        this.timer = this.add.text(this.game.config.width / 2, 40, 'Countdown: ' + this.formatTime(this.initialTime), styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0);
+        // Each 1000 ms call onEvent
+        this.timerEvent = this.time.addEvent({ delay: 1000, callback: this.onTimerEvent, callbackScope: this, loop: true });
+
+        this.lifeBox.setDepth(2);
+        this.timer.setDepth(2);
+        this.pauseButton.setDepth(2);
+        this.flowersBox.setDepth(2);
+    }
+
+    formatTime(seconds) {
+        // Minutes
+        let minutes = Math.floor(seconds / 60);
+        // Seconds
+        let partInSeconds = seconds % 60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2, '0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
+    }
+    
+    onTimerEvent() {
+        if(this.initialTime > 0) {
+            this.initialTime -= 1; // One second
+            this.timer.setText('Countdown: ' + this.formatTime(this.initialTime));
+        } else {
+            console.warn("HAI PERSO!");
+            this.time.removeEvent(this.timerEvent);
+        }
     }
 
     update() {
@@ -331,9 +367,21 @@ export default class TestScene1 extends Phaser.Scene {
         this.manageFlowersOverlap();
         this.manageEnemies();
         this.updateMovingPlatforms();
+        this.managePlatformsOverlap();
         
-        if(this.player.body.y > this.game.config.height) {
-            this.player.die();
+
+        if(this.updates % 60 == 0) {
+            console.log(this.player.x + " " + this.player.y);
+        }
+
+        for(let i = 0; this.checkpoints.length > 0 && i < this.checkpoints.length; i++) {
+            if(this.player.x > this.checkpoints[i].x) {
+                this.lastCheckpoint = this.checkpoints[i];
+                this.checkpoints.splice(i, 1);
+            }
+        }
+        
+        if(this.player.y > this.game.config.height) {
             this.updateLives();
         }
 
@@ -356,6 +404,28 @@ export default class TestScene1 extends Phaser.Scene {
         for(let i = 0; i < this.collectableFlowers.length; i++) {
             for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
                 this.collectableFlowers[i].list[k].body.setAllowGravity(false);
+            }
+        }
+    }
+
+    managePlatformsOverlap() {
+        for(let i = 0; i < this.staticPlatforms.length; i++) {
+            if(this.staticPlatforms[i].damaging) {
+                for(let k = 0; k < this.staticPlatforms[i].list.length; k++) {
+                    if(Phaser.Geom.Intersects.RectangleToRectangle(this.staticPlatforms[i].list[k].body, this.player.body)) {
+                        this.updateLives();
+                    }
+                }
+            }
+        }
+
+        for(let i = 0; i < this.movingPlatforms.length; i++) {
+            if(this.movingPlatforms[i].damaging) {
+                for(let k = 0; k < this.movingPlatforms[i].list.length; k++) {
+                    if(Phaser.Geom.Intersects.RectangleToRectangle(this.movingPlatforms[i].list[k].body, this.player.body)) {
+                        this.updateLives();
+                    }
+                }
             }
         }
     }
@@ -403,7 +473,6 @@ export default class TestScene1 extends Phaser.Scene {
             if(this.uominiGrigi[i] != undefined) {
                 if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
                     this.uominiGrigi[i].cure(this.flower);
-                    console.warn(this.uominiGrigi[i]);
                     this.isFlowerActive = false;
                 }
             }
@@ -473,6 +542,9 @@ export default class TestScene1 extends Phaser.Scene {
 
             this.game.gameState.lives--;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+
+            this.player.x = this.lastCheckpoint.x;
+            this.player.y = this.lastCheckpoint.y - 20;
         }
 
         if(this.game.gameState.lives == 0) {

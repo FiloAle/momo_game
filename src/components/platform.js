@@ -4,9 +4,10 @@ export default class Platform extends Phaser.GameObjects.Sprite {
     img;
     velocity;
     direction;
+    damaging;
     width;
 
-    constructor(scene, x, y, solid, img, direction, velocity) {
+    constructor(scene, x, y, solid, img, direction, velocity, damaging) {
         super(scene, x, y, img);
         this.solid = solid;
         this.x = x;
@@ -14,6 +15,7 @@ export default class Platform extends Phaser.GameObjects.Sprite {
         this.img = img;
         this.direction = direction;
         this.velocity = velocity;
+        this.damaging = damaging;
         this.width = scene.textures.get(img).getSourceImage().width;
 
         scene.add.existing(this);
@@ -38,11 +40,13 @@ export default class Platform extends Phaser.GameObjects.Sprite {
     }
 
     updateMovement() {
-        this.velocity = -this.velocity;
-        if(this.direction == 0) {
-            this.body.setVelocity(this.velocity, 0);
-        } else {
-            this.body.setVelocity(0, this.velocity);
+        if(this.velocity != 0) {
+            this.velocity = -this.velocity;
+            if(this.direction == 0) {
+                this.body.setVelocity(this.velocity, 0);
+            } else {
+                this.body.setVelocity(0, this.velocity);
+            }
         }
     }
 }
