@@ -61,13 +61,24 @@ export default class SplashScreen extends Phaser.Scene {
         this.playButton.setOrigin(0.5, 0.5);
         this.playButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
 
+        this.playLED = this.add.image(160, this.game.config.height / 2 + 100, "playLED").setVisible(false);
+        this.playButton.setOrigin(0.5, 0.5);
+
+
         this.storyButton = this.add.image(360, this.game.config.height / 2 + 100, "storyButton");
         this.storyButton.setOrigin(0.5, 0.5);
         this.storyButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
 
+        this.storyLED = this.add.image(360, this.game.config.height / 2 + 100, "storyLED").setVisible(false);
+        this.storyButton.setOrigin(0.5, 0.5);
+
+
         this.creditsButton = this.add.image(560, this.game.config.height / 2 + 100, "creditsButton");
         this.creditsButton.setOrigin(0.5, 0.5);
         this.creditsButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
+
+        this.creditsLED = this.add.image(560, this.game.config.height / 2 + 100, "creditsLED").setVisible(false);
+        this.creditsLED.setOrigin(0.5, 0.5);
 
 
 
@@ -75,32 +86,29 @@ export default class SplashScreen extends Phaser.Scene {
 
 
         this.playButton.on("pointerover", () => { //quando viene clickato il bottone succedono cose
-            this.playLED = this.add.image(160, this.game.config.height / 2 + 100, "playLED");
-            this.playButton.setOrigin(0.5, 0.5);
+            this.playLED.setVisible(true);
         });
         this.playButton.on("pointerout", () => { //quando viene clickato il bottone succedono cose
-            this.playLED.destroy(true);
+            this.playLED.setVisible(false);
         });
 
         this.storyButton.on("pointerover", () => {
-            this.storyLED = this.add.image(360, this.game.config.height / 2 + 100, "storyLED");
-            this.storyButton.setOrigin(0.5, 0.5);
+            this.storyLED.setVisible(true);
         });
         this.storyButton.on("pointerout", () => { //quando viene clickato il bottone succedono cose
-            this.storyLED.destroy(true);
+            this.storyLED.setVisible(false);
         });
 
         this.creditsButton.on("pointerover", () => {
-            this.creditsLED = this.add.image(560, this.game.config.height / 2 + 100, "creditsLED");
-            this.creditsLED.setOrigin(0.5, 0.5);
+            this.creditsLED.setVisible(true);
         });
         this.creditsButton.on("pointerout", () => { //quando viene clickato il bottone succedono cose
-            this.creditsLED.destroy(true);
+            this.creditsLED.setVisible(false);
         });
 
 
         this.playButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
-            this.scene.start("level_1");
+            this.scene.start("test_scene_1");
         });
     }
 

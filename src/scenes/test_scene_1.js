@@ -4,6 +4,8 @@ import FlowersGroup from "../components/flowersGroup.js";
 import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
 import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
+import PopUp from "../components/popup.js";
+import PauseMenu from "../components/pauseMenu.js";
 
 export default class TestScene1 extends Phaser.Scene {
 
@@ -154,6 +156,8 @@ export default class TestScene1 extends Phaser.Scene {
         this.load.image("sfondo_2", "assets/images/environment_elements/buildings/bld_2.png");
         this.load.image("sfondo_3", "assets/images/environment_elements/buildings/building_3.png");
         this.load.image("sfondo_4", "assets/images/environment_elements/buildings/bld_4.png");
+
+        this.load.image("pause", "assets/UI/pause_button.png");
     }
 
     create() {
@@ -187,6 +191,17 @@ export default class TestScene1 extends Phaser.Scene {
         this.nuvole.setOrigin(0, 0);
         this.nuvole.setScrollFactor(0, 0);
         //#endregion
+
+        this.pauseButton = this.add.image(this.game.config.width / 2, 20, "pause");
+        this.pauseButton.setOrigin(0.5, 0);
+        this.pauseButton.setScrollFactor(0, 0);
+        this.pauseButton.setInteractive({ useHandCursor: true });
+
+        this.pauseButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
+            this.pauseMenu = new PauseMenu(this);
+            this.scene.pause(this);
+            this.scene.add('pause_menu', this.pauseMenu, true);
+        });
 
         this.isCameraFollowingPlayer = false;
 
@@ -304,6 +319,8 @@ export default class TestScene1 extends Phaser.Scene {
         this.flowersBox = this.add.text(this.cameras.main.width - 50, 40, "Flowers: " + (this.flowersCounter + 2) + "/11", styleConfig);
         this.flowersBox.setOrigin(1, 0);
         this.flowersBox.setScrollFactor(0, 0);
+
+        this.popup1 = new PopUp(this, "Ciao Momo, sono qui per aiutarti!   \nPer raggiungere la dimora di Mastro Hora dovrai fare un lungo viaggio.   \n\nEsplora ciò che ti circonda e trova la strada più sicura.", 0);
     }
 
     update() {
@@ -318,6 +335,11 @@ export default class TestScene1 extends Phaser.Scene {
         if(this.player.body.y > this.game.config.height) {
             this.player.die();
             this.updateLives();
+        }
+
+        if(this.player.body.x > 300 && this.player.body.x < 302 && !this.popup1.hasBeenDisplayed) {
+            this.scene.pause(this);
+            this.scene.add('popup1', this.popup1, true);
         }
     }
 
