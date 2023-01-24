@@ -135,7 +135,7 @@ export default class Level1 extends Phaser.Scene {
 
         //pezzo di gru gialla
         this.load.image("platform_3d_8", "assets/images/environment_elements/platform/10.png");
-        this.load.image("platform_3d_15", "assets/images/environment_elements/platform/base_giallo_grande.png");
+        //this.load.image("platform_3d_15", "assets/images/environment_elements/platform/base_giallo_grande.png");
 
         //gru gialla intera
         this.load.image("p_gru", "assets/images/environment_elements/platform/p_gru.png");
@@ -354,7 +354,7 @@ export default class Level1 extends Phaser.Scene {
         //#region Creazione nemici
         this.uominiGrigi = [];
         for(let i = 0; i < 1; i++) {
-            this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 600, this.player.y, "grigi")));
+            this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 600, this.player.y, 0, "grigi")));
             this.uominiGrigi[i].body.allowGravity = true;
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
             for(let k = 0; k < this.pavements.length; k++) {

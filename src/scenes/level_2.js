@@ -48,7 +48,7 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("nuvole", "assets/images/background/nuvole.png"); 
 
         this.load.image("platform_verde_1", "assets/images/environment_elements/old/platform_verde_1.png");
-        this.load.image("platform_verde_corto", "assets/images/environment_elements/old/platform_verde_2.png");
+        this.load.image("platform_verde_corto", "assets/images/environment_elements/platform/level_2/p_cassetto.png");
         this.load.image("platform_verde_lungo", "assets/images/environment_elements/old/platform_verde_3.png");
         this.load.image("platform_1", "assets/images/environment_elements/old/platform_1.png");
         this.load.image("platform_grigia_1", "assets/images/environment_elements/old/platform_grigia_1.png");
@@ -57,10 +57,10 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("platform_base_1", "assets/images/environment_elements/pavement.png");
 
         //DEFINITIVE
-        this.load.image("p.dune_1", "assets/images/environment_elements/platform/level_2/p.dune_1.png");
+        this.load.image("p.dune_1", "assets/images/environment_elements/platform/level_2/dune.2.png");
         //this.load.image("p_torre_basso", "assets/images/environment_elements/platform/level_2/p_torre_basso.png");
         //this.load.image("p_torre_media", "assets/images/environment_elements/platform/level_2/p_torre_media.png");
-        this.load.image("p_torre_lunga", "assets/images/environment_elements/platform/level_2/p_torre_lunga.png");
+        this.load.image("p_torre_lunga", "assets/images/environment_elements/platform/level_2/p_dune.grande.png");
         this.load.image("p_torretta", "assets/images/environment_elements/platform/level_2/p_torretta.png");
         this.load.image("p_2verde_lego", "assets/images/environment_elements/platform/level_2/p_2verde_lego.png");
         this.load.image("p_torre2", "assets/images/environment_elements/platform/level_2/p_torre2.png");
@@ -85,11 +85,7 @@ export default class Level2 extends Phaser.Scene {
         
         this.load.image("b_finestre", "assets/images/environment_elements/platform/level_2/b_finestre.png");
         this.load.image("p_pilastro", "assets/images/environment_elements/platform/level_2/p_pilastro.png");
-
-        this.load.image("p_balaustra_scala_hidden", "assets/images/environment_elements/platform/level_2/p_balaustra_scala_hidden.png");
-        this.load.image("p_balaustra_hidden", "assets/images/environment_elements/platform/level_2/p_balaustra_hidden.png");
-        this.load.image("p_balaustra_scala", "assets/images/environment_elements/platform/level_2/p_balaustra_scala.png");
-        this.load.image("p_balaustra", "assets/images/environment_elements/platform/level_2/p_balaustra.png");
+        
 
         this.load.image("p_mattoncini", "assets/images/environment_elements/platform/level_2/mattoncini.png");
         
@@ -140,11 +136,11 @@ export default class Level2 extends Phaser.Scene {
        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
         platform.setScale(1.9, 1);
         });
-       this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2500, this.game.config.height - 570, 0, -0, false, 'p_torre_lunga'));
+       this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2645, this.game.config.height - 570, 0, -0, false, 'p_torre_lunga'));
        this.player.setDepth(2); 
         
         //4 DUNE
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2144, 180, 0, 0, false, 'p.dune_1'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1920, 180, 0, 0, false, 'p.dune_1'));
         /* this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1900, this.game.config.height - 335, 475, 0, false, 'p_torre_media'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1956, this.game.config.height - 205, 0, 0, false, 'p_torre_basso')); */
 
@@ -172,10 +168,10 @@ export default class Level2 extends Phaser.Scene {
         //this.staticPlatforms.push(new StaticPlatformsGroup(this, 8, 4390, this.game.config.height - 170, 155, 0, true, 'p_2beige_lego'));
 
         //this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4446, this.game.config.height - 450, 460, 0, true, 'p_column_hora_2'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4456, this.game.config.height - 300, 460, 0, true, 'p_2beige_lego'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4670, this.game.config.height - 320, 460, 0, true, 'p_2beige_lego'));
         
        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 4700, this.game.config.height - 550, 450, 0, true, 'p_column_hora_2'));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4610, this.game.config.height - 450, 450, 0, true, 'p_2beige_lego',0, 60, 150)); 
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 4600, this.game.config.height - 450, 450, 0, true, 'p_2beige_lego',0, 400, 150)); 
 
         //
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5700, this.game.config.height - 220, 0, 0, true, 'p_neutral_beige'));
@@ -198,7 +194,7 @@ export default class Level2 extends Phaser.Scene {
         //INGRESSO BANCA
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 7500, 348, 250, -160, true, 'p_balaustra_scala_hidden'));
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
-            platform.setScale(0.75, 0.75);
+            platform.setScale(0.88, 0.88);
         });
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7238, 0, 0, 0, false, "p_entrata_banca"));
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
@@ -206,9 +202,10 @@ export default class Level2 extends Phaser.Scene {
             platform.setDepth(2);
 
         });
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7230, 550, 0, 0, true, 'p_base_banca'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7238, 550, 0, 0, true, 'p_base_banca'));
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
-            platform.setDepth(2);
+            platform.setScale(0.88, 1);
+            platform.setDepth(1);
 
         });
         //pavimento banca
@@ -260,6 +257,7 @@ export default class Level2 extends Phaser.Scene {
 
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8470, 575, 0, 0,true, 'platform_verde_corto', 0, 100, 100));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8900, 525, 0, 0, true,'platform_verde_corto', 0, -100, 100));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 9100, 480, 0, 0, true,'platform_verde_corto', 1, 100, 60));
@@ -343,7 +341,7 @@ export default class Level2 extends Phaser.Scene {
             this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
         } */
 
-        //this.collectableFlowers.push(new FlowersGroup(this, 2, 1035, this.floorHeight - 35, 100, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1535, this.floorHeight - 35, 100, 0, "animated_flower"));
         
         //rombo platform
         this.collectableFlowers.push(new FlowersGroup(this, 2, 2115, this.game.config.height - 430, 470, -0, "animated_flower"));
