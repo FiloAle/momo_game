@@ -43,6 +43,16 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
             repeat: -1
         });
 
+        this.anims.create({
+            key: "curedEnemy",
+            frames: this.anims.generateFrameNumbers(this.img, {
+                start: 20,
+                end: 59,
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+
         this.anims.play("enemyStop");
     }
 
@@ -72,21 +82,20 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     manageAnimations() {
-        if(this.velocity == 75) {
+        if(this.velocity == 75 && this.anims.currentAnim.key == "enemyMove") {
             this.anims.msPerFrame = 60;
         }
 
         const curr_anim = this.anims.currentAnim.key;   // Otteniamo il nome dell'animazione corrente
 
-        if (this.body.velocity.x == 0 || this.body.touching.left || this.body.touching.right) {
+        if((this.body.velocity.x == 0 || this.body.touching.left || this.body.touching.right) && this.isEvil) {
             this.anims.play("enemyStop");
         } else {
             if (curr_anim != "enemyMove") {
                 this.anims.play("enemyMove");
             }
-
             this.flipX = this.body.velocity.x < 0;
-        }
+        } 
     }
 
     followPlayer() {
@@ -98,12 +107,15 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(-this.velocity);
         }
 
-        this.manageAnimations();
+        if(this.isEvil) {
+            this.manageAnimations();
+        }
     }
 
     cure(f) {
         if(--this.lives == 0) {
             this.isEvil = false;
+            this.anims.play("curedEnemy");
         }
         this.velocity = 75;
         f.destroy();

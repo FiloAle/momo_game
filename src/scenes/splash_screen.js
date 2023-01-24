@@ -27,7 +27,7 @@ export default class SplashScreen extends Phaser.Scene {
             frameWidth:  280,
             frameHeight: 258,
         };
-        this.load.spritesheet("grigi", "assets/images/characters/grigi.png", grigi_spritesheet_config);
+        this.load.spritesheet("grigi", "assets/images/characters/grigi1.png", grigi_spritesheet_config);
 
         const flower_spritesheet_config = {
             frameWidth:  150,
