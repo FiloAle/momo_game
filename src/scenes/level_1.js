@@ -181,6 +181,8 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("pauseLED", "assets/UI/pause_button_LED.png");
         this.load.image("flowers_box", "assets/UI/flowers_box.png");
         this.load.image("flowers_icon", "assets/UI/flower.png");
+
+        this.load.image("punzoni", "assets/images/environment_elements/platform/level_2/punzoni.png");
     }
 
     create() {
@@ -224,7 +226,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 10000, this.floorHeight, this.worldWidth));
         //#endregion
 
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
@@ -236,7 +238,7 @@ export default class Level1 extends Phaser.Scene {
         //platform 1 e 2 + sfondo 1 (giallo)
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1700, 66, 0, 0, false, "sfondo_1"));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1570, this.game.config.height-125, 250, -40, true, "p_grigio_lego_cemento"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2060, this.game.config.height-170, 0, 0, true, "platform_enorme"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 2060, this.game.config.height-250, 0, 0, true, "platform_enorme"));
         
         //platform marrone piccola + sfondo 2 (marrone) + platform bordeaux
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3436, this.game.config.height-220, 250, 0, true, "p_hidden")); 
@@ -281,7 +283,7 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 7600, this.game.config.height-380, 0, 0, false, "p_torre"));
         this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2);
 
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6800, this.game.config.height-150, 300, 0, true, "p_beige_lego_2", 0, 130, 260));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6800, this.game.config.height-150, 300, 0, true, "p_beige_lego_2", 0, 200, 150));
 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 30, 7600, this.game.config.height, 200 , 0, true, "p_beige_lego_2")); 
 
@@ -291,30 +293,30 @@ export default class Level1 extends Phaser.Scene {
         this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
         }); 
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 8100, this.game.config.height-464, 700, 300, true, "hidden_3", 0, 10, 600)); 
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 8100, this.game.config.height-600, 700, 300, false, "p_cloud_orange", 0, 10, 600)); 
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 8050, this.game.config.height-463, 750,400, true, "hidden_3", 0, 10, 600)); 
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 8050, this.game.config.height-600, 750, 400, false, "p_cloud_orange", 0, 10, 600)); 
         this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
         }); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-394, 700, 80, true, "hidden_3")); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-530, 700, 80, false, "p_cloud_pink")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-465, 700, 80, true, "hidden_3")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-600, 700, 80, false, "p_cloud_pink")); 
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
         });
-        this.staticPlatforms.push(new StaticPlatformsGroup (this, 2, 8000, this.game.config.height-64, 500, -200, true, "hidden_3"));
-        this.staticPlatforms.push(new StaticPlatformsGroup (this, 2, 8000, this.game.config.height-200, 500, -200, false, "p_cloud_yellow")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup (this, 2, 8000, this.game.config.height-64, 550, -200, true, "hidden_3"));
+        this.staticPlatforms.push(new StaticPlatformsGroup (this, 2, 8000, this.game.config.height-200, 550, -200, false, "p_cloud_yellow")); 
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
         });
         
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 9900, this.game.config.height-264, 0, 0, true, "hidden_3",0, 25, 500));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 9900, this.game.config.height-400, 0, 0, false, "p_cloud_white",0, 25, 500));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 9700, this.game.config.height-264, 0, 0, true, "hidden_3",0, 25, 500));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 9700, this.game.config.height-400, 0, 0, false, "p_cloud_white",0, 25, 500));
         this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
         }); 
         
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 9250, this.game.config.height-514, 1000, 50, true, "hidden_3", 0, -10, 300)); 
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 9250, this.game.config.height-650, 1000, 50, false, "p_cloud_orange", 0, -10, 300));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 9200, this.game.config.height-514, 1000, 50, true, "hidden_3", 0, -10, 300)); 
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 9200, this.game.config.height-650, 1000, 50, false, "p_cloud_orange", 0, -10, 300));
         this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
         }); 
@@ -333,16 +335,22 @@ export default class Level1 extends Phaser.Scene {
             platform.setScale(1.5,1.5);
             platform.setDepth(2);
         }); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11100, 490, 400 , 0, false, "punzoni"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11300, 190, 400 , 0, false, "punzoni"));
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setFlipY(true);
+        });
+
     
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 11900, this.game.config.height-120, 0 , 0, true, "p_marrone_lego_albero_2", 0, 100, 100)); 
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 11850, this.game.config.height-120, 0 , 0, true, "p_marrone_lego_albero_2", 0, 150, 100)); 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 12400, this.game.config.height-120, 0 , 0, true, "p_tree_2")); 
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setScale(1.2,1.2)
         });
 
         //ringhiera con gradini
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 13260, this.game.config.height-220, 300 , 0, true, "p_hidden"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 13250, this.game.config.height-320, 700 , 0, false, "ringhiera")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 13305, this.game.config.height-220, 300 , 0, true, "p_hidden"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 13300, this.game.config.height-320, 700 , 0, false, "ringhiera")); 
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setScale(0.5, 0.5)
             platform.setDepth(2);
@@ -416,6 +424,7 @@ export default class Level1 extends Phaser.Scene {
                 this.physics.add.collider(this.uominiGrigi[i], this.pavements[k].list);
             }   
         }
+        this.uominigrigi.push(new Enemy(this, coordinataX, coordinataY, coordX_verso_cui_camminano, "grigi"));
         //#endregion
 
         //Creazione fiori
@@ -518,12 +527,15 @@ export default class Level1 extends Phaser.Scene {
     
 
     createFlowers() {
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 230, 220, -80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 250, 220, -80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 4655, this.game.config.height-510, 0, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
-
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 8950, this.game.config.height-500, 700, 80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 8360, this.game.config.height-240, 700, 80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 9900, this.game.config.height-350, 700, 80, "animated_flower"));
+        //this, 1, 9700, this.game.config.height-400, 0, 0
         //albero doppio punzoni
         this.collectableFlowers.push(new FlowersGroup(this, 2, 11150, this.game.config.height-500, 400, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 11350, this.game.config.height-245, 0, 0, "animated_flower"));
