@@ -296,16 +296,39 @@ export default class Level1 extends Phaser.Scene {
         //
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8300, this.game.config.height-164, 0, 0, true, "hidden_3",0, -15, 450));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8300, this.game.config.height-300, 0, 0, false, "p_cloud_white",0, -15, 450));
-        this.movingPlatforms[this.movingPlatforms.length - 1].list[0].setDepth(2);  
+        this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(2);
+        }); 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 8100, this.game.config.height-464, 700, 300, true, "hidden_3", 0, 10, 600)); 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 8100, this.game.config.height-600, 700, 300, false, "p_cloud_orange", 0, 10, 600)); 
-        this.movingPlatforms[this.movingPlatforms.length - 1].list[0].setDepth(2); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-394, 500, 70, true, "hidden_3")); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-530, 500, 70, false, "p_cloud_pink")); 
-        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2); 
+        this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(2);
+        }); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-394, 700, 80, true, "hidden_3")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-530, 700, 80, false, "p_cloud_pink")); 
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(2);
+        });
         this.staticPlatforms.push(new StaticPlatformsGroup (this, 2, 8000, this.game.config.height-64, 500, -200, true, "hidden_3"));
         this.staticPlatforms.push(new StaticPlatformsGroup (this, 2, 8000, this.game.config.height-200, 500, -200, false, "p_cloud_yellow")); 
-        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2); 
+        this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(2);
+        });
+        
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 9900, this.game.config.height-264, 0, 0, true, "hidden_3",0, 25, 500));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 9900, this.game.config.height-400, 0, 0, false, "p_cloud_white",0, 25, 500));
+        this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(2);
+        }); 
+        
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 9250, this.game.config.height-514, 1000, 50, true, "hidden_3", 0, -10, 300)); 
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 9250, this.game.config.height-650, 1000, 50, false, "p_cloud_orange", 0, -10, 300));
+        this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
+            platform.setDepth(2);
+        }); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 9200, this.game.config.height-200, 700, 120, true, "p_torre"));
+
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 10450, this.game.config.height-100, 300, -55, true, "p_marrone_lego_albero")); 
       
         //piattaforme albero
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11000, this.game.config.height-200, 200 , 0, true, "p_tree")); 
