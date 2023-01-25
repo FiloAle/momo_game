@@ -5,6 +5,7 @@ import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
 import FlowersGroup from "../components/flowersGroup.js";
 import PauseMenu from "../components/pauseMenu.js";
+import Vault from "../components/vault.js";
 
 export default class Level2 extends Phaser.Scene {
 
@@ -109,7 +110,6 @@ export default class Level2 extends Phaser.Scene {
 
     create() {
 
-        
         // Qui le istruzioni su cosa creare e dove nel mondo di gioco
         console.log("test_scene_2 - Executing create()");
 
@@ -122,11 +122,6 @@ export default class Level2 extends Phaser.Scene {
         this.background = this.add.image(0, 0, "stars");
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0, 0);
- 
-        // this.nuvole = this.add.tileSprite(0, this.game.config.height - this.textures.get('nuvole').getSourceImage().height, this.game.width, this.textures.get('nuvole').getSourceImage().height, "nuvole");
-        // this.nuvole.setOrigin(0, 0);
-        // this.nuvole.setScrollFactor(0, 0);
-         //#endregion
 
         this.isCameraFollowingPlayer = false;
 
@@ -141,7 +136,7 @@ export default class Level2 extends Phaser.Scene {
         //#endregion
         
         //#region Creazione player
-        const thePlayer = new Player(this, 0, this.floorHeight, this.worldWidth);
+        const thePlayer = new Player(this, 12000, this.floorHeight, this.worldWidth);
         // Aggiungi il player alla fisica
         this.player = this.physics.add.existing(new Player(this, 100, this.game.config.height-220, this.worldWidth));
         this.physics.add.collider(this.player, this.floor);
@@ -188,9 +183,9 @@ export default class Level2 extends Phaser.Scene {
 
         //torrette verdi come colonne
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2800, this.game.config.height - 90, 430, 0, true, 'p_torretta'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2780, this.game.config.height - 130, 430, 0, true, 'p_2verde_lego'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2780, this.game.config.height - 128, 430, 0, true, 'p_2verde_lego'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 3000, this.game.config.height - 220, 430, 0, true, 'p_torretta'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2980, this.game.config.height - 260, 430, 0, true, 'p_2verde_lego'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2980, this.game.config.height - 258, 430, 0, true, 'p_2verde_lego'));
 
         //platform torrette gialle 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4050, this.game.config.height - 450, 490, -0, false, 'p_torre2'));
@@ -203,7 +198,7 @@ export default class Level2 extends Phaser.Scene {
         });
 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 3600, this.game.config.height - 350, 0, 0, false, 'p_torretta_double',0, 200, 80));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3607, this.game.config.height - 350, 0, 0, true, 'p_2verde_lego',0, 200, 80));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3607, this.game.config.height - 360, 0, 0, true, 'p_2verde_lego',0, 200, 80));
   
         //colonne dopo torretta
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4446, this.game.config.height - 130, 460, 0, true, 'p_column_hora'));
@@ -223,16 +218,12 @@ export default class Level2 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 6370, this.game.config.height - 240, 330, -50, true, 'p_neutral_beige'));
         //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5700, this.game.config.height - 250, 0, 0, true, 'p_2neutre_lego'));
 
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 5905, 200, 305, -0, false, 'punzoni', 1, 250, 100));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 5905, 200, 305, -0, false, 'punzoni', 1, 250, 100, true));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 5900, 230, 304, -0, true, 'p_verde_punzoni', 1, 250, 100));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6560, 520, 0, 0, false, 'punzoni', 1, -250, 90));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6560, 520, 0, 0, false, 'punzoni', 1, -250, 90, true));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6555, 550, 0, 0, true, 'p_verde_punzoni', 1, -250, 90));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6900, 550, 0, 0, true, 'p_grigio_lego', 0, 250, 50));
 
-        //PAVIMENTO (X 40 per allungare il livello, poi sarà da spostare)
-       /*  this.staticPlatforms.push(new StaticPlatformsGroup(this, 40, 0, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 6400, this.game.config.height-30, this.textures.get('platform_base_1').getSourceImage().width, 0, true, 'platform_base_1'));
-         */
         //INGRESSO BANCA
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4100, 0, 0, -0, false, 'bg_finestra_down'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 4098, 0, 0, -0, false, 'bg_parete_banca'));
@@ -257,8 +248,8 @@ export default class Level2 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 8, 8270, this.game.config.height-30, 1055, 0, true, 'p_base_interno'));
 
         //punzoni parte difficile
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 10, 8270, this.game.config.height-55, 106, -0, false, 'punzoni'));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 14, 9700, this.game.config.height-55, 106, -0, false, 'punzoni'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 10, 8270, this.game.config.height-55, 106, -0, false, 'punzoni', true));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 14, 9700, this.game.config.height-55, 106, -0, false, 'punzoni', true));
 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8750, 575, 0, 0,true, 'p_cassetto', 0, -180, 150));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8750, 525, 0, 0, true,'p_cassetto', 0, 180, 150));
@@ -288,15 +279,13 @@ export default class Level2 extends Phaser.Scene {
         });
 
         //COLONNE FINALI 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11543, this.game.config.height-243, 450, -0, false, 'punzoni'));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11543, this.game.config.height-243, 450, -0, false, 'punzoni', true));
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setScale(0.80, 0.80);
         });
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11230, this.game.config.height-185, 470, 0, true, 'p_pilastro'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11380, this.game.config.height-305, 450, 0, true, 'p_pilastro'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11540, this.game.config.height-215, 450, 0, true, 'p_pilastro_punzoni'));
-
-
         
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 14000, 720);
@@ -338,13 +327,19 @@ export default class Level2 extends Phaser.Scene {
         });
 
         //collecting flowers
-        
-        this.createFlowers();     
+         this.createFlowers();     
     
-        this.initialTime = 90;
+        //TIMER 
+         this.initialTime = 400;
         this.timer = this.add.text(this.game.config.width / 2, 90, 'Countdown: ' + this.formatTime(this.initialTime), styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
         // Each 1000 ms call onEvent
         this.timerEvent = this.time.addEvent({ delay: 1000, callback: this.onTimerEvent, callbackScope: this, loop: true });
+
+
+        //cassaforte
+        this.cassaforte= new Vault (this, 126000, this.floorHeight, this.worldWidth);
+        
+
     }
 
 
@@ -377,40 +372,63 @@ export default class Level2 extends Phaser.Scene {
         this.animateBackground();
         this.updateMovingPlatforms();
         this.manageFlowersOverlap();
+        this.managePlatformsOverlap();
 
         if(this.player.body.y > this.game.config.height) {
             this.player.die();
             this.updateLives();
         }
+
+        if(this.updates % 60 == 0) {
+            console.log(this.player.x + " " + this.player.y);
+        }
+
+        //apertura portellone
+        if(this.player. x > 12000 && this.player.x < 12002) { 
+            this.cassaforte.openVault(); 
+        }
     }
 
     createFlowers() {
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 1535, this.floorHeight - 35, 100, 0, "animated_flower"));
         
-        //rombo platform
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 2115, this.game.config.height - 430, 470, -0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 2350, this.game.config.height - 260, 0, -360, "animated_flower"));
+       //platform albero
+       this.collectableFlowers.push(new FlowersGroup(this, 2, 985, 450, 170, 0, "animated_flower"));
 
+       //marrone lego
+       this.collectableFlowers.push(new FlowersGroup(this, 2, 1460, 350, 312, -90, "animated_flower"));
+
+       //rombo platform
+       this.collectableFlowers.push(new FlowersGroup(this, 2, 2100, this.game.config.height - 430, 485, -0, "animated_flower"));
+       this.collectableFlowers.push(new FlowersGroup(this, 2, 2350, this.game.config.height - 275, 0, -345, "animated_flower"))
+       
+        
         //platform lungo
-        this.collectableFlowers.push(new FlowersGroup(this, 3, 2820, this.game.config.height - 630, 250, -0, "animated_flower"));
-        //verde double 
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 3950, this.game.config.height - 530, 0, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 3, 2870, this.game.config.height - 630, 250, -0, "animated_flower"));
 
+        //double per 2
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 3035, 350, 423, 0, "animated_flower"));
 
+        //torretta
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 4145, 400, 0, 0, "animated_flower"));
+
+        //lego beige
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 4730, 250, 452, 0, "animated_flower"));
+
+        //double x1
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 6100, 150, 100, 0, "animated_flower"));
+
+        //basic x2
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 6440, 250, 346, -30, "animated_flower"));
 
         //ingresso banca
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 7570, 270, 250, -160, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 7565, 270, 255, -160, "animated_flower"));
 
         //2 colonne e balaustra
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 9450, 400, 250, -160, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 3, 10500, 210, 200, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 11150, 350, 400, 0, "animated_flower"));
-        
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 9415, 200, 205, -60, "animated_flower"));
 
-        //colonne alternate
-       /*  this.collectableFlowers.push(new FlowersGroup( this, 2, 3450, this.game.config.height - 225, 480, -0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(  this, 2, 3755, this.game.config.height - 325, 470, -0, "animated_flower")); */
-    
+        this.collectableFlowers.push(new FlowersGroup(this, 3, 10700, 210, 195, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 11280, 380, 600, -100, "animated_flower"));
+        
         for(let i = 0; i < this.collectableFlowers.length; i++) {
             for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
                 this.collectableFlowers[i].list[k].body.setAllowGravity(false);
@@ -427,6 +445,28 @@ export default class Level2 extends Phaser.Scene {
                     this.game.gameState.flowersCounter++;
                     this.localFlowersCounter++;
                     this.flowersBox.setText(this.game.gameState.flowersCounter);
+                }
+            }
+        }
+    }
+
+    managePlatformsOverlap() {
+        for(let i = 0; i < this.staticPlatforms.length; i++) {
+            if(this.staticPlatforms[i].damaging) {
+                for(let k = 0; k < this.staticPlatforms[i].list.length; k++) {
+                    if(Phaser.Geom.Intersects.RectangleToRectangle(this.staticPlatforms[i].list[k].body, this.player.body)) {
+                        this.updateLives();
+                    }
+                }
+            }
+        }
+
+        for(let i = 0; i < this.movingPlatforms.length; i++) {
+            if(this.movingPlatforms[i].damaging) {
+                for(let k = 0; k < this.movingPlatforms[i].list.length; k++) {
+                    if(Phaser.Geom.Intersects.RectangleToRectangle(this.movingPlatforms[i].list[k].body, this.player.body)) {
+                        this.updateLives();
+                    }
                 }
             }
         }
@@ -451,7 +491,6 @@ export default class Level2 extends Phaser.Scene {
         if(this.game.gameState.lives == 0 || this.initialTime == 0) {
             this.game.gameState.lives = 0;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
-            this.player.die();
             this.scene.start("gameover");
             this.scene.stop(this);
         }
@@ -467,6 +506,7 @@ export default class Level2 extends Phaser.Scene {
 
             this.game.gameState.lives--;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
-        }     
+        }    
+        
     }
 }
