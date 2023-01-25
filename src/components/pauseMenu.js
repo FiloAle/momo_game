@@ -27,27 +27,27 @@ export default class PauseMenu extends Phaser.Scene {
         this.background.setOrigin(0,0);
 
         //creo una immagine per il bottone
-        this.homeButton = this.add.image(this.game.config.width / 2, this.game.config.height / 2 - 100, "home");
+        this.homeButton = this.add.image(this.game.config.width / 2, this.game.config.height / 2 + 150, "home");
         this.homeButton.setOrigin(0.5, 0.5);
         this.homeButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
 
-        this.homeLED = this.add.image(this.game.config.width / 2, this.game.config.height / 2 - 100, "homeLED").setVisible(false);
+        this.homeLED = this.add.image(this.game.config.width / 2, this.game.config.height / 2 + 152, "homeLED").setVisible(false);
         this.homeLED.setOrigin(0.5, 0.5);
 
 
-        this.resumeButton = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "resume");
+        this.resumeButton = this.add.image(this.game.config.width / 2, this.game.config.height / 2 - 150, "resume");
         this.resumeButton.setOrigin(0.5, 0.5);
         this.resumeButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
 
-        this.resumeLED = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "resumeLED").setVisible(false);
+        this.resumeLED = this.add.image(this.game.config.width / 2, this.game.config.height / 2 - 150, "resumeLED").setVisible(false);
         this.resumeLED.setOrigin(0.5, 0.5);
 
 
-        this.restartButton = this.add.image(this.game.config.width / 2, this.game.config.height / 2 + 100, "restart");
+        this.restartButton = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "restart");
         this.restartButton.setOrigin(0.5, 0.5);
         this.restartButton.setInteractive({ useHandCursor: true }); //imposta l'immagine in modo che possa essere cliccata
 
-        this.restartLED = this.add.image(this.game.config.width / 2, this.game.config.height / 2 + 100, "restartLED").setVisible(false);
+        this.restartLED = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "restartLED").setVisible(false);
         this.restartLED.setOrigin(0.5, 0.5);
 
 
