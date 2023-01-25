@@ -94,7 +94,10 @@ export default class PauseMenu extends Phaser.Scene {
                     this.game.gameState.flowersCounter = 0;
                     break;
                 case 2:
-                    this.game.gameState.flowersCounter -= this.originScene.localFlowersCounter;
+                    if(this.game.gameState.flowersCounter > 0)
+                    {
+                        this.game.gameState.flowersCounter -= this.originScene.localFlowersCounter;
+                    }
                     break;
                 default:
                     break;

@@ -5,6 +5,7 @@ import Level2 from "./scenes/level_2.js";
 import TestScene1 from "./scenes/test_scene_1.js";
 import GameOver from "./scenes/gameover.js";
 import Credits from "./scenes/credits.js";
+import Story from "./scenes/story.js";
 
 // Definiamo la configurazione di lancio del gioco
 const config = {
@@ -13,7 +14,7 @@ const config = {
     height: 720,
     autoRound: true,
     backgroundColor: 0x000000, // sfondo nero
-    scene: [ SplashScreen, Level1, Level2, TestScene1, GameOver, Credits ],
+    scene: [ SplashScreen, Level1, Level2, TestScene1, GameOver, Credits, Story ],
     pixelArt: true,
     parent: "game_area", // Specifica il div contenitore
     physics: {

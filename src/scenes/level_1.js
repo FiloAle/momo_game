@@ -226,7 +226,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 10000, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //#endregion
 
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
@@ -335,8 +335,8 @@ export default class Level1 extends Phaser.Scene {
             platform.setScale(1.5,1.5);
             platform.setDepth(2);
         }); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11100, 490, 400 , 0, false, "punzoni"));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11300, 190, 400 , 0, false, "punzoni"));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11100, 490, 400 , 0, false, "punzoni", true));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11300, 190, 400 , 0, false, "punzoni", true));
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setFlipY(true);
         });
@@ -362,28 +362,6 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 12730, 0, 0 , 0, false, "bg_tree"));
         this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2); 
 
-         
-
-        //platform vecchie
-        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].x + this.staticPlatforms[0].list[this.staticPlatforms[0].list.length - 1].width, 500, 1000, 100, true, 'platform_3'));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1070, 500, 200, 0, true, "platform_2"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2550, this.game.config.height-250, 90, 0, false, "punzoni"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 2200, this.staticPlatforms[0].list[0].y -120, 400, -160, true, "platform_verde_2"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 3600, this.staticPlatforms[0].list[0].y -230, 250, 0, true, "platform_verde_2"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 4060, this.game.config.height-130, 220, -30, true, "column"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 5200, 600, 0, 0, true, 'platform_3'));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 6550, 400, 0, 100, true, "platform_2"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 7000, this.game.config.height-150, 200, 0, true, "platform_verde_2"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 7600, this.game.config.height-500, 0, 310, true, "platform_verde_3"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 7640, this.game.config.height-490, 400, 0, false, "punzoni"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 7900, this.game.config.height-215, 400, 0, false, "punzoni"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 8650, this.game.config.height-190, 220, -40, true, "platform_verde_2"));
-        // this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 9300, this.game.config.height-280, 0, 0, true, "platform_verde_3"));
-
-        // for(let i = 0; i < this.staticPlatforms[1].list.length; i++) {
-        //     this.staticPlatforms[1].list[i].flipY = true;
-        // }
-
         //pavimento 2D
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 697, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 690, this.textures.get('platform_1_2').getSourceImage().width, 0, false, 'platform_1_2'));
@@ -405,15 +383,6 @@ export default class Level1 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         
-        //MOVING PLATFORMS
-        /* this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 3060, 100, 95, 0, true, 'platform_verde_2', 1, 250, 100));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 4600, 450, 95, 0, true, 'platform_verde_2', 0, 250, 80));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 3, 5890, 500, 230, -20, true, 'column', 1, 100, 100));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 510, 200, 0, true, 'platform_verde_2', 1, 150, 50));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 7100, 480, 200, 0, false, 'punzoni', 1, 150, 50));
-        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 6800, this.game.config.height-460, 95, 0, true, 'platform_verde_2', 0, 200, 170)); */
-       
-        
         //#region Creazione nemici
         this.uominiGrigi = [];
         for(let i = 0; i < 1; i++) {
@@ -424,7 +393,7 @@ export default class Level1 extends Phaser.Scene {
                 this.physics.add.collider(this.uominiGrigi[i], this.pavements[k].list);
             }   
         }
-        this.uominigrigi.push(new Enemy(this, coordinataX, coordinataY, coordX_verso_cui_camminano, "grigi"));
+        //this.uominiGrigi.push(new Enemy(this, coordinataX, coordinataY, coordX_verso_cui_camminano, "grigi"));
         //#endregion
 
         //Creazione fiori
@@ -461,8 +430,8 @@ export default class Level1 extends Phaser.Scene {
             this.scene.add('pause_menu', this.pauseMenu, true);
         });
 
-        this.popup_movimento = new PopUp(this, "Ciao! Ecco alcuni suggerimenti prima di iniziare la tua avventura:   \n\nPremi ⇦ e ⇨ o [A] e [D] per muoverti, \n⇧ o [W] o [BARRA SPAZIATRICE] per saltare    ", 0);
-        this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la dimora di Mastro Hora.  \nTi aspetta un lungo viaggio: Esplora ciò che ti circonda e trova la strada più sicura.", 1);
+        this.popup_movimento = new PopUp(this, "Ciao! Ecco alcuni suggerimenti prima di iniziare la tua avventura:   \n\nPremi ⇦ e ⇨ o [A] e [D] per muoverti, \n⇧ o [W] o [BARRA SPAZIATRICE] per saltare.", 0);
+        this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la dimora di Mastro Hora.  \nTi aspetta un lungo viaggio: esplora ciò che ti circonda e trova la strada più sicura.", 1);
         this.popup_spiegazione2 = new PopUp(this, "Ehi Momo, dove scappi? Non ti ho ancora detto dei pericoli che puoi incontrare...\nDovrai stare molto attenta perché i Signori Grigi hanno scoperto il nostro piano e stanno cercando di fermarti!   \nTrova un modo per sconfiggerli o per liberarli dalla loro condizione facendoli tornare buoni.", 2);
         this.popup_uccisione = new PopUp(this, "Ecco un Signore Grigio. Attenta, ti sta inseguendo! Se ti raggiunge perderai una vita.   \nGli OraFiori che raccoglierai durante il percorso ti aiuteranno a salvarli.   \nPremi [F] per lanciarli, ma attenta perché non te ne basterà uno solo... \nEccotene due per provare.", 3);
         this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno X per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa. ", 4);
@@ -518,13 +487,11 @@ export default class Level1 extends Phaser.Scene {
             this.scene.add('popup_uccisione_2', this.popup_uccisione_2, true);
         }
 
-
         if(this.player.x > 13765) {
             this.scene.start('level_2');
             this.scene.stop(this);
         }
     }
-    
 
     createFlowers() {
         this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 250, 220, -80, "animated_flower"));
@@ -535,7 +502,7 @@ export default class Level1 extends Phaser.Scene {
         this.collectableFlowers.push(new FlowersGroup(this, 1, 8950, this.game.config.height-500, 700, 80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 8360, this.game.config.height-240, 700, 80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 9900, this.game.config.height-350, 700, 80, "animated_flower"));
-        //this, 1, 9700, this.game.config.height-400, 0, 0
+        
         //albero doppio punzoni
         this.collectableFlowers.push(new FlowersGroup(this, 2, 11150, this.game.config.height-500, 400, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 11350, this.game.config.height-245, 0, 0, "animated_flower"));
@@ -591,16 +558,13 @@ export default class Level1 extends Phaser.Scene {
         const timeFromPreviousFlower = this.time.now - this.lastFlower;
 
         if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
-            if(this.game.gameState.flowersCounter != 0) {
-                if(this.game.gameState.flowersCounter > 0) {
-                    this.game.gameState.flowersCounter--;
-                    this.flowersBox.setText(this.game.gameState.flowersCounter);
-                } 
+            if(this.game.gameState.flowersCounter > 0) {
+                this.game.gameState.flowersCounter--;
+                this.flowersBox.setText(this.game.gameState.flowersCounter);
                 this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
 
                 // Creo un fiore
-                this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2,"animated_flower", 10, this.player.flipX);
-                this.flower.setDepth(0);
+                this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2, "animated_flower", 10, this.player.flipX);
                 this.isFlowerActive = true;
                 
                 this.flower.fire(); // Lo lancio
@@ -669,15 +633,20 @@ export default class Level1 extends Phaser.Scene {
     }
 
     updateLives() {
+        if(this.game.gameState.lives == 0 || this.initialTime == 0) {
+            this.game.gameState.lives = 0;
+            this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+            this.scene.start("gameover");
+            this.scene.stop(this);
+        }
+
         // Aggiorna il punteggio
         const minTimeLivesDecrement = 2000;    // Tempo minimo (in ms) tra una perdita di vita e l'altra
-
         const timeFromLastLivesDecrement = this.time.now - this.lastLivesDecrement;
 
         if(timeFromLastLivesDecrement > minTimeLivesDecrement && this.game.gameState.lives > 0) {
             // Se sono qui devo togliere una vita
             this.lastLivesDecrement = this.time.now;
-
             this.game.gameState.lives--;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
 
@@ -686,7 +655,6 @@ export default class Level1 extends Phaser.Scene {
         }
 
         if(this.game.gameState.lives == 0) {
-            this.player.die();
             this.scene.start("gameover");
             this.scene.stop(this);
             //schermata game over

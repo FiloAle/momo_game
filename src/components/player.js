@@ -41,40 +41,37 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     initAnimations() {
-        //creiamo l'animazione della corsa del personaggio tramite lo spritesheet
         this.anims.create({
             key: "playerMove",
             frames: this.anims.generateFrameNumbers("playerrun", {
-                start: 0, //iniziamo dal primo frame
-                end: 40, //e i primi 10 frame (fino alla fine della corsa)
+                start: 0,
+                end: 40,
             }),
-            frameRate: 40, //aggiorniamo l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
-            repeat: -1 //ripetiamo all'infinito la stessa animazione
-        });
-
-        //creiamo l'animazione del personaggio che sta fermo
-        this.anims.create({
-            key: "playerStop",
-            frames: this.anims.generateFrameNumbers("playerrun", {
-                start: 0, //prendiamo un frame in cui il personaggio è fermo in una posizione ragionevole
-                end: 0, //e riusiamo lo stesso frame, questo vuol dire che non verrà cambiata l'immagine
-            }),
-            frameRate: 15, //aggiornimao l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
-            repeat: -1 //ripetiamo all'infinito la stessa animazione
-        });
-
-        //creiamo l'animazione del salto del personaggio tramite lo spritesheet
-        this.anims.create({
-            key: "playerJump",
-            frames: this.anims.generateFrameNumbers("playerrun", {
-                start: 41, //iniziamo dal primo frame
-                end: 58, //e i primi 10 frame (fino alla fine della corsa)
-            }),
-            frameRate: 15, //aggiornimao l'immagine ogni 15 frame per rendere l'animazione non troppo rapida
+            frameRate: 40,
             repeat: -1
         });
 
-        this.anims.play("playerStop"); //facciamo partire l'animazione del personaggio, questa volta fermo
+        this.anims.create({
+            key: "playerStop",
+            frames: this.anims.generateFrameNumbers("playerrun", {
+                start: 0,
+                end: 0,
+            }),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: "playerJump",
+            frames: this.anims.generateFrameNumbers("playerrun", {
+                start: 41,
+                end: 58,
+            }),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.play("playerStop");
     }
 
     resize() {
@@ -174,5 +171,4 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.body.setVelocity(0, 0);
         //gameover
     }
-
 }

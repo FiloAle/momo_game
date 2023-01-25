@@ -56,11 +56,11 @@ export default class SplashScreen extends Phaser.Scene {
     create() {
         console.log("splash_screen - Executing create()");
 
+        this.game.gameState.flowersCounter = 0;
+
         // Posizioniamo gli elementi nella scena
         this.background = this.add.image(0, 0, "background_splash_screen");
         this.background.setOrigin(0,0);
-
-
 
         //creo una immagine per il bottone
         this.playButton = this.add.image(160, this.game.config.height / 2 + 100, "playButton");
@@ -114,12 +114,17 @@ export default class SplashScreen extends Phaser.Scene {
 
 
         this.playButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
-            this.scene.start("level_1");
+            this.scene.start("level_2");
             this.scene.stop(this);
         });
 
         this.creditsButton.on("pointerdown", () => {
             this.scene.start("credits");
+            this.scene.stop(this);
+        })
+
+        this.storyButton.on("pointerdown", () => {
+            this.scene.start("story");
             this.scene.stop(this);
         })
     }

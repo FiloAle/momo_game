@@ -41,8 +41,7 @@ export default class PopUp extends Phaser.Scene {
         }
     }
 
-    typewriteText(text)
-    {
+    typewriteText(text) {
         const length = text.length;
         let i = 0;
         this.time.addEvent({
