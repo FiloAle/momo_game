@@ -111,8 +111,7 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("flowers_icon", "assets/UI/flower.png");
 
 
-        this.load.image("cassiopea", "assets/images/environment_elements/platform/level_2/cassiopea.png");
-       
+        this.load.image("cassiopea", "assets/images/characters/cassiopea.png");
     }
 
     create() {

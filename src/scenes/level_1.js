@@ -335,8 +335,8 @@ export default class Level1 extends Phaser.Scene {
             platform.setScale(1.5,1.5);
             platform.setDepth(2);
         }); 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11100, 490, 400 , 0, false, "punzoni", true));
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11300, 190, 400 , 0, false, "punzoni", true));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 11100, 490, 400 , 0, true, "punzoni", true));
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11300, 190, 400 , 0, true, "punzoni", true));
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setFlipY(true);
         });
@@ -385,15 +385,24 @@ export default class Level1 extends Phaser.Scene {
         
         //#region Creazione nemici
         this.uominiGrigi = [];
-        for(let i = 0; i < 1; i++) {
-            this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 600, this.player.y, 0, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 800, this.player.y, this.player.x + 1000, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 2600, this.player.y, 2800, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 2900, this.player.y, 3100, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 4500, 300, 4650, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 6150, 595, 6600, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 9205, 520, 9470, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 12450, 600, 12750, "grigi")));
+
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
             this.uominiGrigi[i].body.allowGravity = true;
             this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
-            for(let k = 0; k < this.pavements.length; k++) {
-                this.physics.add.collider(this.uominiGrigi[i], this.pavements[k].list);
+            for(let k = 0; k < this.staticPlatforms.length; k++) {
+                if(this.staticPlatforms[k].solid) {
+                    this.physics.add.collider(this.uominiGrigi[i], this.staticPlatforms[k].list);
+              }
+                
             }   
         }
-        //this.uominiGrigi.push(new Enemy(this, coordinataX, coordinataY, coordX_verso_cui_camminano, "grigi"));
         //#endregion
 
         //Creazione fiori

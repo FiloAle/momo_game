@@ -17,12 +17,12 @@ export default class PopUp extends Phaser.Scene {
 
     preload() {
         this.load.image("popup", "assets/UI/popup.png");
-        this.load.image("cassiopea", "assets/UI/cassiopea_popup.png");
+        this.load.image("cassiopea_popup", "assets/UI/cassiopea_popup.png");
     }
 
     create() {
         this.img = this.add.image(0, -20, "popup").setOrigin(0, 0);
-        this.add.image(122, 96, "cassiopea");
+        this.add.image(122, 96, "cassiopea_popup");
         this.img.flipX = true;
         this.keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
