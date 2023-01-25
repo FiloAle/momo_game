@@ -675,6 +675,8 @@ export default class Level1 extends Phaser.Scene {
 
         if(this.game.gameState.lives == 0) {
             this.player.die();
+            this.scene.start("gameover");
+            this.scene.stop(this);
             //schermata game over
         }
     }
