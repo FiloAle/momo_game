@@ -78,7 +78,9 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(0);
         }
 
-        this.manageAnimations();
+        if(this.isEvil) {
+            this.manageAnimations();
+        }
     }
 
     manageAnimations() {
