@@ -4,7 +4,7 @@ import StaticPlatformsGroup from "../components/staticPlatformsGroup.js";
 import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
 import FlowersGroup from "../components/flowersGroup.js";
-import Platform from "../components/platform.js";
+import PauseMenu from "../components/pauseMenu.js";
 
 export default class Level2 extends Phaser.Scene {
 
@@ -19,6 +19,7 @@ export default class Level2 extends Phaser.Scene {
     movingPlatforms;
     staticPlatforms;
     collectableFlowers;
+    localFlowersCounter;
 
     constructor() {
         // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
@@ -39,6 +40,8 @@ export default class Level2 extends Phaser.Scene {
         this.collectableFlowers = [];
         this.movingPlatforms = [];
         this.staticPlatforms = [];
+        this.game.gameState.level = 2;
+        this.localFlowersCounter = 0;
     }
 
     preload() {
@@ -98,6 +101,10 @@ export default class Level2 extends Phaser.Scene {
 
         this.load.image("p_pilastro", "assets/images/environment_elements/platform/level_2/p_pilastro.png");
         
+        this.load.image("pause", "assets/UI/pause_button.png");
+        this.load.image("pauseLED", "assets/UI/pause_button_LED.png");
+        this.load.image("flowers_box", "assets/UI/flowers_box.png");
+        this.load.image("flowers_icon", "assets/UI/flower.png");
     }
 
     create() {
@@ -301,49 +308,41 @@ export default class Level2 extends Phaser.Scene {
         // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-
-        //#region Creazione nemici
-     /*    this.uominiGrigi = [];
-        for(let i = 0; i < 5; i++) {
-           this.uominiGrigi[i] = new Enemy(this, Math.floor(Math.random() * 10000) - 700, this.floorHeight);
-           this.physics.add.existing(this.uominiGrigi[i]);
-           this.physics.add.collider(this.uominiGrigi[i], this.floor);
-           this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
-        } */
- 
-        /* for(let i = 0; i < 5; i++) {
-            this.uominiGrigi.push(new Enemy(this, this.movingPlatformsList[0].list[i].x, this.movingPlatformsList[0].list[i].y));
-            this.physics.add.existing(this.uominiGrigi[this.uominiGrigi.length - 1]);
-            this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.floor);
-            this.physics.add.collider(this.uominiGrigi[this.uominiGrigi.length - 1], this.movingPlatformsList[0].list[i]);
-            this.uominiGrigi[this.uominiGrigi.length - 1].resize(); // Ridimensionamento hitbox
-        } */
-
-       /*  for(let k = 0; k < this.uominiGrigi.length; k++) {
-            this.uominiGrigi.forEach(enemy => {
-                this.physics.add.collider(this.uominiGrigi[k], enemy);
-            });
-        } */
-        //#endregion
-
         this.player.resize(); // Ridimensionamento hitbox
 
-        this.game.gameState.lives = 3;
+        this.flowersContainerBox = this.add.image(20, 15, "flowers_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
+        this.flowersIcon = this.add.image(8, 6, "flowers_icon").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
+
         const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
 
-        //#region Inserimento informazione vita
-        const lifeMessage = "Lives: " + this.game.gameState.lives;
-        this.lifeBox = this.add.text(50, 40, lifeMessage, styleConfig);
-        this.lifeBox.setOrigin(0, 0);
-        this.lifeBox.setScrollFactor(0, 0);
-        //#endregion
+        this.lifeBox = this.add.text(this.game.config.width / 2, 46, "Lives: " + this.game.gameState.lives, styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
+
+        this.flowersBox = this.add.text(150, 46, (this.game.gameState.flowersCounter), styleConfig).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(5);
+
+        this.pauseButton = this.add.image(this.game.config.width - 70, 60, "pause").setOrigin(0.5, 0.5).setScrollFactor(0, 0).setScale(0.5).setDepth(4);
+        this.pauseButton.setInteractive({ useHandCursor: true });
+
+        this.pauseLED = this.add.image(this.game.config.width - 70, 60, "pauseLED").setOrigin(0.5, 0.5).setScrollFactor(0, 0).setScale(0.5).setVisible(false).setDepth(4);
+
+        this.pauseButton.on("pointerover", () => {
+            this.pauseLED.setVisible(true);
+        });
+        this.pauseButton.on("pointerout", () => {
+            this.pauseLED.setVisible(false);
+        });
+
+        this.pauseButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
+            this.pauseMenu = new PauseMenu(this);
+            this.scene.pause(this);
+            this.scene.add('pause_menu', this.pauseMenu, true);
+        });
 
         //collecting flowers
         
         this.createFlowers();     
     
         this.initialTime = 90;
-        this.timer = this.add.text(this.game.config.width / 2, 40, 'Countdown: ' + this.formatTime(this.initialTime), styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0);
+        this.timer = this.add.text(this.game.config.width / 2, 90, 'Countdown: ' + this.formatTime(this.initialTime), styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
         // Each 1000 ms call onEvent
         this.timerEvent = this.time.addEvent({ delay: 1000, callback: this.onTimerEvent, callbackScope: this, loop: true });
     }
@@ -365,7 +364,8 @@ export default class Level2 extends Phaser.Scene {
             this.initialTime -= 1; // One second
             this.timer.setText('Countdown: ' + this.formatTime(this.initialTime));
         } else {
-            console.warn("HAI PERSO!");
+            //console.warn("HAI PERSO!");
+            this.updateLives();
             this.time.removeEvent(this.timerEvent);
         }
     }
@@ -377,24 +377,14 @@ export default class Level2 extends Phaser.Scene {
         this.animateBackground();
         this.updateMovingPlatforms();
         this.manageFlowersOverlap();
-        //this.createTimer();
-        //this.updateTimer();
 
         if(this.player.body.y > this.game.config.height) {
             this.player.die();
             this.updateLives();
         }
-
-        // if (me.timeElapsed >= me.totalTime) {
-        //     //Do what you need to do
-        //   }
     }
 
     createFlowers() {
-        /* for(let i = 0; i < 10; i++) {
-            this.collectableFlowers.push(new Flower(this, i * 160 + 160, this.floorHeight - 100, "animated_flower"));
-        } */
-
         this.collectableFlowers.push(new FlowersGroup(this, 2, 1535, this.floorHeight - 35, 100, 0, "animated_flower"));
         
         //rombo platform
@@ -421,35 +411,11 @@ export default class Level2 extends Phaser.Scene {
        /*  this.collectableFlowers.push(new FlowersGroup( this, 2, 3450, this.game.config.height - 225, 480, -0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(  this, 2, 3755, this.game.config.height - 325, 470, -0, "animated_flower")); */
     
-
-        //To do: sposta setAllowGravity(false) 
         for(let i = 0; i < this.collectableFlowers.length; i++) {
             for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
                 this.collectableFlowers[i].list[k].body.setAllowGravity(false);
             }
         }
-
-        /* this.collectableFlowers.forEach(flowersGroup => {
-            flowersGroup.list.foreach(flower => {
-                flower.body.setAllowGravity(false);
-            })
-            //flower.body.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-        }); */
-
-        //this.physics.add.collider(this.flowers, this.player);
-
-        /* for(let i = 0; i < this.collectableFlowers.length; i++) {
-            for(let k = 0; k < this.movingPlatforms.length; k++) {
-                this.physics.add.collider(this.collectableFlowers[i], this.movingPlatforms[k].list);
-            }
-            
-            for(let k = 0; k < this.staticPlatforms.length; k++) {
-                if(this.staticPlatforms[k].solid) {
-                    this.physics.add.collider(this.collectableFlowers[i], this.staticPlatforms[k].list);
-                }
-            }
-        } */
-        //this.physics.add.collider(this.flowers, this.platform);
     }
 
     manageFlowersOverlap() {
@@ -458,6 +424,9 @@ export default class Level2 extends Phaser.Scene {
                 if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].list[k].body, this.player.body)) {
                     this.collectableFlowers[i].list[k].destroy(true);
                     this.collectableFlowers[i].list.splice(k, 1);
+                    this.game.gameState.flowersCounter++;
+                    this.localFlowersCounter++;
+                    this.flowersBox.setText(this.game.gameState.flowersCounter);
                 }
             }
         }
@@ -479,6 +448,13 @@ export default class Level2 extends Phaser.Scene {
     }
 
     updateLives() {
+        if(this.game.gameState.lives == 0 || this.initialTime == 0) {
+            this.game.gameState.lives = 0;
+            this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+            this.player.die();
+            //schermata game over
+        }
+
         // Aggiorna il punteggio
         const minTimeLivesDecrement = 2000;    // Tempo minimo (in ms) tra una perdita di vita e l'altra
 
@@ -490,35 +466,6 @@ export default class Level2 extends Phaser.Scene {
 
             this.game.gameState.lives--;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
-        }
-
-        if(this.game.gameState.lives == 0) {
-            this.player.die();
-            //schermata game over
-        }
+        }     
     }
-
-/*     createTimer() {
-        this.timeLabel = this.add.text(100, 100, "00:00", {fontSize: 36});
-        //this.timeLabel.anchor.setTo(0.5, 0);
-        //this.timeLabel.align = 'center';
-    }
-
-    updateTimer() {
-        var currentTime = new Date();
-        var timeDifference = this.startTime.getTime() - currentTime.getTime();
-        //Time elapsed in seconds
-        this.timeElapsed = Math.abs(timeDifference / 1000);
-        //Time remaining in seconds
-        var timeRemaining = this.totalTime - this.timeElapsed;
-        //Convert seconds into minutes and seconds
-        var minutes = Math.floor(timeRemaining / 60);
-        var seconds = Math.floor(timeRemaining) - (60 * minutes);
-        //Display minutes, add a 0 to the start if less than 10
-        var result = (minutes < 10) ? "0" + minutes : minutes;
-        //Display seconds, add a 0 to the start if less than 10
-        result += (seconds < 10) ? ":0" + seconds : ":" + seconds;
-        this.timeLabel.text = result;
-    } */
-
 }

@@ -77,6 +77,7 @@ export default class PauseMenu extends Phaser.Scene {
 
 
         this.homeButton.on("pointerdown", () => { 
+            this.game.gameState.flowersCounter = 0;
             this.scene.stop(this.originScene);
             this.scene.start("splash_screen");
             this.scene.remove(this);
@@ -88,6 +89,16 @@ export default class PauseMenu extends Phaser.Scene {
         });
 
         this.restartButton.on("pointerdown", () => { 
+            switch(this.game.gameState.level) {
+                case 1:
+                    this.game.gameState.flowersCounter = 0;
+                    break;
+                case 2:
+                    this.game.gameState.flowersCounter -= this.originScene.localFlowersCounter;
+                    break;
+                default:
+                    break;
+            }
             this.scene.stop(this.originScene);
             this.scene.start(this.originScene);
             this.scene.remove(this);

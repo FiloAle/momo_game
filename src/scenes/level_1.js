@@ -42,7 +42,7 @@ export default class Level1 extends Phaser.Scene {
         this.collectableFlowers = [];
         this.movingPlatforms = [];
         this.staticPlatforms = [];
-        this.flowersCounter = -2;
+        this.game.gameState.level = 1;
     }
 
     preload() {
@@ -178,6 +178,9 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("sfondo_4", "assets/images/environment_elements/buildings/bld_4.png");
 
         this.load.image("pause", "assets/UI/pause_button.png");
+        this.load.image("pauseLED", "assets/UI/pause_button_LED.png");
+        this.load.image("flowers_box", "assets/UI/flowers_box.png");
+        this.load.image("flowers_icon", "assets/UI/flower.png");
     }
 
     create() {
@@ -217,22 +220,11 @@ export default class Level1 extends Phaser.Scene {
     
         //#endregion
 
-        this.pauseButton = this.add.image(this.game.config.width / 2, 20, "pause");
-        this.pauseButton.setOrigin(0.5, 0);
-        this.pauseButton.setScrollFactor(0, 0);
-        this.pauseButton.setInteractive({ useHandCursor: true });
-
-        this.pauseButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
-            this.pauseMenu = new PauseMenu(this);
-            this.scene.pause(this);
-            this.scene.add('pause_menu', this.pauseMenu, true);
-        });
-
         this.isCameraFollowingPlayer = false;
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 8150, this.floorHeight-500, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
         //#endregion
 
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
@@ -431,18 +423,34 @@ export default class Level1 extends Phaser.Scene {
 
         this.player.resize(); // Ridimensionamento hitbox
 
+        this.flowersContainerBox = this.add.image(20, 15, "flowers_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
+        this.flowersIcon = this.add.image(8, 6, "flowers_icon").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
+
         this.game.gameState.lives = 3;
+        this.game.gameState.flowersCounter = 0;
         const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
 
-        //#region Inserimento informazione vita
-        this.lifeBox = this.add.text(50, 40, "Lives: " + this.game.gameState.lives, styleConfig);
-        this.lifeBox.setOrigin(0, 0);
-        this.lifeBox.setScrollFactor(0, 0);
-        //#endregion
+        this.lifeBox = this.add.text(this.game.config.width / 2, 46, "Lives: " + this.game.gameState.lives, styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
 
-        this.flowersBox = this.add.text(this.cameras.main.width - 50, 40, "Flowers: " + (this.flowersCounter + 2) + "/11", styleConfig);
-        this.flowersBox.setOrigin(1, 0);
-        this.flowersBox.setScrollFactor(0, 0);
+        this.flowersBox = this.add.text(150, 46, (this.game.gameState.flowersCounter), styleConfig).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
+
+        this.pauseButton = this.add.image(this.game.config.width - 70, 60, "pause").setOrigin(0.5, 0.5).setScrollFactor(0, 0).setScale(0.5).setDepth(4);
+        this.pauseButton.setInteractive({ useHandCursor: true });
+
+        this.pauseLED = this.add.image(this.game.config.width - 70, 60, "pauseLED").setOrigin(0.5, 0.5).setScrollFactor(0, 0).setScale(0.5).setVisible(false).setDepth(4);
+
+        this.pauseButton.on("pointerover", () => {
+            this.pauseLED.setVisible(true);
+        });
+        this.pauseButton.on("pointerout", () => {
+            this.pauseLED.setVisible(false);
+        });
+
+        this.pauseButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
+            this.pauseMenu = new PauseMenu(this);
+            this.scene.pause(this);
+            this.scene.add('pause_menu', this.pauseMenu, true);
+        });
 
         this.popup_movimento = new PopUp(this, "Ciao! Ecco alcuni suggerimenti prima di iniziare la tua avventura:   \n\nPremi ⇦ e ⇨ o [A] e [D] per muoverti, \n⇧ o [W] o [BARRA SPAZIATRICE] per saltare    ", 0);
         this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la dimora di Mastro Hora.  \nTi aspetta un lungo viaggio: Esplora ciò che ti circonda e trova la strada più sicura.", 1);
@@ -452,8 +460,6 @@ export default class Level1 extends Phaser.Scene {
 
         this.scene.pause(this);
         this.scene.add('popup_movimento', this.popup_movimento, true);
-
-
     }
 
     update() {
@@ -494,6 +500,8 @@ export default class Level1 extends Phaser.Scene {
         if(this.player.body.x > 840 && this.player.body.x < 842 && !this.popup_uccisione.hasBeenDisplayed ) {
             this.scene.pause(this);
             this.scene.add('popup_uccisione', this.popup_uccisione, true);
+            this.game.gameState.flowersCounter = 2;
+            this.flowersBox.setText(this.game.gameState.flowersCounter);
         }
 
         if(this.player.body.x > 2180 && this.player.body.x < 2182 && !this.popup_uccisione_2.hasBeenDisplayed ) {
@@ -559,11 +567,8 @@ export default class Level1 extends Phaser.Scene {
                 if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].list[k].body, this.player.body)) {
                     this.collectableFlowers[i].list[k].destroy(true);
                     this.collectableFlowers[i].list.splice(k, 1);
-                    if(this.flowersCounter < 0) {
-                        this.flowersCounter = 0;
-                    }
-                    this.flowersCounter++;
-                    this.flowersBox.setText("Flowers: " + this.flowersCounter + "/11");
+                    this.game.gameState.flowersCounter++;
+                    this.flowersBox.setText(this.game.gameState.flowersCounter);
                 }
             }
         }
@@ -574,12 +579,10 @@ export default class Level1 extends Phaser.Scene {
         const timeFromPreviousFlower = this.time.now - this.lastFlower;
 
         if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
-            if(this.flowersCounter != 0) {
-                if(this.flowersCounter < 0) {
-                    this.flowersCounter++;
-                } else if(this.flowersCounter > 0) {
-                    this.flowersCounter--;
-                    this.flowersBox.setText("Flowers: " + this.flowersCounter + "/11");
+            if(this.game.gameState.flowersCounter != 0) {
+                if(this.game.gameState.flowersCounter > 0) {
+                    this.game.gameState.flowersCounter--;
+                    this.flowersBox.setText(this.game.gameState.flowersCounter);
                 } 
                 this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
 
