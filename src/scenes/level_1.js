@@ -183,6 +183,8 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("flowers_icon", "assets/UI/flower.png");
 
         this.load.image("punzoni", "assets/images/environment_elements/platform/level_2/punzoni.png");
+
+        this.load.image("cassiopea", "assets/images/characters/cassiopea.png");
     }
 
     create() {
@@ -231,6 +233,8 @@ export default class Level1 extends Phaser.Scene {
 
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
         this.lastCheckpoint = this.checkpoints[0];
+
+        this.add.image(230, this.floorHeight - 72, "cassiopea").setOrigin(0, 0).setDepth(1);
 
         //colonne inizio 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 0, 400, 116, 0, false, "column"));
@@ -385,13 +389,15 @@ export default class Level1 extends Phaser.Scene {
         
         //#region Creazione nemici
         this.uominiGrigi = [];
-        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 800, this.player.y, this.player.x + 1000, "grigi")));
-        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 2600, this.player.y, 2800, "grigi")));
-        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 2900, this.player.y, 3100, "grigi")));
-        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 4500, 300, 4650, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 1300, this.floorHeight, 0, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 2500, this.floorHeight, 2800, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 3400, this.floorHeight, 4000, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 4400, 300, 4850, "grigi")));
         this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 6150, 595, 6600, "grigi")));
-        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 9205, 520, 9470, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 9205, 520, 9400, "grigi")));
         this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 12450, 600, 12750, "grigi")));
+
+        this.uominiGrigi[0].flipX = true;
 
         for(let i = 0; i < this.uominiGrigi.length; i++) {
             this.uominiGrigi[i].body.allowGravity = true;
@@ -399,8 +405,7 @@ export default class Level1 extends Phaser.Scene {
             for(let k = 0; k < this.staticPlatforms.length; k++) {
                 if(this.staticPlatforms[k].solid) {
                     this.physics.add.collider(this.uominiGrigi[i], this.staticPlatforms[k].list);
-              }
-                
+                }  
             }   
         }
         //#endregion
@@ -443,7 +448,8 @@ export default class Level1 extends Phaser.Scene {
         this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la dimora di Mastro Hora.  \nTi aspetta un lungo viaggio: esplora ciò che ti circonda e trova la strada più sicura.", 1);
         this.popup_spiegazione2 = new PopUp(this, "Ehi Momo, dove scappi? Non ti ho ancora detto dei pericoli che puoi incontrare...\nDovrai stare molto attenta perché i Signori Grigi hanno scoperto il nostro piano e stanno cercando di fermarti!   \nTrova un modo per sconfiggerli o per liberarli dalla loro condizione facendoli tornare buoni.", 2);
         this.popup_uccisione = new PopUp(this, "Ecco un Signore Grigio. Attenta, ti sta inseguendo! Se ti raggiunge perderai una vita.   \nGli OraFiori che raccoglierai durante il percorso ti aiuteranno a salvarli.   \nPremi [F] per lanciarli, ma attenta perché non te ne basterà uno solo... \nEccotene due per provare.", 3);
-        this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno X per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa. ", 4);
+        this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno X per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa.", 4);
+        this.popup_checkpoint = new PopUp(this, "Forte! Hai appena superato il primo checkpoint: questo significa che se dovessi perdere una delle\ntue 3 vite a disposizione, verrai riportata qui. Nella mappa sono presenti diversi checkpoint,\nraggiungili tutti!", 5);
 
         this.scene.pause(this);
         this.scene.add('popup_movimento', this.popup_movimento, true);
@@ -474,7 +480,7 @@ export default class Level1 extends Phaser.Scene {
             this.updateLives();
         }
 
-        if(this.player.body.x > 360 && this.player.body.x < 362 && !this.popup_spiegazione.hasBeenDisplayed) {
+        if(this.player.body.x > 200 && this.player.body.x < 202 && !this.popup_spiegazione.hasBeenDisplayed) {
             this.scene.pause(this);
             this.scene.add('popup_spiegazione', this.popup_spiegazione, true);
         }
@@ -494,6 +500,11 @@ export default class Level1 extends Phaser.Scene {
         if(this.player.body.x > 2180 && this.player.body.x < 2182 && !this.popup_uccisione_2.hasBeenDisplayed ) {
             this.scene.pause(this);
             this.scene.add('popup_uccisione_2', this.popup_uccisione_2, true);
+        }
+
+        if(this.player.body.x > 4600 && this.player.body.x < 4602 && !this.popup_checkpoint.hasBeenDisplayed ) {
+            this.scene.pause(this);
+            this.scene.add('popup_checkpoint', this.popup_checkpoint, true);
         }
 
         if(this.player.x > 13765) {
@@ -614,7 +625,7 @@ export default class Level1 extends Phaser.Scene {
         }
 
         //gestione movimenti primo uomo grigio (id: 0)
-        if(this.player.x != this.player.initialX && this.uominiGrigi[0] != undefined) {
+        if(this.player.x > 650 && this.uominiGrigi[0] != undefined) {
             this.uominiGrigi[0].followPlayer();
         }
     }

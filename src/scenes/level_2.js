@@ -150,8 +150,7 @@ export default class Level2 extends Phaser.Scene {
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
         this.lastCheckpoint = this.checkpoints[0];
 
-
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1080, 437, 0 , 0, false, "cassiopea"));
+        this.add.image(1080, 437, "cassiopea").setOrigin(0, 0);
         
         //Alberlo e platform
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, -150, 0, 0 , 0, false, "bg_tree"));
