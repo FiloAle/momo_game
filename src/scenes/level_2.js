@@ -5,6 +5,7 @@ import MovingPlatformsGroup from "../components/movingPlatformsGroup.js";
 import Enemy from "../components/enemy.js";
 import FlowersGroup from "../components/flowersGroup.js";
 import PauseMenu from "../components/pauseMenu.js";
+import PopUp from "../components/popup.js";
 import Vault from "../components/vault.js";
 
 export default class Level2 extends Phaser.Scene {
@@ -108,6 +109,10 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("pauseLED", "assets/UI/pause_button_LED.png");
         this.load.image("flowers_box", "assets/UI/flowers_box.png");
         this.load.image("flowers_icon", "assets/UI/flower.png");
+
+
+        this.load.image("cassiopea", "assets/images/environment_elements/platform/level_2/cassiopea.png");
+       
     }
 
     create() {
@@ -146,6 +151,9 @@ export default class Level2 extends Phaser.Scene {
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
         this.lastCheckpoint = this.checkpoints[0];
 
+
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 1080, 437, 0 , 0, false, "cassiopea"));
+        
         //Alberlo e platform
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, -150, 0, 0 , 0, false, "bg_tree"));
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
@@ -158,6 +166,7 @@ export default class Level2 extends Phaser.Scene {
             platform.setScale(0.5, 0.5)
             platform.setDepth(2);
         });  
+       
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 900, this.game.config.height-210, 0 , 0, true, "p_tree_2")); 
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setScale(1.2,1.2);
@@ -330,8 +339,12 @@ export default class Level2 extends Phaser.Scene {
             this.scene.add('pause_menu', this.pauseMenu, true);
         });
 
+        this.popup_2 = new PopUp(this, "Complimenti Momo! Sei riuscita superare la prima fase.   \nAdesso dovrai raggiungere la banca del tempo per liberare tutti gli OraFiori che i signori grigi hanno rubato ai tuoi amici.    \nMa attenta, il percorso è lungo e insidioso e il tempo a tua disposizione è limitato…   \nÈ ora di andare, lascia il Grande albero alle tue spalle e buona fortuna!", 0);
+
         this.uominiGrigi = [];
-        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, this.player.x + 800, this.player.y, this.player.x + 1000, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 12150, this.player.y, 12550, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 12600, this.player.y, 13000, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 13000, this.player.y, 13500, "grigi")));
 
         for(let i = 0; i < this.uominiGrigi.length; i++) {
             this.uominiGrigi[i].body.allowGravity = true;
@@ -403,15 +416,21 @@ export default class Level2 extends Phaser.Scene {
         }
 
         //apertura portellone
-        if(this.player. x > 12000 && this.player.x < 12002) { 
+        if(this.player. x > 13500 && this.player.x < 13502) { 
             this.cassaforte.openVault(); 
         }
+
+        //popup
+        if(this.player.body.x > 980 && this.player.body.x < 982 && !this.popup_2.hasBeenDisplayed) {
+            this.scene.pause(this);
+            this.scene.add('popup_2', this.popup_2, true);
+        } 
     }
 
     createFlowers() {
         
         //platform albero
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 985, 450, 170, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 985, 450, 0, 0, "animated_flower"));
 
         //marrone lego
         this.collectableFlowers.push(new FlowersGroup(this, 2, 1460, 350, 312, -90, "animated_flower"));
