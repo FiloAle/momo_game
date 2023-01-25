@@ -25,15 +25,21 @@ export default class SplashScreen extends Phaser.Scene {
 
         const grigi_spritesheet_config = {
             frameWidth:  280,
-            frameHeight: 258,
+            frameHeight: 256,
         };
-        this.load.spritesheet("grigi", "assets/images/characters/grigi1.png", grigi_spritesheet_config);
+        this.load.spritesheet("grigi", "assets/images/characters/grigi.png", grigi_spritesheet_config);
 
         const flower_spritesheet_config = {
             frameWidth:  150,
             frameHeight: 150,
         }
         this.load.spritesheet("animated_flower", "assets/images/weapons/animated_flower.png", flower_spritesheet_config);
+
+        const vault_spritesheet_config = {
+            frameWidth:  400,
+            frameHeight: 400,
+        }
+        this.load.spritesheet("vault", "assets/images/environment_elements/vault.png", vault_spritesheet_config);
 
         // Carichiamo gli asset grafici
         //this.load.image("pauseButton", "assets/UI/pause_button.png"); //caricamento bottone menu di pausa
