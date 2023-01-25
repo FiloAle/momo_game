@@ -155,6 +155,13 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("p_beige_lego", "assets/images/environment_elements/platform/p_beige_lego.png");
         this.load.image("p_beige_lego_2", "assets/images/environment_elements/platform/beige_lego_2.png");
 
+        //clouds
+        this.load.image("p_cloud_orange", "assets/images/environment_elements/platform/p_cloud_orange.png");
+        this.load.image("p_cloud_pink", "assets/images/environment_elements/platform/p_cloud_pink.png");
+        this.load.image("p_cloud_white", "assets/images/environment_elements/platform/p_cloud_white.png");
+        this.load.image("p_cloud_yellow", "assets/images/environment_elements/platform/p_cloud_yellow.png");
+        this.load.image("hidden_3", "assets/images/environment_elements/platform/hidden_3.png");
+
         //rami albero
         this.load.image("p_tree", "assets/images/environment_elements/platform/p_tree.png");
         this.load.image("p_tree_2", "assets/images/environment_elements/platform/p_tree_2.png");
@@ -225,7 +232,7 @@ export default class Level1 extends Phaser.Scene {
 
         //#region Creazione player
         // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
+        this.player = this.physics.add.existing(new Player(this, 8150, this.floorHeight-500, this.worldWidth));
         //#endregion
 
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
@@ -286,6 +293,20 @@ export default class Level1 extends Phaser.Scene {
 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 30, 7600, this.game.config.height, 200 , 0, true, "p_beige_lego_2")); 
 
+        //
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8300, this.game.config.height-164, 0, 0, true, "hidden_3",0, -15, 450));
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8300, this.game.config.height-300, 0, 0, false, "p_cloud_white",0, -15, 450));
+        this.movingPlatforms[this.movingPlatforms.length - 1].list[0].setDepth(2);  
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 8100, this.game.config.height-464, 700, 300, true, "hidden_3", 0, 10, 600)); 
+        this.movingPlatforms.push(new MovingPlatformsGroup(this, 2, 8100, this.game.config.height-600, 700, 300, false, "p_cloud_orange", 0, 10, 600)); 
+        this.movingPlatforms[this.movingPlatforms.length - 1].list[0].setDepth(2); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-394, 500, 70, true, "hidden_3")); 
+        this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 8850, this.game.config.height-530, 500, 70, false, "p_cloud_pink")); 
+        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2); 
+        this.staticPlatforms.push(new StaticPlatformsGroup (this, 2, 8000, this.game.config.height-64, 500, -200, true, "hidden_3"));
+        this.staticPlatforms.push(new StaticPlatformsGroup (this, 2, 8000, this.game.config.height-200, 500, -200, false, "p_cloud_yellow")); 
+        this.staticPlatforms[this.staticPlatforms.length - 1].list[0].setDepth(2); 
+      
         //piattaforme albero
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 11000, this.game.config.height-200, 200 , 0, true, "p_tree")); 
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
