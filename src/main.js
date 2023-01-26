@@ -2,7 +2,6 @@
 import SplashScreen from "./scenes/splash_screen.js"
 import Level1 from "./scenes/level_1.js";
 import Level2 from "./scenes/level_2.js";
-import TestScene1 from "./scenes/test_scene_1.js";
 import GameOver from "./scenes/gameover.js";
 import Credits from "./scenes/credits.js";
 import Story from "./scenes/story.js";
@@ -14,7 +13,7 @@ const config = {
     height: 720,
     autoRound: true,
     backgroundColor: 0x000000, // sfondo nero
-    scene: [ SplashScreen, Level1, Level2, TestScene1, GameOver, Credits, Story ],
+    scene: [ SplashScreen, Credits, Story, Level1, Level2, GameOver ],
     pixelArt: true,
     parent: "game_area", // Specifica il div contenitore
     physics: {

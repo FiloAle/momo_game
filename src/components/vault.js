@@ -7,7 +7,7 @@ export default class Vault extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.initialX = x;
         this.y = y;
-        this.setOrigin(0, 1);   // Punto pivot in basso a sinistra
+        this.setOrigin(1, 1);   // Punto pivot in basso a destra
         scene.add.existing(this);
 
         this.initAnimations();

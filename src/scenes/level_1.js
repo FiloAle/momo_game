@@ -8,33 +8,26 @@ import PopUp from "../components/popup.js";
 import PauseMenu from "../components/pauseMenu.js";
 
 export default class Level1 extends Phaser.Scene {
-
-    background;         // oggetto relativo all'elemento "sfondo"
-    player;             // oggetto relativo all'elemento "giocatore"
-    floorHeight;        // Altezza del terreno (asse y) rispetto al riquadro di gioco
-    lastFlower;         // Tempo dall'ultimo fiore lanciato
+    background;
+    player;
+    floorHeight;
+    lastFlower;
     isCameraFollowingPlayer;
-    mP1;
     updates;
     lastLivesDecrement;
-    nuvole;
     collectableFlowers;
     movingPlatforms;
     staticPlatforms;
-    flowersCounter;
     checkpoints;
     lastCheckpoint;
 
     constructor() {
-        // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
         super("level_1");
     }
 
     init() {
-        console.log("test_scene_2 - Executing init()");
-        // Definiamo l'altezza del terreno pari all'altezza del riquadro di gioco, per posizionare il giocatore sul fondo della schermata.
-        this.floorHeight = this.game.config.height - 30;
-        this.worldWidth = 14000;
+        this.floorHeight = this.game.config.height - 30; //altezza pavimento
+        this.worldWidth = 14000; //lunghezza livello
         this.lastFlower = 0;
         this.updates = 0;
         this.lastLivesDecrement = 0;
@@ -42,11 +35,11 @@ export default class Level1 extends Phaser.Scene {
         this.collectableFlowers = [];
         this.movingPlatforms = [];
         this.staticPlatforms = [];
-        this.game.gameState.level = 1;
+        this.game.gameState.level = 1; //salvo il numero del livello corrente
     }
 
     preload() {
-        //#region loading screen
+        //#region schermata caricamento
         var width = this.cameras.main.width;
         var height = this.cameras.main.height;
 
@@ -97,8 +90,6 @@ export default class Level1 extends Phaser.Scene {
             assetText.destroy();
         });
         //#endregion
-
-        console.log("test_scene_2 - Executing preload()");
        
         //BACKGROUND, CLOUDS, CITY, TREE
         this.load.image("sky", "assets/images/background/bg_sky.jpg");
@@ -109,7 +100,6 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
         this.load.image("bg_tree", "assets/images/background/bg_tree.png"); 
         
-
         //pavimento verde
         this.load.image("platform_1", "assets/images/environment_elements/pavement_up.png");
         this.load.image("platform_1_2", "assets/images/environment_elements/pavement.png");
@@ -119,9 +109,6 @@ export default class Level1 extends Phaser.Scene {
 
         //platform cemento
         this.load.image("p_grigio_lego_cemento", "assets/images/environment_elements/platform/p_grigio_lego_cemento.png");
-        
-        //platform
-        //this.load.image("p_grey_big", "assets/images/environment_elements/platform/p_grey_big.png");
 
         //platform semplice 3D marrone
         this.load.image("p_marrone_lego", "assets/images/environment_elements/platform/p_marrone_lego.png");
@@ -142,7 +129,6 @@ export default class Level1 extends Phaser.Scene {
 
         //pezzo di gru gialla
         this.load.image("platform_3d_8", "assets/images/environment_elements/platform/10.png");
-        //this.load.image("platform_3d_15", "assets/images/environment_elements/platform/base_giallo_grande.png");
 
         //gru gialla intera
         this.load.image("p_gru", "assets/images/environment_elements/platform/p_gru.png");
@@ -183,59 +169,28 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("flowers_icon", "assets/UI/flower.png");
 
         this.load.image("punzoni", "assets/images/environment_elements/platform/level_2/punzoni.png");
-
         this.load.image("cassiopea", "assets/images/characters/cassiopea.png");
     }
 
     create() {
-        // Qui le istruzioni su cosa creare e dove nel mondo di gioco
-        console.log("test_scene_2 - Executing create()");
-
         //#region Impostazione sfondo scena
-        this.background = this.add.image(0, 0, "sky");
-        this.background.setScale(0.75, 1);
-        this.background.setOrigin(0, 0);
-        this.background.setScrollFactor(0, 0);
-
-       
-        this.hill_3 = this.add.image(0, 0.5, "hill_3");
-        this.hill_3.setOrigin(0, 0);
-        this.hill_3.setScrollFactor(0, 0);
-
-        this.hill = this.add.image(0, 0.5, "hill");
-        this.hill.setOrigin(0, 0);
-        this.hill.setScrollFactor(0, 0);
-
-        this.hill_2 = this.add.image(0, 0.5, "hill_2");
-        this.hill_2.setOrigin(0, 0);
-        this.hill_2.setScrollFactor(0, 0);
-
-        this.city = this.add.image(0, 0.5, "city");
-        this.city.setOrigin(0, 0);
-        this.city.setScrollFactor(0, 0);
-        
-        this.nuvole = this.add.image(0, 0, "clouds");
-        this.nuvole.setOrigin(0, 0);
-        this.nuvole.setScrollFactor(0, 0);
-
-        /*  this.tree = this.add.image(0, 0, "bg_tree");
-        this.tree.setOrigin(7000, 0);
-        this.tree.setScrollFactor(0, 0); */
-    
+        this.background = this.add.image(0, 0, "sky").setScale(0.75, 1).setOrigin(0, 0).setScrollFactor(0, 0);
+        this.hill_3 = this.add.image(0, 0.5, "hill_3").setOrigin(0, 0).setScrollFactor(0, 0);
+        this.hill = this.add.image(0, 0.5, "hill").setOrigin(0, 0).setScrollFactor(0, 0);
+        this.hill_2 = this.add.image(0, 0.5, "hill_2").setOrigin(0, 0).setScrollFactor(0, 0);
+        this.city = this.add.image(0, 0.5, "city").setOrigin(0, 0).setScrollFactor(0, 0);
+        this.nuvole = this.add.image(0, 0, "clouds").setOrigin(0, 0).setScrollFactor(0, 0);
         //#endregion
 
         this.isCameraFollowingPlayer = false;
+        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth)); //creazione player
 
-        //#region Creazione player
-        // Aggiungi il player alla fisica
-        this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth));
-        //#endregion
-
-        this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}];
-        this.lastCheckpoint = this.checkpoints[0];
+        this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}]; //elenco checkpoint del livello
+        this.lastCheckpoint = this.checkpoints[0]; //setto ultimo checkpoint salvato
 
         this.add.image(230, this.floorHeight - 72, "cassiopea").setOrigin(0, 0).setDepth(1);
 
+        //#region creazione platforms statiche e dinamiche
         //colonne inizio 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 3, 0, 400, 116, 0, false, "column"));
 
@@ -291,7 +246,6 @@ export default class Level1 extends Phaser.Scene {
 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 30, 7600, this.game.config.height, 200 , 0, true, "p_beige_lego_2")); 
 
-        //
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8300, this.game.config.height-164, 0, 0, true, "hidden_3",0, -15, 450));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8300, this.game.config.height-300, 0, 0, false, "p_cloud_white",0, -15, 450));
         this.movingPlatforms[this.movingPlatforms.length-1].list.forEach(platform => {
@@ -369,14 +323,12 @@ export default class Level1 extends Phaser.Scene {
         //pavimento 2D
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 697, this.textures.get('platform_1').getSourceImage().width, 0, true, 'platform_1'));
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 690, this.textures.get('platform_1_2').getSourceImage().width, 0, false, 'platform_1_2'));
-
-        this.pavements = [];
-        this.pavements.push(this.staticPlatforms[this.staticPlatforms.length - 2]);
-
-        this.player.setDepth(1);
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
         });
+        //#endregion
+
+        this.player.setDepth(1); //setto lo z-index del player
         
         //#region Posizionamento camera
         this.cameras.main.setBounds(0, 0, 14000, 720);
@@ -384,8 +336,7 @@ export default class Level1 extends Phaser.Scene {
         this.cameras.main.setFollowOffset(-this.player.width / 4, this.game.config.height / 2);
         //#endregion
 
-        // Recuperiamo il riferimento al tasto F (sara' il tasto per sparare)
-        this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F); //riferimento a pulsante F per lanciare un fiore
         
         //#region Creazione nemici
         this.uominiGrigi = [];
@@ -401,7 +352,7 @@ export default class Level1 extends Phaser.Scene {
 
         for(let i = 0; i < this.uominiGrigi.length; i++) {
             this.uominiGrigi[i].body.allowGravity = true;
-            this.uominiGrigi[i].resize(); // Ridimensionamento hitbox
+            this.uominiGrigi[i].resize(); //ridimensionamento hitbox nemici
             for(let k = 0; k < this.staticPlatforms.length; k++) {
                 if(this.staticPlatforms[k].solid) {
                     this.physics.add.collider(this.uominiGrigi[i], this.staticPlatforms[k].list);
@@ -409,26 +360,23 @@ export default class Level1 extends Phaser.Scene {
             }   
         }
         //#endregion
+    
+        this.createFlowers(); //creazione fiori
+        this.player.resize(); //ridimensionamento hitbox player
 
-        //Creazione fiori
-        this.createFlowers(); 
-
-        this.player.resize(); // Ridimensionamento hitbox
-
-        this.flowersContainerBox = this.add.image(20, 15, "flowers_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
-        this.flowersIcon = this.add.image(8, 6, "flowers_icon").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
-
+        //#region definizione elementi UI e variabili correlate
         this.game.gameState.lives = 3;
         this.game.gameState.flowersCounter = 0;
         const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
 
-        this.lifeBox = this.add.text(this.game.config.width / 2, 46, "Lives: " + this.game.gameState.lives, styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
-
+        this.flowersContainerBox = this.add.image(20, 15, "flowers_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
+        this.flowersIcon = this.add.image(8, 6, "flowers_icon").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
         this.flowersBox = this.add.text(150, 46, (this.game.gameState.flowersCounter), styleConfig).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
 
+        this.lifeBox = this.add.text(this.game.config.width / 2, 46, "Lives: " + this.game.gameState.lives, styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
+        
         this.pauseButton = this.add.image(this.game.config.width - 70, 60, "pause").setOrigin(0.5, 0.5).setScrollFactor(0, 0).setScale(0.5).setDepth(4);
         this.pauseButton.setInteractive({ useHandCursor: true });
-
         this.pauseLED = this.add.image(this.game.config.width - 70, 60, "pauseLED").setOrigin(0.5, 0.5).setScrollFactor(0, 0).setScale(0.5).setVisible(false).setDepth(4);
 
         this.pauseButton.on("pointerover", () => {
@@ -437,45 +385,147 @@ export default class Level1 extends Phaser.Scene {
         this.pauseButton.on("pointerout", () => {
             this.pauseLED.setVisible(false);
         });
-
         this.pauseButton.on("pointerdown", () => { //quando viene clickato il bottone succedono cose
             this.pauseMenu = new PauseMenu(this);
             this.scene.pause(this);
             this.scene.add('pause_menu', this.pauseMenu, true);
         });
+        //#endregion
 
+        //#region creazione messaggi popup
         this.popup_movimento = new PopUp(this, "Ciao! Ecco alcuni suggerimenti prima di iniziare la tua avventura:   \n\nPremi ⇦ e ⇨ o [A] e [D] per muoverti, \n⇧ o [W] o [BARRA SPAZIATRICE] per saltare.", 0);
         this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la dimora di Mastro Hora.  \nTi aspetta un lungo viaggio: esplora ciò che ti circonda e trova la strada più sicura.", 1);
         this.popup_spiegazione2 = new PopUp(this, "Ehi Momo, dove scappi? Non ti ho ancora detto dei pericoli che puoi incontrare...\nDovrai stare molto attenta perché i Signori Grigi hanno scoperto il nostro piano e stanno cercando di fermarti!   \nTrova un modo per sconfiggerli o per liberarli dalla loro condizione facendoli tornare buoni.", 2);
         this.popup_uccisione = new PopUp(this, "Ecco un Signore Grigio. Attenta, ti sta inseguendo! Se ti raggiunge perderai una vita.   \nGli OraFiori che raccoglierai durante il percorso ti aiuteranno a salvarli.   \nPremi [F] per lanciarli, ma attenta perché non te ne basterà uno solo... \nEccotene due per provare.", 3);
         this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno X per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa.", 4);
         this.popup_checkpoint = new PopUp(this, "Forte! Hai appena superato il primo checkpoint: questo significa che se dovessi perdere una delle\ntue 3 vite a disposizione, verrai riportata qui. Nella mappa sono presenti diversi checkpoint,\nraggiungili tutti!", 5);
+        //#endregion
 
         this.scene.pause(this);
-        this.scene.add('popup_movimento', this.popup_movimento, true);
+        this.scene.add('popup_movimento', this.popup_movimento, true); //apparizione primo popup
     }
 
     update() {
-        // Azioni che vengono eseguite a ogni frame del gioco
         this.player.manageMovements(this.movingPlatforms);
         this.animateBackground();
         this.manageFlowersLaunch();
         this.manageFlowersOverlap();
         this.manageEnemies();
-        this.updateMovingPlatforms();
+        this.managePopups();
+        this.manageCheckpoints();
         this.managePlatformsOverlap();
+        this.updateMovingPlatforms();
         
-        if(this.updates % 60 == 0) {
-            console.log(this.player.x + " " + this.player.y);
+        if(this.player.x > 13765) {
+            this.scene.start('level_2');
+            this.scene.stop(this);
         }
+    }
 
-        for(let i = 0; this.checkpoints.length > 0 && i < this.checkpoints.length; i++) {
-            if(this.player.x > this.checkpoints[i].x) {
-                this.lastCheckpoint = this.checkpoints[i];
-                this.checkpoints.splice(i, 1);
+    createFlowers() {
+        //#region creazione fiori
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 250, 220, -80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 4655, this.game.config.height-510, 0, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 8950, this.game.config.height-500, 700, 80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 8360, this.game.config.height-240, 700, 80, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 9900, this.game.config.height-350, 700, 80, "animated_flower"));
+        
+        //aggiunta fiori albero doppio punzoni
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 11150, this.game.config.height-500, 400, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 11350, this.game.config.height-245, 0, 0, "animated_flower"));
+
+        this.collectableFlowers.push(new FlowersGroup(this, 1, 12540, this.game.config.height-200, 0, 0, "animated_flower"));
+        this.collectableFlowers.push(new FlowersGroup(this, 2, 12910, this.game.config.height-200, 200, -60, "animated_flower"));
+        //#endregion
+
+        for(let i = 0; i < this.collectableFlowers.length; i++) {
+            for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
+                this.collectableFlowers[i].list[k].body.setAllowGravity(false);
             }
         }
-        
+    }
+
+    animateBackground() {
+        this.background.x = - this.cameras.main.scrollX * 0.5;
+        this.nuvole.x = - this.cameras.main.scrollX * 0.7;
+        this.city.x = - this.cameras.main.scrollX * 0.6;
+        this.hill_2.x = - this.cameras.main.scrollX * 0.65;
+        this.hill_3.x = - this.cameras.main.scrollX * 0.6;
+        this.hill.x = - this.cameras.main.scrollX * 0.7;
+    }
+
+    manageFlowersLaunch() {
+        const minTimeBetweenFlowers = 500;    //tempo minimo (in ms) tra il lancio di un fiore e un altro
+        const timeFromPreviousFlower = this.time.now - this.lastFlower;
+
+        if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
+            if(this.game.gameState.flowersCounter > 0) {
+                this.game.gameState.flowersCounter--;
+                this.flowersBox.setText(this.game.gameState.flowersCounter);
+                this.lastFlower = this.time.now; //salvo il tempo in cui è stato lanciato l'ultimo fiore
+
+                //creo un fiore
+                this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2, "animated_flower", 10, this.player.flipX);
+                this.isFlowerActive = true;
+                
+                this.flower.fire(); //lancio un fiore
+            } 
+        }
+
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
+            if(this.uominiGrigi[i] != undefined) {
+                if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
+                    this.uominiGrigi[i].cure(this.flower); //il player ha colpito un nemico con un fiore, curo il nemico
+                    this.isFlowerActive = false;
+                }
+            }
+        }
+    }
+
+    manageFlowersOverlap() {
+        for(let i = 0; i < this.collectableFlowers.length; i++) {
+            for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
+                if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].list[k].body, this.player.body)) {
+                    this.collectableFlowers[i].list[k].destroy(true);
+                    this.collectableFlowers[i].list.splice(k, 1);
+                    this.game.gameState.flowersCounter++; //il player ha raccolto un fiore, aggiorno il contatore
+                    this.flowersBox.setText(this.game.gameState.flowersCounter);
+                }
+            }
+        }
+    }
+
+    manageEnemies() {
+        for(let i = 0; i < this.uominiGrigi.length; i++) {
+            if(this.uominiGrigi[i] != undefined) {
+                if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
+                    if(this.player.body.velocity.y > 0 && this.player.y < (this.uominiGrigi[i].y + this.uominiGrigi[i].height)) {
+                        this.player.body.setVelocityY(-300);
+                        this.uominiGrigi[i].destroy(true); //player ha saltato su un nemico, quindi lo elimino
+                        this.uominiGrigi[i] = undefined;
+                    } else {
+                        this.updateLives(); //il player è stato toccato da un nemico, quindi -1 vita
+                    }
+                }
+            } 
+        }
+
+        if(this.player.x > 650 && this.uominiGrigi[0] != undefined) {
+            this.uominiGrigi[0].followPlayer(); //gestisco i movimenti del primo nemico (id: 0)
+        }
+
+        for(let i = 1; i < this.uominiGrigi.length; i++) {
+            if(this.uominiGrigi[i] != undefined) {
+                this.uominiGrigi[i].manageMovements(); //gestisco i movimenti dei nemici da secondo in poi (id: 1)
+            }
+        }
+    }
+
+    managePopups() {
+        //#region comparsa dei messaggi popup nel livello
         if(this.player.y > this.game.config.height) {
             this.updateLives();
         }
@@ -506,34 +556,14 @@ export default class Level1 extends Phaser.Scene {
             this.scene.pause(this);
             this.scene.add('popup_checkpoint', this.popup_checkpoint, true);
         }
-
-        if(this.player.x > 13765) {
-            this.scene.start('level_2');
-            this.scene.stop(this);
-        }
+        //#endregion
     }
 
-    createFlowers() {
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 1800, this.floorHeight - 250, 220, -80, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 3680, this.floorHeight - 500, 100, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 4655, this.game.config.height-510, 0, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 3, 5160, 80, 230, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 7753, this.game.config.height-115, 0, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 8950, this.game.config.height-500, 700, 80, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 8360, this.game.config.height-240, 700, 80, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 9900, this.game.config.height-350, 700, 80, "animated_flower"));
-        
-        //albero doppio punzoni
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 11150, this.game.config.height-500, 400, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 11350, this.game.config.height-245, 0, 0, "animated_flower"));
-
-        this.collectableFlowers.push(new FlowersGroup(this, 1, 12540, this.game.config.height-200, 0, 0, "animated_flower"));
-        this.collectableFlowers.push(new FlowersGroup(this, 2, 12910, this.game.config.height-200, 200, -60, "animated_flower"));
-
-        //To do: sposta setAllowGravity(false) 
-        for(let i = 0; i < this.collectableFlowers.length; i++) {
-            for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
-                this.collectableFlowers[i].list[k].body.setAllowGravity(false);
+    manageCheckpoints() {
+        for(let i = 0; this.checkpoints.length > 0 && i < this.checkpoints.length; i++) {
+            if(this.player.x > this.checkpoints[i].x) {
+                this.lastCheckpoint = this.checkpoints[i]; //il player ha raggiunto un nuovo checkpoint, lo salvo
+                this.checkpoints.splice(i, 1);
             }
         }
     }
@@ -543,7 +573,7 @@ export default class Level1 extends Phaser.Scene {
             if(this.staticPlatforms[i].damaging) {
                 for(let k = 0; k < this.staticPlatforms[i].list.length; k++) {
                     if(Phaser.Geom.Intersects.RectangleToRectangle(this.staticPlatforms[i].list[k].body, this.player.body)) {
-                        this.updateLives();
+                        this.updateLives(); //il player è caduto su una piattaforma statica pericolosa -> -1 vita
                     }
                 }
             }
@@ -553,80 +583,10 @@ export default class Level1 extends Phaser.Scene {
             if(this.movingPlatforms[i].damaging) {
                 for(let k = 0; k < this.movingPlatforms[i].list.length; k++) {
                     if(Phaser.Geom.Intersects.RectangleToRectangle(this.movingPlatforms[i].list[k].body, this.player.body)) {
-                        this.updateLives();
+                        this.updateLives(); //il player è caduto su una piattaforma dinamica pericolosa -> -1 vita
                     }
                 }
             }
-        }
-    }
-
-    manageFlowersOverlap() {
-        for(let i = 0; i < this.collectableFlowers.length; i++) {
-            for(let k = 0; k < this.collectableFlowers[i].list.length; k++) {
-                if(Phaser.Geom.Intersects.RectangleToRectangle(this.collectableFlowers[i].list[k].body, this.player.body)) {
-                    this.collectableFlowers[i].list[k].destroy(true);
-                    this.collectableFlowers[i].list.splice(k, 1);
-                    this.game.gameState.flowersCounter++;
-                    this.flowersBox.setText(this.game.gameState.flowersCounter);
-                }
-            }
-        }
-    }
-
-    manageFlowersLaunch() {
-        const minTimeBetweenFlowers = 500;    // Tempo minimo (in ms) tra un fiore e l'altro
-        const timeFromPreviousFlower = this.time.now - this.lastFlower;
-
-        if(this.keyF.isDown && timeFromPreviousFlower > minTimeBetweenFlowers) {
-            if(this.game.gameState.flowersCounter > 0) {
-                this.game.gameState.flowersCounter--;
-                this.flowersBox.setText(this.game.gameState.flowersCounter);
-                this.lastFlower = this.time.now; // Salvo il tempo in cui è stato lanciato l'ultimo fiore
-
-                // Creo un fiore
-                this.flower = new Flower(this, this.player.x + this.player.body.width * (3/2), this.player.y - this.player.body.height / 2, "animated_flower", 10, this.player.flipX);
-                this.isFlowerActive = true;
-                
-                this.flower.fire(); // Lo lancio
-            } 
-        }
-
-        for(let i = 0; i < this.uominiGrigi.length; i++) {
-            if(this.uominiGrigi[i] != undefined) {
-                if(this.isFlowerActive && Phaser.Geom.Intersects.RectangleToRectangle(this.flower.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
-                    this.uominiGrigi[i].cure(this.flower);
-                    this.isFlowerActive = false;
-                }
-            }
-        }
-    }
-
-    manageEnemies() {
-        //gestione collisione player (-1 vita o uccisione uomo grigio)
-        for(let i = 0; i < this.uominiGrigi.length; i++) {
-            if(this.uominiGrigi[i] != undefined) {
-                if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.body, this.uominiGrigi[i].body) && this.uominiGrigi[i].isEvil) {
-                    if(this.player.body.velocity.y > 0 && this.player.y < (this.uominiGrigi[i].y + this.uominiGrigi[i].height)) {
-                        this.player.body.setVelocityY(-300);
-                        this.uominiGrigi[i].destroy(true);
-                        this.uominiGrigi[i] = undefined;
-                    } else {
-                        this.updateLives();
-                    }
-                }
-            } 
-        }
-
-        //gestione movimenti uomini grigi da secondo (id: 1) in poi
-        for(let i = 1; i < this.uominiGrigi.length; i++) {
-            if(this.uominiGrigi[i] != undefined) {
-                this.uominiGrigi[i].manageMovements();
-            }
-        }
-
-        //gestione movimenti primo uomo grigio (id: 0)
-        if(this.player.x > 650 && this.uominiGrigi[0] != undefined) {
-            this.uominiGrigi[0].followPlayer();
         }
     }
 
@@ -635,37 +595,23 @@ export default class Level1 extends Phaser.Scene {
         for(let i = 0; i < this.movingPlatforms.length; i++)
         {
             if(this.updates % this.movingPlatforms[i].duration == 0) {
-                this.movingPlatforms[i].updateMovingPlatforms();
+                this.movingPlatforms[i].updateMovingPlatforms(); //aggiorno la direzione delle platform dinamiche
             }
         }
     }
 
-    animateBackground() {
-        this.background.x = - this.cameras.main.scrollX * 0.5;
-        this.nuvole.x = - this.cameras.main.scrollX * 0.7;
-        this.city.x = - this.cameras.main.scrollX * 0.6;
-        this.hill_2.x = - this.cameras.main.scrollX * 0.65;
-        this.hill_3.x = - this.cameras.main.scrollX * 0.6;
-        this.hill.x = - this.cameras.main.scrollX * 0.7;
-        
-        //this.cameras.main.y = - (this.player.body.y / 2) + 250;
-        //this.background.y = - (this.player.body.y / 2) * 0.005 - 280;
-    }
-
     updateLives() {
-        if(this.game.gameState.lives == 0 || this.initialTime == 0) {
+        if(this.game.gameState.lives == 0) {
             this.game.gameState.lives = 0;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
-            this.scene.start("gameover");
+            this.scene.start("gameover"); //il player ha perso tutte le vite: schermata gameover
             this.scene.stop(this);
         }
 
-        // Aggiorna il punteggio
-        const minTimeLivesDecrement = 2000;    // Tempo minimo (in ms) tra una perdita di vita e l'altra
+        const minTimeLivesDecrement = 2000;    //tempo minimo (in ms) tra una perdita di vita e l'altra
         const timeFromLastLivesDecrement = this.time.now - this.lastLivesDecrement;
 
         if(timeFromLastLivesDecrement > minTimeLivesDecrement && this.game.gameState.lives > 0) {
-            // Se sono qui devo togliere una vita
             this.lastLivesDecrement = this.time.now;
             this.game.gameState.lives--;
             this.lifeBox.setText("Lives: " + this.game.gameState.lives);
@@ -677,7 +623,6 @@ export default class Level1 extends Phaser.Scene {
         if(this.game.gameState.lives == 0) {
             this.scene.start("gameover");
             this.scene.stop(this);
-            //schermata game over
         }
     }
 }
