@@ -99,56 +99,44 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("hill", "assets/images/background/bg_hill_new.png"); 
         this.load.image("hill_3", "assets/images/background/bg_hill_3.png"); 
         this.load.image("bg_tree", "assets/images/background/bg_tree.png"); 
-        
-        //pavimento verde
+
         this.load.image("platform_1", "assets/images/environment_elements/pavement_up.png");
         this.load.image("platform_1_2", "assets/images/environment_elements/pavement.png");
 
-        //colonne
         this.load.image("column", "assets/images/environment_elements/column.png");
 
-        //platform cemento
         this.load.image("p_grigio_lego_cemento", "assets/images/environment_elements/platform/p_grigio_lego_cemento.png");
 
-        //platform semplice 3D marrone
         this.load.image("p_marrone_lego", "assets/images/environment_elements/platform/p_marrone_lego.png");
         this.load.image("platform_3d_4_2", "assets/images/environment_elements/platform/4_2.png");
         this.load.image("platform_enorme", "assets/images/environment_elements/platform/platform_enorme.png");
-        
-        //platform_3d_bordeaux e hidden 1
+
         this.load.image("p_rossa_lego_2", "assets/images/environment_elements/platform/p_rossa_lego.png");
         this.load.image("p_hidden", "assets/images/environment_elements/platform/p_hidden.png");
 
-        //hidden 2
         this.load.image("p_hidden_2", "assets/images/environment_elements/platform/p_hidden_2.png");
 
-        //camini
         this.load.image("platform_3d_6", "assets/images/environment_elements/platform/7.png");
         this.load.image("platform_3d_7", "assets/images/environment_elements/platform/8-9.png");
         this.load.image("p_grigio_lego", "assets/images/environment_elements/platform/p_grigio_lego.png");
 
-        //pezzo di gru gialla
         this.load.image("platform_3d_8", "assets/images/environment_elements/platform/10.png");
 
-        //gru gialla intera
         this.load.image("p_gru", "assets/images/environment_elements/platform/p_gru.png");
         this.load.image("p_giallo_lego", "assets/images/environment_elements/platform/p_giallo_lego.png");
 
-        //torretta
         this.load.image("p_torre", "assets/images/environment_elements/platform/p_torre.png");
         this.load.image("p_torre_bg", "assets/images/environment_elements/platform/15_bg.png");
 
         this.load.image("p_beige_lego", "assets/images/environment_elements/platform/p_beige_lego.png");
         this.load.image("p_beige_lego_2", "assets/images/environment_elements/platform/beige_lego_2.png");
 
-        //clouds
         this.load.image("p_cloud_orange", "assets/images/environment_elements/platform/p_cloud_orange.png");
         this.load.image("p_cloud_pink", "assets/images/environment_elements/platform/p_cloud_pink.png");
         this.load.image("p_cloud_white", "assets/images/environment_elements/platform/p_cloud_white.png");
         this.load.image("p_cloud_yellow", "assets/images/environment_elements/platform/p_cloud_yellow.png");
         this.load.image("hidden_3", "assets/images/environment_elements/platform/hidden_3.png");
 
-        //rami albero
         this.load.image("p_tree", "assets/images/environment_elements/platform/p_tree.png");
         this.load.image("p_tree_2", "assets/images/environment_elements/platform/p_tree_2.png");
         this.load.image("p_tree_3", "assets/images/environment_elements/platform/p_tree_3.png");
@@ -170,6 +158,7 @@ export default class Level1 extends Phaser.Scene {
 
         this.load.image("punzoni", "assets/images/environment_elements/platform/level_2/punzoni.png");
         this.load.image("cassiopea", "assets/images/characters/cassiopea.png");
+        
     }
 
     create() {
@@ -325,6 +314,7 @@ export default class Level1 extends Phaser.Scene {
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 4, 0, 690, this.textures.get('platform_1_2').getSourceImage().width, 0, false, 'platform_1_2'));
         this.staticPlatforms[this.staticPlatforms.length-1].list.forEach(platform => {
             platform.setDepth(2);
+        
         });
         //#endregion
 
@@ -432,11 +422,8 @@ export default class Level1 extends Phaser.Scene {
         this.collectableFlowers.push(new FlowersGroup(this, 1, 8950, this.game.config.height-500, 700, 80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 8360, this.game.config.height-240, 700, 80, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 9900, this.game.config.height-350, 700, 80, "animated_flower"));
-        
-        //aggiunta fiori albero doppio punzoni
         this.collectableFlowers.push(new FlowersGroup(this, 2, 11150, this.game.config.height-500, 400, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 1, 11350, this.game.config.height-245, 0, 0, "animated_flower"));
-
         this.collectableFlowers.push(new FlowersGroup(this, 1, 12540, this.game.config.height-200, 0, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 12910, this.game.config.height-200, 200, -60, "animated_flower"));
         //#endregion

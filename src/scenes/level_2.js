@@ -26,7 +26,6 @@ export default class Level2 extends Phaser.Scene {
     lastCheckpoint;
 
     constructor() {
-        // Il costruttore della classe base Phaser.Scene prende come argomento il nome della scena
         super("level_2");
     }
 
@@ -47,7 +46,7 @@ export default class Level2 extends Phaser.Scene {
 
     preload() {
         //carico asset grafici
-        this.load.image("bg", "assets/images/background/bg_level2.png"); // carica l'immagine di sfondo
+        this.load.image("bg", "assets/images/background/bg_level2.png");
         this.load.image("stars", "assets/images/background/bg_star.png"); 
         this.load.image("bg_finestra_down", "assets/images/background/bg_finestra_down.png"); 
         this.load.image("bg_parete_banca", "assets/images/background/bg_parete_banca.png"); 
@@ -136,7 +135,6 @@ export default class Level2 extends Phaser.Scene {
         });
 
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 2, 1410, this.game.config.height - 230, 300, -100, true, 'p_marrone_lego_albero'));
-        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 1, 630, this.game.config.height - 350, 300, -100, true, 'p_marrone_lego_albero'));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 630, this.game.config.height-230, 0, 0, true, "p_marrone_lego_albero", 1, -100, 80));
 
         //platform verdi dune
@@ -209,6 +207,7 @@ export default class Level2 extends Phaser.Scene {
             platform.setDepth(1);
 
         });
+
         //pavimento banca
         this.staticPlatforms.push(new StaticPlatformsGroup(this, 8, 8270, this.game.config.height-30, 1055, 0, true, 'p_base_interno'));
 
@@ -345,7 +344,6 @@ export default class Level2 extends Phaser.Scene {
     }
 
     update() {
-        // Azioni che vengono eseguite a ogni frame del gioco
         this.player.manageMovements(this.movingPlatforms);
         this.animateBackground();
         this.updateMovingPlatforms();
@@ -383,40 +381,18 @@ export default class Level2 extends Phaser.Scene {
 
     createFlowers() {
         
-        //platform albero
         this.collectableFlowers.push(new FlowersGroup(this, 1, 985, 450, 0, 0, "animated_flower"));
-
-        //marrone lego
         this.collectableFlowers.push(new FlowersGroup(this, 2, 1460, 350, 312, -90, "animated_flower"));
-
-        //rombo platform
         this.collectableFlowers.push(new FlowersGroup(this, 2, 2100, this.game.config.height - 430, 485, -0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 2350, this.game.config.height - 275, 0, -345, "animated_flower"))
-       
-        //platform lungo
         this.collectableFlowers.push(new FlowersGroup(this, 3, 2870, this.game.config.height - 630, 250, -0, "animated_flower"));
-
-        //double per 2
         this.collectableFlowers.push(new FlowersGroup(this, 2, 3035, 350, 423, 0, "animated_flower"));
-
-        //torretta
         this.collectableFlowers.push(new FlowersGroup(this, 1, 4145, 400, 0, 0, "animated_flower"));
-
-        //lego beige
         this.collectableFlowers.push(new FlowersGroup(this, 2, 4730, 250, 452, 0, "animated_flower"));
-
-        //double x1
         this.collectableFlowers.push(new FlowersGroup(this, 1, 6100, 150, 100, 0, "animated_flower"));
-
-        //basic x2
         this.collectableFlowers.push(new FlowersGroup(this, 2, 6440, 250, 346, -30, "animated_flower"));
-
-        //ingresso banca
         this.collectableFlowers.push(new FlowersGroup(this, 2, 7565, 270, 255, -160, "animated_flower"));
-
-        //2 colonne e balaustra
         this.collectableFlowers.push(new FlowersGroup(this, 2, 9415, 200, 205, -60, "animated_flower"));
-
         this.collectableFlowers.push(new FlowersGroup(this, 3, 10700, 210, 195, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 11280, 380, 600, -100, "animated_flower"));
         
