@@ -175,10 +175,10 @@ export default class Level1 extends Phaser.Scene {
     create() {
         //#region Impostazione sfondo scena
         this.background = this.add.image(0, 0, "sky").setScale(0.75, 1).setOrigin(0, 0).setScrollFactor(0, 0);
-        this.hill_3 = this.add.image(0, 0.5, "hill_3").setOrigin(0, 0).setScrollFactor(0, 0);
-        this.hill = this.add.image(0, 0.5, "hill").setOrigin(0, 0).setScrollFactor(0, 0);
-        this.hill_2 = this.add.image(0, 0.5, "hill_2").setOrigin(0, 0).setScrollFactor(0, 0);
-        this.city = this.add.image(0, 0.5, "city").setOrigin(0, 0).setScrollFactor(0, 0);
+        this.hill_3 = this.add.image(0, 0, "hill_3").setOrigin(0, 0).setScrollFactor(0, 0);
+        this.hill = this.add.image(0, 0, "hill").setOrigin(0, 0).setScrollFactor(0, 0);
+        this.hill_2 = this.add.image(0, 0, "hill_2").setOrigin(0, 0).setScrollFactor(0, 0);
+        this.city = this.add.image(0, 0, "city").setOrigin(0, 0).setScrollFactor(0, 0);
         this.nuvole = this.add.image(0, 0, "clouds").setOrigin(0, 0).setScrollFactor(0, 0);
         //#endregion
 
@@ -340,7 +340,7 @@ export default class Level1 extends Phaser.Scene {
         
         //#region Creazione nemici
         this.uominiGrigi = [];
-        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 1300, this.floorHeight, 0, "grigi")));
+        this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 1320, this.floorHeight, 0, "grigi")));
         this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 2500, this.floorHeight, 2800, "grigi")));
         this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 3400, this.floorHeight, 4000, "grigi")));
         this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 4400, 300, 4850, "grigi")));
@@ -540,19 +540,19 @@ export default class Level1 extends Phaser.Scene {
             this.scene.add('popup_spiegazione2', this.popup_spiegazione2, true);
         }
 
-        if(this.player.body.x > 840 && this.player.body.x < 842 && !this.popup_uccisione.hasBeenDisplayed ) {
+        if(this.player.body.x > 750 && this.player.body.x < 752 && !this.popup_uccisione.hasBeenDisplayed) {
             this.scene.pause(this);
             this.scene.add('popup_uccisione', this.popup_uccisione, true);
             this.game.gameState.flowersCounter = 2;
             this.flowersBox.setText(this.game.gameState.flowersCounter);
         }
 
-        if(this.player.body.x > 2180 && this.player.body.x < 2182 && !this.popup_uccisione_2.hasBeenDisplayed ) {
+        if(this.player.body.x > 2180 && this.player.body.x < 2182 && !this.popup_uccisione_2.hasBeenDisplayed) {
             this.scene.pause(this);
             this.scene.add('popup_uccisione_2', this.popup_uccisione_2, true);
         }
 
-        if(this.player.body.x > 4600 && this.player.body.x < 4602 && !this.popup_checkpoint.hasBeenDisplayed ) {
+        if(this.player.body.x > 4600 && this.player.body.x < 4605 && !this.popup_checkpoint.hasBeenDisplayed) {
             this.scene.pause(this);
             this.scene.add('popup_checkpoint', this.popup_checkpoint, true);
         }
