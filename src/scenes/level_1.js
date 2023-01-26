@@ -155,10 +155,13 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("pauseLED", "assets/UI/pause_button_led.png");
         this.load.image("flowers_box", "assets/UI/flowers_box.png");
         this.load.image("flowers_icon", "assets/UI/flower.png");
+        this.load.image("lives_box", "assets/UI/lives_box.png");
+        this.load.image("lives_1", "assets/UI/lives/lives_1.png");
+        this.load.image("lives_2", "assets/UI/lives/lives_2.png");
+        this.load.image("lives_3", "assets/UI/lives/lives_3.png");
 
         this.load.image("punzoni", "assets/images/environment_elements/platform/level_2/punzoni.png");
         this.load.image("cassiopea", "assets/images/characters/cassiopea.png");
-        
     }
 
     create() {
@@ -177,7 +180,7 @@ export default class Level1 extends Phaser.Scene {
         this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}]; //elenco checkpoint del livello
         this.lastCheckpoint = this.checkpoints[0]; //setto ultimo checkpoint salvato
 
-        this.add.image(230, this.floorHeight - 72, "cassiopea").setOrigin(0, 0).setDepth(1);
+        this.add.image(275, this.floorHeight - 45, "cassiopea").setOrigin(0, 0).setDepth(1);
 
         //#region creazione platforms statiche e dinamiche
         //colonne inizio 
@@ -363,7 +366,9 @@ export default class Level1 extends Phaser.Scene {
         this.flowersIcon = this.add.image(8, 6, "flowers_icon").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
         this.flowersBox = this.add.text(150, 46, (this.game.gameState.flowersCounter), styleConfig).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
 
-        this.lifeBox = this.add.text(this.game.config.width / 2, 46, "Lives: " + this.game.gameState.lives, styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
+        this.livesContainerBox = this.add.image(300, 15, "lives_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
+        this.livesIcon = this.add.image(300, 20, "lives_3").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
+        this.livesBox = this.add.text(445, 46, this.game.gameState.lives, styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
         
         this.pauseButton = this.add.image(this.game.config.width - 70, 60, "pause").setOrigin(0.5, 0.5).setScrollFactor(0, 0).setScale(0.5).setDepth(4);
         this.pauseButton.setInteractive({ useHandCursor: true });
@@ -384,10 +389,10 @@ export default class Level1 extends Phaser.Scene {
 
         //#region creazione messaggi popup
         this.popup_movimento = new PopUp(this, "Ciao! Ecco alcuni suggerimenti prima di iniziare la tua avventura:   \n\nPremi ⇦ e ⇨ o [A] e [D] per muoverti, \n⇧ o [W] o [BARRA SPAZIATRICE] per saltare.", 0);
-        this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la dimora di Mastro Hora.  \nTi aspetta un lungo viaggio: esplora ciò che ti circonda e trova la strada più sicura.", 1);
+        this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la banca del tempo con almeno 35 OraFiori.  \nTi aspetta un lungo viaggio: esplora ciò che ti circonda e trova la strada più sicura.", 1);
         this.popup_spiegazione2 = new PopUp(this, "Ehi Momo, dove scappi? Non ti ho ancora detto dei pericoli che puoi incontrare...\nDovrai stare molto attenta perché i Signori Grigi hanno scoperto il nostro piano e stanno cercando di fermarti!   \nTrova un modo per sconfiggerli o per liberarli dalla loro condizione facendoli tornare buoni.", 2);
         this.popup_uccisione = new PopUp(this, "Ecco un Signore Grigio. Attenta, ti sta inseguendo! Se ti raggiunge perderai una vita.   \nGli OraFiori che raccoglierai durante il percorso ti aiuteranno a salvarli.   \nPremi [F] per lanciarli, ma attenta perché non te ne basterà uno solo... \nEccotene due per provare.", 3);
-        this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno X per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa.", 4);
+        this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno 30 per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa.", 4);
         this.popup_checkpoint = new PopUp(this, "Forte! Hai appena superato il primo checkpoint: questo significa che se dovessi perdere una delle\ntue 3 vite a disposizione, verrai riportata qui. Nella mappa sono presenti diversi checkpoint,\nraggiungili tutti!", 5);
         //#endregion
 
@@ -590,7 +595,7 @@ export default class Level1 extends Phaser.Scene {
     updateLives() {
         if(this.game.gameState.lives == 0) {
             this.game.gameState.lives = 0;
-            this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+            this.livesBox.setText(this.game.gameState.lives);
             this.scene.start("gameover"); //il player ha perso tutte le vite: schermata gameover
             this.scene.stop(this);
         }
@@ -601,7 +606,18 @@ export default class Level1 extends Phaser.Scene {
         if(timeFromLastLivesDecrement > minTimeLivesDecrement && this.game.gameState.lives > 0) {
             this.lastLivesDecrement = this.time.now;
             this.game.gameState.lives--;
-            this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+            switch(this.game.gameState.lives) {
+                case 1:
+                    this.livesIcon.setTexture("lives_1");
+                    break;
+                case 2:
+                    this.livesIcon.setTexture("lives_2");
+                    break;
+                default:
+                    this.livesIcon.setTexture("lives_3");
+                    break;
+            }
+            this.livesBox.setText(this.game.gameState.lives);
 
             this.player.x = this.lastCheckpoint.x;
             this.player.y = this.lastCheckpoint.y - 30;

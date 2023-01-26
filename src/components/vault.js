@@ -1,5 +1,7 @@
 export default class Vault extends Phaser.GameObjects.Sprite {
 
+    hasBeenOpened;
+
     constructor(scene, x, y) {
 		super(scene, x, y, "vault");
         this.lives = 2;
@@ -9,6 +11,7 @@ export default class Vault extends Phaser.GameObjects.Sprite {
         this.y = y;
         this.setOrigin(1, 1);   // Punto pivot in basso a destra
         scene.add.existing(this);
+        this.hasBeenOpened = false;
 
         this.initAnimations();
     }
@@ -39,5 +42,6 @@ export default class Vault extends Phaser.GameObjects.Sprite {
 
     openVault() {
         this.anims.play("openingVault");
+        this.hasBeenOpened = true;
     }
 }

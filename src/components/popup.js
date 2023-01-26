@@ -1,3 +1,5 @@
+import TypeWriter from "./typewriter.js";
+
 export default class PopUp extends Phaser.Scene {
 
     originScene;
@@ -30,7 +32,8 @@ export default class PopUp extends Phaser.Scene {
         const styleConfig = { color: '#000000', fontFamily: 'Montserrat', fontSize: 18 };
 
         this.textMessage = this.add.text(220, 38, "", styleConfig);
-        this.typewriteText(this.message);
+        this.typewriter = new TypeWriter(this, this.textMessage);
+        this.typewriter.typewrite(this.message);
         this.hasBeenDisplayed = true;
     }
 
@@ -39,17 +42,5 @@ export default class PopUp extends Phaser.Scene {
             this.scene.resume(this.originScene);
             this.scene.remove(this);
         }
-    }
-
-    typewriteText(text) {
-        const length = text.length;
-        let i = 0;
-        this.time.addEvent({
-            callback: () => {
-                this.textMessage.text += text[i++];
-            },
-            repeat: length - 1,
-            delay: 20
-        });
     }
 } 

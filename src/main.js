@@ -1,8 +1,8 @@
-// Importiamo le scene (ne usiamo una diversa per ogni esempio)
 import SplashScreen from "./scenes/splash_screen.js"
 import Level1 from "./scenes/level_1.js";
 import Level2 from "./scenes/level_2.js";
 import GameOver from "./scenes/gameover.js";
+import Win from "./scenes/win.js";
 import Credits from "./scenes/credits.js";
 import Story from "./scenes/story.js";
 
@@ -13,7 +13,7 @@ const config = {
     height: 720,
     autoRound: true,
     backgroundColor: 0x000000, // sfondo nero
-    scene: [ SplashScreen, Credits, Story, Level1, Level2, GameOver ],
+    scene: [ SplashScreen, Credits, Story, Level1, Level2, GameOver, Win ],
     pixelArt: true,
     parent: "game_area", // Specifica il div contenitore
     physics: {
@@ -38,9 +38,3 @@ game.gameState = {
     score: 0,
     lives: 3
 }
-
-// Carichiamo la scena corrispondente all'esercizio scelto
-// (se non eseguiamo questa istruzione viene creata una
-// scena a partire dalla prima specificata nell'array "scene"
-// della configurazione di gioco)
-//game.scene.start("scene_platforms");

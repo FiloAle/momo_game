@@ -24,6 +24,7 @@ export default class Level2 extends Phaser.Scene {
     localFlowersCounter;
     checkpoints;
     lastCheckpoint;
+    hasTimerStarted;
 
     constructor() {
         super("level_2");
@@ -40,6 +41,7 @@ export default class Level2 extends Phaser.Scene {
         this.collectableFlowers = [];
         this.movingPlatforms = [];
         this.staticPlatforms = [];
+        this.hasTimerStarted = false;
         this.game.gameState.level = 2; //salvo il numero del livello corrente
         this.localFlowersCounter = 0; //contatore fiori locale
     }
@@ -96,6 +98,12 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("pauseLED", "assets/UI/pause_button_led.png");
         this.load.image("flowers_box", "assets/UI/flowers_box.png");
         this.load.image("flowers_icon", "assets/UI/flower.png");
+        this.load.image("lives_box", "assets/UI/lives_box.png");
+        this.load.image("lives_1", "assets/UI/lives/lives_1.png");
+        this.load.image("lives_2", "assets/UI/lives/lives_2.png");
+        this.load.image("lives_3", "assets/UI/lives/lives_3.png");
+        this.load.image("timer_icon", "assets/UI/timer.png");
+        this.load.image("timer_box", "assets/UI/timer_box.png");
 
         this.load.image("cassiopea", "assets/images/characters/cassiopea.png");
     }
@@ -112,7 +120,7 @@ export default class Level2 extends Phaser.Scene {
         this.checkpoints = [{x: 100, y: 500}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}]; //elenco checkpoint del livello
         this.lastCheckpoint = this.checkpoints[0]; //setto ultimo checkpoint salvato
 
-        this.add.image(1080, 437, "cassiopea").setOrigin(0, 0).setDepth(3);
+        this.add.image(1080, 465, "cassiopea").setOrigin(0, 0).setDepth(3);
         
         //#region creazione platform statiche e dinamiche
         //Alberlo e platform
@@ -265,14 +273,22 @@ export default class Level2 extends Phaser.Scene {
 
         this.player.resize(); // Ridimensionamento hitbox
 
-        this.flowersContainerBox = this.add.image(20, 15, "flowers_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
-        this.flowersIcon = this.add.image(8, 6, "flowers_icon").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
-
         const styleConfig = { color: '#FFFFFF', fontFamily: 'Montserrat', fontSize: 36 };
 
-        this.lifeBox = this.add.text(this.game.config.width / 2, 46, "Lives: " + this.game.gameState.lives, styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
-
+        this.flowersContainerBox = this.add.image(20, 15, "flowers_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
+        this.flowersIcon = this.add.image(8, 6, "flowers_icon").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
         this.flowersBox = this.add.text(150, 46, (this.game.gameState.flowersCounter), styleConfig).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(5);
+
+        this.livesContainerBox = this.add.image(300, 15, "lives_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4);
+        this.livesIcon = this.add.image(300, 20, "lives_3").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4);
+        this.livesBox = this.add.text(445, 46, this.game.gameState.lives, styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
+
+        //TIMER 
+        this.initialTime = 120;
+        this.timerContainerBox = this.add.image(20, 145, "timer_box").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(4).setVisible(false);
+        this.timerIcon = this.add.image(20, 150, "timer_icon").setOrigin(0, 0).setScale(0.85).setScrollFactor(0, 0).setDepth(4).setVisible(false);
+        this.timer = this.add.text(170, 176, this.formatTime(this.initialTime), styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4).setVisible(false);
+        // Each 1000 ms call onEvent
 
         this.pauseButton = this.add.image(this.game.config.width - 70, 60, "pause").setOrigin(0.5, 0.5).setScrollFactor(0, 0).setScale(0.5).setDepth(4);
         this.pauseButton.setInteractive({ useHandCursor: true });
@@ -292,7 +308,7 @@ export default class Level2 extends Phaser.Scene {
             this.scene.add('pause_menu', this.pauseMenu, true);
         });
 
-        this.popup_2 = new PopUp(this, "Complimenti Momo! Sei riuscita superare la prima fase.   \nAdesso dovrai raggiungere la banca del tempo per liberare tutti gli OraFiori che i signori grigi hanno rubato ai tuoi amici.    \nMa attenta, il percorso è lungo e insidioso e il tempo a tua disposizione è limitato…   \nÈ ora di andare, lascia il Grande albero alle tue spalle e buona fortuna!", 0);
+        this.popup_l2 = new PopUp(this, "Complimenti Momo! Sei riuscita superare la prima fase.   \nAdesso dovrai raggiungere la banca del tempo in 2 minuti per liberare tutti gli OraFiori che i signori grigi\nhanno rubato ai tuoi amici. Ma attenta, il percorso è lungo e insidioso e il tempo a tua disposizione è limitato…   \nÈ ora di andare, lascia il Grande albero alle tue spalle e buona fortuna!", 0);
 
         this.uominiGrigi = [];
         this.uominiGrigi.push(this.physics.add.existing(new Enemy(this, 12150, this.player.y, 12550, "grigi")));
@@ -308,14 +324,7 @@ export default class Level2 extends Phaser.Scene {
         }
 
         //collecting flowers
-        this.createFlowers();     
-    
-        //TIMER 
-        this.initialTime = 400;
-        this.timer = this.add.text(this.game.config.width / 2, 90, 'Countdown: ' + this.formatTime(this.initialTime), styleConfig).setOrigin(0.5, 0).setScrollFactor(0, 0).setDepth(4);
-        // Each 1000 ms call onEvent
-        this.timerEvent = this.time.addEvent({ delay: 1000, callback: this.onTimerEvent, callbackScope: this, loop: true });
-
+        this.createFlowers();
 
         //cassaforte
         this.cassaforte = new Vault(this, 14000, this.floorHeight).setDepth(4);
@@ -335,9 +344,8 @@ export default class Level2 extends Phaser.Scene {
     onTimerEvent() {
         if(this.initialTime > 0) {
             this.initialTime -= 1; // One second
-            this.timer.setText('Countdown: ' + this.formatTime(this.initialTime));
+            this.timer.setText(this.formatTime(this.initialTime));
         } else {
-            //console.warn("HAI PERSO!");
             this.updateLives();
             this.time.removeEvent(this.timerEvent);
         }
@@ -368,19 +376,30 @@ export default class Level2 extends Phaser.Scene {
         }
 
         //apertura portellone
-        if(this.player. x > 13400 && this.player.x < 13402) { 
-            this.cassaforte.openVault(); 
+        if(this.player.body.x > 13400 && this.player.body.x < 13402 && !this.cassaforte.hasBeenOpened && this.game.gameState.flowersCounter >= 35) { 
+            this.cassaforte.openVault();
+            this.winDelay = this.time.addEvent({ delay: 3000, callback: this.win, callbackScope: this, loop: false });
+        } else if(this.player.body.x > 13400 && this.player.body.x < 13402 && !this.cassaforte.hasBeenOpened && this.game.gameState.flowersCounter < 35) {
+            this.scene.start("gameover");
+            this.scene.stop(this);
         }
 
         //popup
-        if(this.player.body.x > 980 && this.player.body.x < 982 && !this.popup_2.hasBeenDisplayed) {
+        if(this.player.body.x > 980 && this.player.body.x < 982 && !this.popup_l2.hasBeenDisplayed) {
             this.scene.pause(this);
-            this.scene.add('popup_2', this.popup_2, true);
+            this.scene.add('popup_2', this.popup_l2, true);
         } 
+
+        if(this.popup_l2.hasBeenDisplayed && !this.hasTimerStarted) {
+            this.timerEvent = this.time.addEvent({ delay: 1000, callback: this.onTimerEvent, callbackScope: this, loop: true });
+            this.timerContainerBox.setVisible(true);
+            this.timerIcon.setVisible(true);
+            this.timer.setVisible(true);
+            this.hasTimerStarted = true;
+        }
     }
 
     createFlowers() {
-        
         this.collectableFlowers.push(new FlowersGroup(this, 1, 985, 450, 0, 0, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 1460, 350, 312, -90, "animated_flower"));
         this.collectableFlowers.push(new FlowersGroup(this, 2, 2100, this.game.config.height - 430, 485, -0, "animated_flower"));
@@ -508,20 +527,29 @@ export default class Level2 extends Phaser.Scene {
     updateLives() {
         if(this.game.gameState.lives == 0 || this.initialTime == 0) {
             this.game.gameState.lives = 0;
-            this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+            this.livesBox.setText("Lives: " + this.game.gameState.lives);
             this.scene.start("gameover");
             this.scene.stop(this);
         }
 
-        // Aggiorna il punteggio
-        const minTimeLivesDecrement = 2000;    // Tempo minimo (in ms) tra una perdita di vita e l'altra
+        const minTimeLivesDecrement = 2000;    //tempo minimo (in ms) tra una perdita di vita e l'altra
         const timeFromLastLivesDecrement = this.time.now - this.lastLivesDecrement;
 
         if(timeFromLastLivesDecrement > minTimeLivesDecrement && this.game.gameState.lives > 0) {
-            // Se sono qui devo togliere una vita
             this.lastLivesDecrement = this.time.now;
             this.game.gameState.lives--;
-            this.lifeBox.setText("Lives: " + this.game.gameState.lives);
+            switch(this.game.gameState.lives) {
+                case 1:
+                    this.livesIcon.setTexture("lives_1");
+                    break;
+                case 2:
+                    this.livesIcon.setTexture("lives_2");
+                    break;
+                default:
+                    this.livesIcon.setTexture("lives_3");
+                    break;
+            }
+            this.livesBox.setText(this.game.gameState.lives);
 
             this.player.x = this.lastCheckpoint.x;
             this.player.y = this.lastCheckpoint.y - 30;
@@ -530,7 +558,11 @@ export default class Level2 extends Phaser.Scene {
         if(this.game.gameState.lives == 0) {
             this.scene.start("gameover");
             this.scene.stop(this);
-            //schermata game over
         }
+    }
+
+    win() {
+        this.scene.start("win");
+        this.scene.stop(this);
     }
 }

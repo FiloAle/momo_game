@@ -1,3 +1,5 @@
+import TypeWriter from "../components/typewriter.js";
+
 export default class Story extends Phaser.Scene {
 
     constructor() {
@@ -33,7 +35,8 @@ export default class Story extends Phaser.Scene {
         this.scene6Image = this.add.image(0, 0, "scene_6").setOrigin(0, 0).setVisible(false);
         this.shadow = this.add.image(0, 0, "shadow").setOrigin(0, 0).setAlpha(0.8).setVisible(true);
 
-        this.storyText = this.add.text(150, this.game.config.height - 70, "").setOrigin(0, 0.5);
+        const styleConfig = { color: '#000000', fontFamily: 'Lacrima', fontSize: 18 };
+        this.storyText = this.add.text(150, this.game.config.height - 70, styleConfig).setOrigin(0, 0.5);
 
         this.scene1Text = "In un paese non molto lontano, abita una bambina di nome Momo.\nTra le piccole vie del suo paesino si respirano tranquillità e benessere. Le persone sono felici\ne i bambini giocano spensierati: non si potrebbe sperare di vivere in un posto migliore.";
         this.scene2Text = "Un giorno, all’improvviso, arrivano i Signori Grigi: degli uomini orribili che convincono\nil popolo a lavorare fino allo sfinimento in modo da risparmiare il proprio tempo e conservarlo\nnella Banca del Tempo. Le persone diventano esauste e infelici, sempre al lavoro: anche riposare\nper loro diventa difficile e il paese di Momo viene avvolto da un’atmosfera grigia e triste."
@@ -41,7 +44,8 @@ export default class Story extends Phaser.Scene {
         this.scene4Text = "Momo, con l’aiuto di Cassiopea, una tartaruga magica, dovrà dirigersi verso il Grande Albero.\nSolo così la bambina potrà cogliere un Orafiore e fermare il tempo per tutti.";
         this.scene5Text = "Il fiore darà a Momo il tempo necessario per raggiungere la banca e liberare gli Orafiori\ndelle persone senza essere fermata dai Signori Grigi.";
         
-        this.typewriteText(this.scene1Text);
+        this.typewriter = new TypeWriter(this, this.storyText);
+        this.typewriter.typewrite(this.scene1Text);
 
         this.homeButton = this.add.image(80, this.game.config.height - 70, "home").setOrigin(0.5, 0.5).setInteractive({ useHandCursor: true }).setScale(0.4);
         this.homeLED = this.add.image(80, this.game.config.height - 68, "homeLED").setVisible(false).setScale(0.4);
@@ -83,32 +87,32 @@ export default class Story extends Phaser.Scene {
                     this.leftArrow.setVisible(false);
                     this.scene1Image.setVisible(true);
                     this.scene2Image.setVisible(false);
-                    this.typewriteText(this.scene1Text);
+                    this.typewriter.typewrite(this.scene1Text);
                     break;
                 case 3:
                     this.currentImage = 2;
                     this.scene2Image.setVisible(true);
                     this.scene3Image.setVisible(false);
-                    this.typewriteText(this.scene2Text);
+                    this.typewriter.typewrite(this.scene2Text);
                     break;
                 case 4:
                     this.currentImage = 3;
                     this.scene3Image.setVisible(true);
                     this.scene4Image.setVisible(false);
-                    this.typewriteText(this.scene3Text);
+                    this.typewriter.typewrite(this.scene3Text);
                     break;
                 case 5:
                     this.currentImage = 4;
                     this.scene4Image.setVisible(true);
                     this.scene5Image.setVisible(false);
-                    this.typewriteText(this.scene4Text);
+                    this.typewriter.typewrite(this.scene4Text);
                     break;
                 case 6:
                     this.currentImage = 5;
                     this.rightArrow.setVisible(true);
                     this.scene5Image.setVisible(true);
                     this.scene6Image.setVisible(false);
-                    this.typewriteText(this.scene5Text);
+                    this.typewriter.typewrite(this.scene5Text);
                     break;
                 default:
                     break;
@@ -128,25 +132,25 @@ export default class Story extends Phaser.Scene {
                     this.leftArrow.setVisible(true);
                     this.scene2Image.setVisible(true);
                     this.scene1Image.setVisible(false);
-                    this.typewriteText(this.scene2Text);
+                    this.typewriter.typewrite(this.scene2Text);
                     break;
                 case 2:
                     this.currentImage = 3;
                     this.scene3Image.setVisible(true);
                     this.scene2Image.setVisible(false);
-                    this.typewriteText(this.scene3Text);
+                    this.typewriter.typewrite(this.scene3Text);
                     break;
                 case 3:
                     this.currentImage = 4;
                     this.scene4Image.setVisible(true);
                     this.scene3Image.setVisible(false);
-                    this.typewriteText(this.scene4Text);
+                    this.typewriter.typewrite(this.scene4Text);
                     break;
                 case 4:
                     this.currentImage = 5;
                     this.scene5Image.setVisible(true);
                     this.scene4Image.setVisible(false);
-                    this.typewriteText(this.scene5Text);
+                    this.typewriter.typewrite(this.scene5Text);
                     break;
                 case 5:
                     this.currentImage = 6;
@@ -161,20 +165,6 @@ export default class Story extends Phaser.Scene {
                 default:
                     break;
             }
-        });
-    }
-
-    typewriteText(text) {
-        this.storyText.text = "";
-        this.time.removeEvent(this.typing);
-        const length = text.length;
-        let i = 0;
-        this.typing = this.time.addEvent({
-            callback: () => {
-                this.storyText.text += text[i++];
-            },
-            repeat: length - 1,
-            delay: 20
         });
     }
 }

@@ -131,4 +131,4 @@ export default class SplashScreen extends Phaser.Scene {
 
     update() {
     }
-};
+}
