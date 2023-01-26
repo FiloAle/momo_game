@@ -164,7 +164,7 @@ export default class Level1 extends Phaser.Scene {
         this.load.image("sfondo_4", "assets/images/environment_elements/buildings/bld_4.png");
 
         this.load.image("pause", "assets/UI/pause_button.png");
-        this.load.image("pauseLED", "assets/UI/pause_button_LED.png");
+        this.load.image("pauseLED", "assets/UI/pause_button_led.png");
         this.load.image("flowers_box", "assets/UI/flowers_box.png");
         this.load.image("flowers_icon", "assets/UI/flower.png");
 

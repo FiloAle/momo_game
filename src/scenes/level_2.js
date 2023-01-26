@@ -94,7 +94,7 @@ export default class Level2 extends Phaser.Scene {
         this.load.image("p_pilastro", "assets/images/environment_elements/platform/level_2/p_pilastro.png");
         
         this.load.image("pause", "assets/UI/pause_button.png");
-        this.load.image("pauseLED", "assets/UI/pause_button_LED.png");
+        this.load.image("pauseLED", "assets/UI/pause_button_led.png");
         this.load.image("flowers_box", "assets/UI/flowers_box.png");
         this.load.image("flowers_icon", "assets/UI/flower.png");
 
