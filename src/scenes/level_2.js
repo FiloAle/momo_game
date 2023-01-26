@@ -108,7 +108,7 @@ export default class Level2 extends Phaser.Scene {
         //#endregion
 
         this.isCameraFollowingPlayer = false;
-        this.player = this.physics.add.existing(new Player(this, 13200, 500, this.worldWidth)); //creazione player
+        this.player = this.physics.add.existing(new Player(this, 100, 500, this.worldWidth)); //creazione player
 
         this.checkpoints = [{x: 100, y: 500}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}]; //elenco checkpoint del livello
         this.lastCheckpoint = this.checkpoints[0]; //setto ultimo checkpoint salvato
