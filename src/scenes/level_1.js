@@ -177,7 +177,7 @@ export default class Level1 extends Phaser.Scene {
         this.isCameraFollowingPlayer = false;
         this.player = this.physics.add.existing(new Player(this, 0, this.floorHeight, this.worldWidth)); //creazione player
 
-        this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9400, y: this.floorHeight}]; //elenco checkpoint del livello
+        this.checkpoints = [{x: 0, y: this.floorHeight}, {x: 4600, y: 320}, {x: 9300, y: this.floorHeight - 200}]; //elenco checkpoint del livello
         this.lastCheckpoint = this.checkpoints[0]; //setto ultimo checkpoint salvato
 
         this.add.image(275, this.floorHeight - 45, "cassiopea").setOrigin(0, 0).setDepth(1);
@@ -236,7 +236,7 @@ export default class Level1 extends Phaser.Scene {
 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 6800, this.game.config.height-150, 300, 0, true, "p_beige_lego_2", 0, 200, 150));
 
-        this.staticPlatforms.push(new StaticPlatformsGroup(this, 30, 7600, this.game.config.height, 200 , 0, true, "p_beige_lego_2")); 
+        //this.staticPlatforms.push(new StaticPlatformsGroup(this, 30, 7600, this.game.config.height, 200 , 0, true, "p_beige_lego_2")); 
 
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8300, this.game.config.height-164, 0, 0, true, "hidden_3",0, -15, 450));
         this.movingPlatforms.push(new MovingPlatformsGroup(this, 1, 8300, this.game.config.height-300, 0, 0, false, "p_cloud_white",0, -15, 450));
