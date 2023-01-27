@@ -25,6 +25,7 @@ export default class Level2 extends Phaser.Scene {
     checkpoints;
     lastCheckpoint;
     hasTimerStarted;
+    lastPopup;
 
     constructor() {
         super("level_2");
@@ -44,6 +45,7 @@ export default class Level2 extends Phaser.Scene {
         this.hasTimerStarted = false;
         this.game.gameState.level = 2; //salvo il numero del livello corrente
         this.localFlowersCounter = 0; //contatore fiori locale
+        this.lastPopup = 0;
     }
 
     preload() {
@@ -376,16 +378,17 @@ export default class Level2 extends Phaser.Scene {
         }
 
         //apertura portellone
-        if(this.player.body.x > 13400 && this.player.body.x < 13402 && !this.cassaforte.hasBeenOpened && this.game.gameState.flowersCounter >= 35) { 
+        if(this.player.body.x > 13400 && !this.cassaforte.hasBeenOpened && this.game.gameState.flowersCounter >= this.game.gameState.necessaryFlowers) { 
             this.cassaforte.openVault();
             this.winDelay = this.time.addEvent({ delay: 3000, callback: this.win, callbackScope: this, loop: false });
-        } else if(this.player.body.x > 13400 && this.player.body.x < 13402 && !this.cassaforte.hasBeenOpened && this.game.gameState.flowersCounter < 35) {
+        } else if(this.player.body.x > 13400 && !this.cassaforte.hasBeenOpened && this.game.gameState.flowersCounter < this.game.gameState.necessaryFlowers) {
             this.scene.start("gameover");
             this.scene.stop(this);
         }
 
         //popup
-        if(this.player.body.x > 980 && this.player.body.x < 982 && !this.popup_l2.hasBeenDisplayed) {
+        if(this.player.body.x > 980 && !this.popup_l2.hasBeenDisplayed && this.lastPopup == 0) {
+            this.lastPopup = 1;
             this.scene.pause(this);
             this.scene.add('popup_2', this.popup_l2, true);
         } 

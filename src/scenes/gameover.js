@@ -23,7 +23,7 @@ export default class GameOver extends Phaser.Scene {
         this.retryButton = this.add.image(this.game.config.width - 80, this.game.config.height - 70, "retry").setOrigin(0.5, 0.5).setInteractive({ useHandCursor: true }).setScale(0.4);
         this.retryLED = this.add.image(this.game.config.width - 80, this.game.config.height - 70, "retryLED").setVisible(false).setScale(0.4);
 
-        if(this.game.gameState.lives > 0 && this.game.gameState.flowersCounter < 35) {
+        if(this.game.gameState.lives > 0 && this.game.gameState.flowersCounter < this.game.gameState.necessaryFlowers) {
             const styleConfig = { color: '#000000', fontFamily: 'Lacrima', fontSize: 18 };
             this.gameoverMessage = this.add.text(150, this.game.config.height - 70, styleConfig).setOrigin(0, 0.5);
             this.msg = "Non hai raccolto abbastanza fiori e non sei riuscita a salvare i tuoi amici.";

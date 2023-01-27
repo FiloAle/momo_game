@@ -20,6 +20,7 @@ export default class Level1 extends Phaser.Scene {
     staticPlatforms;
     checkpoints;
     lastCheckpoint;
+    lastPopup;
 
     constructor() {
         super("level_1");
@@ -36,6 +37,7 @@ export default class Level1 extends Phaser.Scene {
         this.movingPlatforms = [];
         this.staticPlatforms = [];
         this.game.gameState.level = 1; //salvo il numero del livello corrente
+        this.lastPopup = 0;
     }
 
     preload() {
@@ -392,7 +394,7 @@ export default class Level1 extends Phaser.Scene {
         this.popup_spiegazione = new PopUp(this, "Ciao Momo, sono Cassiopea e sono qui per aiutarti!   \nPer salvare i tuoi amici dovrai raggiungere la banca del tempo con almeno 35 OraFiori.  \nTi aspetta un lungo viaggio: esplora ciò che ti circonda e trova la strada più sicura.", 1);
         this.popup_spiegazione2 = new PopUp(this, "Ehi Momo, dove scappi? Non ti ho ancora detto dei pericoli che puoi incontrare...\nDovrai stare molto attenta perché i Signori Grigi hanno scoperto il nostro piano e stanno cercando di fermarti!   \nTrova un modo per sconfiggerli o per liberarli dalla loro condizione facendoli tornare buoni.", 2);
         this.popup_uccisione = new PopUp(this, "Ecco un Signore Grigio. Attenta, ti sta inseguendo! Se ti raggiunge perderai una vita.   \nGli OraFiori che raccoglierai durante il percorso ti aiuteranno a salvarli.   \nPremi [F] per lanciarli, ma attenta perché non te ne basterà uno solo... \nEccotene due per provare.", 3);
-        this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno 30 per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa.", 4);
+        this.popup_uccisione_2 = new PopUp(this, "Attenta a non utilizzare troppi fiori, perché te ne serviranno almeno " + this.game.gameState.necessaryFlowers + " per salvare i tuoi amici.   \nIl modo più semplice, ma anche il più rischioso, per sconfiggere i Signori Grigi è con un salto sulla loro testa.", 4);
         this.popup_checkpoint = new PopUp(this, "Forte! Hai appena superato il primo checkpoint: questo significa che se dovessi perdere una delle\ntue 3 vite a disposizione, verrai riportata qui. Nella mappa sono presenti diversi checkpoint,\nraggiungili tutti!", 5);
         //#endregion
 
@@ -522,29 +524,34 @@ export default class Level1 extends Phaser.Scene {
             this.updateLives();
         }
 
-        if(this.player.body.x > 200 && this.player.body.x < 202 && !this.popup_spiegazione.hasBeenDisplayed) {
+        if(this.player.body.x > 200 && !this.popup_spiegazione.hasBeenDisplayed && this.lastPopup == 0) {
+            this.lastPopup = 1;
             this.scene.pause(this);
             this.scene.add('popup_spiegazione', this.popup_spiegazione, true);
         }
 
-        if(this.player.body.x > 550 && this.player.body.x < 552 && !this.popup_spiegazione2.hasBeenDisplayed && this.popup_spiegazione.hasBeenDisplayed) {
+        if(this.player.body.x > 550 && !this.popup_spiegazione2.hasBeenDisplayed && this.popup_spiegazione.hasBeenDisplayed && this.lastPopup == 1) {
+            this.lastPopup = 2;
             this.scene.pause(this);
             this.scene.add('popup_spiegazione2', this.popup_spiegazione2, true);
         }
 
-        if(this.player.body.x > 750 && this.player.body.x < 752 && !this.popup_uccisione.hasBeenDisplayed) {
+        if(this.player.body.x > 750 && !this.popup_uccisione.hasBeenDisplayed && this.lastPopup == 2) {
+            this.lastPopup = 3;
             this.scene.pause(this);
             this.scene.add('popup_uccisione', this.popup_uccisione, true);
             this.game.gameState.flowersCounter = 2;
             this.flowersBox.setText(this.game.gameState.flowersCounter);
         }
 
-        if(this.player.body.x > 2180 && this.player.body.x < 2182 && !this.popup_uccisione_2.hasBeenDisplayed) {
+        if(this.player.body.x > 2180 && !this.popup_uccisione_2.hasBeenDisplayed && this.lastPopup == 3) {
+            this.lastPopup = 4;
             this.scene.pause(this);
             this.scene.add('popup_uccisione_2', this.popup_uccisione_2, true);
         }
 
-        if(this.player.body.x > 4600 && this.player.body.x < 4605 && !this.popup_checkpoint.hasBeenDisplayed) {
+        if(this.player.body.x > 4600 && !this.popup_checkpoint.hasBeenDisplayed && this.lastPopup == 4) {
+            this.lastPopup = 5;
             this.scene.pause(this);
             this.scene.add('popup_checkpoint', this.popup_checkpoint, true);
         }

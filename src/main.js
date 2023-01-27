@@ -36,5 +36,6 @@ let game = new Phaser.Game(config);
 game.gameState = {
     playTime: 30,
     score: 0,
-    lives: 3
+    lives: 3,
+    necessaryFlowers: 35
 }
